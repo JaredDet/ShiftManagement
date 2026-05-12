@@ -1,0 +1,28 @@
+# Build
+bin/
+obj/
+
+# Rider
+.idea/
+
+# VSCode
+.vscode/
+
+# User files
+*.user
+*.suo
+
+# Environment variables
+.env
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# EF Core local database artifacts
+*.db
+*.db-shm
+*.db-wal
