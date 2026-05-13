@@ -28,12 +28,13 @@ public class BranchController(
     }
 
     [HttpGet]
-    public async Task<IActionResult> ListBranches(
-        [FromQuery] Guid companyId
-    )
+    [HttpGet]
+    public async Task<IActionResult> ListBranches([FromQuery] Guid companyId)
     {
-        var result = await listBranchesUseCase
-            .ExecuteAsync(companyId);
+        var result = await listBranchesUseCase.ExecuteAsync(companyId);
+
+        if (!result.IsSuccess)
+            return NotFound(result.Error);
 
         return Ok(result.Value);
     }

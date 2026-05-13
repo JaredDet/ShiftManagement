@@ -31,6 +31,12 @@ public sealed class CompanyRepository(
         return Task.CompletedTask;
     }
 
+    public async Task<bool> ExistsAsync(Guid id)
+    {
+        return await dbContext.Companies
+            .AnyAsync(company => company.Id == id);
+    }
+
     public async Task SaveChangesAsync()
     {
         await dbContext.SaveChangesAsync();

@@ -8,6 +8,14 @@ Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
+var port = Environment.GetEnvironmentVariable(
+    "APP_PORT"
+) ?? "5181";
+
+builder.WebHost.UseUrls(
+    $"http://0.0.0.0:{port}"
+);
+
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
