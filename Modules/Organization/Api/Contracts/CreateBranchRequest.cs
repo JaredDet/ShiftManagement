@@ -1,9 +1,10 @@
 using System.ComponentModel.DataAnnotations;
+using ShiftManagement.Api.Shared;
 
 namespace ShiftManagement.Api.Modules.Organization.Api.Contracts;
 
 public sealed record CreateBranchRequest(
-    [Required]
+    [NotEmptyGuid]
     Guid CompanyId,
 
     [Required]

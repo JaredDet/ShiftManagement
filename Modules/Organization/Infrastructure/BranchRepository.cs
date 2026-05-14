@@ -1,45 +1,54 @@
 using Microsoft.EntityFrameworkCore;
+using ShiftManagement.Api.Infrastructure;
 using ShiftManagement.Api.Modules.Organization.Domain;
 
 namespace ShiftManagement.Api.Modules.Organization.Infrastructure.Persistence.Repositories;
 
-public sealed class BranchRepository(
-    ShiftManagementDbContext dbContext
-)
+public sealed class BranchRepository
 {
-    public async Task<Branch?> GetByIdAsync(Guid id)
+    private readonly ShiftManagementDbContext _context;
+
+    public BranchRepository(ShiftManagementDbContext context)
     {
-        return await dbContext.Branches
+        _context = context;
+    }
+
+    public Task<Branch?> GetByIdAsync(Guid id)
+    {
+        return _context.Branches
             .FirstOrDefaultAsync(branch => branch.Id == id);
     }
 
-    public async Task<List<Branch>> GetByCompanyIdAsync(Guid companyId)
+    public Task<List<Branch>> GetByCompanyIdAsync(Guid companyId)
     {
-        return await dbContext.Branches
+        return _context.Branches
+            .AsNoTracking()
             .Where(branch => branch.CompanyId == companyId)
             .ToListAsync();
     }
 
-    public async Task<List<Branch>> GetAllAsync()
+    public Task<List<Branch>> ListAsync()
     {
-        return await dbContext.Branches
+        return _context.Branches
+            .AsNoTracking()
             .ToListAsync();
     }
 
     public async Task AddAsync(Branch branch)
     {
-        await dbContext.Branches.AddAsync(branch);
+        await _context.Branches.AddAsync(branch);
     }
 
     public Task UpdateAsync(Branch branch)
     {
-        dbContext.Branches.Update(branch);
+        _context.Branches.Update(branch);
 
         return Task.CompletedTask;
     }
 
-    public async Task SaveChangesAsync()
+    public Task<bool> ExistsAsync(Guid id)
     {
-        await dbContext.SaveChangesAsync();
+        return _context.Set<Branch>()
+            .AnyAsync(branch => branch.Id == id);
     }
 }

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using ShiftManagement.Api.Modules.Organization.Api.Contracts;
-using ShiftManagement.Api.Modules.Organization.Application.UseCases;
+using ShiftManagement.Api.Modules.Organization.Application.Companies;
 
 namespace ShiftManagement.Api.Modules.Organization.Api.Controllers;
 
@@ -8,11 +8,23 @@ namespace ShiftManagement.Api.Modules.Organization.Api.Controllers;
 [Route("api/companies")]
 public class CompanyController(
     CreateCompanyUseCase createCompanyUseCase,
+    ListCompaniesUseCase listCompaniesUseCase,
     GetCompanyUseCase getCompanyUseCase,
     UpdateCompanyUseCase updateCompanyUseCase,
     DeactivateCompanyUseCase deactivateCompanyUseCase
 ) : ControllerBase
 {
+    [HttpGet]
+    public async Task<IActionResult> ListCompanies()
+    {
+        var result = await listCompaniesUseCase.ExecuteAsync();
+
+        if (!result.IsSuccess)
+            return BadRequest(result.Error);
+
+        return Ok(result.Value);
+    }
+
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetCompany(Guid id)
     {
@@ -74,6 +86,6 @@ public class CompanyController(
             return NotFound(result.Error);
         }
 
-        return Ok(result.Value);
+        return NoContent();
     }
 }

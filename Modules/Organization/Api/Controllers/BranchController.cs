@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using ShiftManagement.Api.Modules.Organization.Api.Contracts;
-using ShiftManagement.Api.Modules.Organization.Application.UseCases;
+using ShiftManagement.Api.Modules.Organization.Application.Branches;
 
 namespace ShiftManagement.Api.Modules.Organization.Api.Controllers;
 
@@ -87,6 +87,6 @@ public class BranchController(
             return NotFound(result.Error);
         }
 
-        return Ok(result.Value);
+        return NoContent();
     }
 }
