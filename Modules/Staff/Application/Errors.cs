@@ -67,4 +67,10 @@ public static class StaffErrors
             "staff.employee.invalid_primary_state",
             "Employee primary assignment state is invalid."
         );
+
+    public static readonly Error UserNotEligibleForEmployee =
+        new(
+            "staff.employee.user_not_eligible",
+            "User does not have a valid role to become an employee."
+        );
 }

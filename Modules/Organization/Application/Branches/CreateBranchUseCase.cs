@@ -1,10 +1,9 @@
-using ShiftManagement.Api.Modules.Organization.Api.Contracts;
-
 using ShiftManagement.Api.Modules.Organization.Infrastructure.Persistence.Repositories;
 using ShiftManagement.Api.Modules.Organization.Application.Errors;
 using ShiftManagement.Api.Shared;
 using ShiftManagement.Api.Modules.Organization.Domain;
 using ShiftManagement.Api.Infrastructure;
+using ShiftManagement.Api.Modules.Organization.Api.Contracts.Branches;
 
 namespace ShiftManagement.Api.Modules.Organization.Application.Branches;
 

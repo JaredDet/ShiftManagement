@@ -6,8 +6,9 @@ using ShiftManagement.Api.Modules.Staff.Application.Errors;
 using ShiftManagement.Api.Modules.Staff.Application.Mappers;
 using ShiftManagement.Api.Modules.Organization.Infrastructure.Persistence.Repositories;
 using ShiftManagement.Api.Modules.Organization.Application.Errors;
-using ShiftManagement.Api.Modules.Identity.Repository;
 using ShiftManagement.Api.Infrastructure;
+using ShiftManagement.Api.Modules.Identity.Domain;
+using ShiftManagement.Api.Modules.Identity.Infrastructure;
 using ShiftManagement.Api.Modules.Identity.Application;
 
 namespace ShiftManagement.Api.Modules.Staff.Application.Collaborators;
@@ -16,6 +17,7 @@ public sealed class CreateCollaboratorUseCase(
     EmployeeRepository employeeRepository,
     CompanyRepository companyRepository,
     UserRepository userRepository,
+    StaffAccessPolicy staffAccessPolicy,
     ShiftManagementDbContext context
 )
 {
@@ -68,6 +70,11 @@ public sealed class CreateCollaboratorUseCase(
 
         if (existing is not null)
             return Result.Failure(StaffErrors.EmployeeAlreadyExists);
+
+        var hasAccess = await staffAccessPolicy.CanAccess(request.UserId);
+
+        if (!hasAccess)
+            return Result.Failure(StaffErrors.UserNotEligibleForEmployee);
 
         return Result.Success();
     }

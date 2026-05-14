@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using ShiftManagement.Api.Modules.Organization.Api.Contracts;
+using ShiftManagement.Api.Modules.Organization.Api.Contracts.Companies;
 using ShiftManagement.Api.Modules.Organization.Application.Companies;
 
 namespace ShiftManagement.Api.Modules.Organization.Api.Controllers;

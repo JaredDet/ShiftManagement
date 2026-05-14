@@ -22,6 +22,8 @@ public sealed class ShiftManagementDbContext : DbContext
     public DbSet<User> Users => Set<User>();
     public DbSet<UserCredential> UserCredentials => Set<UserCredential>();
 
+    public DbSet<UserRole> UserRoles => Set<UserRole>();
+
     public ShiftManagementDbContext(
         DbContextOptions<ShiftManagementDbContext> options
     ) : base(options)

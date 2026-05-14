@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ShiftManagement.Api.Infrastructure;
@@ -11,9 +12,11 @@ using ShiftManagement.Api.Infrastructure;
 namespace ShiftManagement.Api.Migrations
 {
     [DbContext(typeof(ShiftManagementDbContext))]
-    partial class ShiftManagementDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260514072025_AddUserRoles")]
+    partial class AddUserRoles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -69,32 +72,6 @@ namespace ShiftManagement.Api.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("user_credentials");
-                });
-
-            modelBuilder.Entity("ShiftManagement.Api.Modules.Identity.Domain.UserRole", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("BranchId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("Role")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("user_roles");
                 });
 
             modelBuilder.Entity("ShiftManagement.Api.Modules.Organization.Domain.Branch", b =>

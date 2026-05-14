@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using ShiftManagement.Api.Shared;
 
-namespace ShiftManagement.Api.Modules.Organization.Api.Contracts;
+namespace ShiftManagement.Api.Modules.Organization.Api.Contracts.Branches;
 
 public sealed record CreateBranchRequest(
     [NotEmptyGuid]

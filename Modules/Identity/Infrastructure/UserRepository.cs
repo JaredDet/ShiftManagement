@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using ShiftManagement.Api.Infrastructure;
 using ShiftManagement.Api.Modules.Identity.Domain;
 
-namespace ShiftManagement.Api.Modules.Identity.Repository;
+namespace ShiftManagement.Api.Modules.Identity.Infrastructure;
 
 public class UserRepository
 {

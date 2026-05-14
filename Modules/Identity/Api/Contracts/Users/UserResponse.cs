@@ -1,4 +1,4 @@
-namespace ShiftManagement.Api.Modules.Identity.Api.Contracts;
+namespace ShiftManagement.Api.Modules.Identity.Api.Contracts.Users;
 
 public sealed record UserResponse(
     Guid Id,

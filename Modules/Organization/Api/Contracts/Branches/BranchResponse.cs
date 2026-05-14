@@ -1,4 +1,4 @@
-namespace ShiftManagement.Api.Modules.Organization.Api.Contracts;
+namespace ShiftManagement.Api.Modules.Organization.Api.Contracts.Branches;
 
 public sealed record BranchResponse(
     Guid Id,

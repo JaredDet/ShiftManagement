@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using ShiftManagement.Api.Shared;
 
-namespace ShiftManagement.Api.Modules.Identity.Api.Contracts;
+namespace ShiftManagement.Api.Modules.Identity.Api.Contracts.Users;
 
 public sealed record CreateUserRequest
 {
@@ -9,7 +9,7 @@ public sealed record CreateUserRequest
     public Guid CompanyId { get; init; }
 
     [Required]
-    [MinLength(2)]
+    [MinLength(6)]
     [MaxLength(100)]
     public required string Name { get; init; }
 

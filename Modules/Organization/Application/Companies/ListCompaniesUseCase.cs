@@ -1,4 +1,4 @@
-using ShiftManagement.Api.Modules.Organization.Api.Contracts;
+using ShiftManagement.Api.Modules.Organization.Api.Contracts.Companies;
 using ShiftManagement.Api.Modules.Organization.Infrastructure.Persistence.Repositories;
 using ShiftManagement.Api.Shared;
 

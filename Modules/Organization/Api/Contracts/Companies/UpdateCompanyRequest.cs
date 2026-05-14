@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace ShiftManagement.Api.Modules.Organization.Api.Contracts;
+namespace ShiftManagement.Api.Modules.Organization.Api.Contracts.Companies;
 
 public sealed record UpdateCompanyRequest(
     [Required]

@@ -1,7 +1,7 @@
-using ShiftManagement.Api.Modules.Identity.Api.Contracts;
+using ShiftManagement.Api.Modules.Identity.Api.Contracts.Users;
 using ShiftManagement.Api.Modules.Identity.Domain;
 
-namespace ShiftManagement.Api.Modules.Identity.Application;
+namespace ShiftManagement.Api.Modules.Identity.Application.Users;
 
 public static class UserMapper
 {
