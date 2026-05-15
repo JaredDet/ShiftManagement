@@ -70,4 +70,16 @@ public sealed class Shift
         StartsAt = startsAt;
         EndsAt = endsAt;
     }
+
+    public void Update(
+    Guid branchId,
+    Guid positionId,
+    DateTime startsAt,
+    DateTime endsAt)
+    {
+        BranchId = branchId;
+        PositionId = positionId;
+        StartsAt = startsAt;
+        EndsAt = endsAt;
+    }
 }

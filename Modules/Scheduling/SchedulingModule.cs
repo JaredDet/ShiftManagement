@@ -11,6 +11,8 @@ public static class SchedulingModule
 
         services.AddScoped<CreateShiftUseCase>();
 
+        services.AddScoped<UpdateShiftUseCase>();
+
         return services;
     }
 }
