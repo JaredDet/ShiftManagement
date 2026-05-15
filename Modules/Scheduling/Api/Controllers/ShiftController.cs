@@ -6,7 +6,11 @@ namespace ShiftManagement.Api.Modules.Scheduling.Api.Controllers;
 
 [ApiController]
 [Route("api/shifts")]
-public class ShiftController(CreateShiftUseCase createShiftUseCase, UpdateShiftUseCase updateShiftUseCase) : ControllerBase
+public class ShiftController(
+    CreateShiftUseCase createShiftUseCase,
+    UpdateShiftUseCase updateShiftUseCase,
+    AssignCollaboratorToShiftUseCase assignCollaboratorToShiftUseCase
+) : ControllerBase
 {
     private readonly CreateShiftUseCase _createShiftUseCase = createShiftUseCase;
 
@@ -33,9 +37,14 @@ public class ShiftController(CreateShiftUseCase createShiftUseCase, UpdateShiftU
     }
 
     [HttpPost("assign")]
-    public Task<IActionResult> Assign(AssignCollaboratorToShiftRequest request)
+    public async Task<IActionResult> Assign(AssignCollaboratorToShiftRequest request)
     {
-        throw new NotImplementedException();
+        var result = await assignCollaboratorToShiftUseCase.ExecuteAsync(request);
+
+        if (!result.IsSuccess)
+            return BadRequest(result.Error);
+
+        return Ok(result.Value);
     }
 
     [HttpPost("replace")]

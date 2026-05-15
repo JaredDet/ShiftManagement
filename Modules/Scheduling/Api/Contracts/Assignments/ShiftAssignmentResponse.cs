@@ -8,5 +8,5 @@ public sealed record ShiftAssignmentResponse
     public string CollaboratorName { get; init; }
     public string Status { get; init; }
     public DateTime CreatedAt { get; init; }
-    public DateTime? CanceledAt { get; init; }
+    public DateTime? CancelledAt { get; init; }
 }
