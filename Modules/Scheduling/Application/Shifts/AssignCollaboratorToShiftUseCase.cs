@@ -4,7 +4,7 @@ using ShiftManagement.Api.Modules.Scheduling.Domain;
 using ShiftManagement.Api.Modules.Scheduling.Infrastructure;
 using ShiftManagement.Api.Shared;
 
-namespace ShiftManagement.Api.Modules.Scheduling.Application;
+namespace ShiftManagement.Api.Modules.Scheduling.Application.Shifts;
 
 public sealed class AssignCollaboratorToShiftUseCase(
     ShiftRepository shiftRepository,

@@ -1,4 +1,4 @@
-using ShiftManagement.Api.Modules.Scheduling.Application;
+using ShiftManagement.Api.Modules.Scheduling.Application.Shifts;
 using ShiftManagement.Api.Modules.Scheduling.Infrastructure;
 
 namespace ShiftManagement.Api.Modules.Scheduling;
@@ -13,6 +13,7 @@ public static class SchedulingModule
         services.AddScoped<CreateShiftUseCase>();
         services.AddScoped<UpdateShiftUseCase>();
         services.AddScoped<AssignCollaboratorToShiftUseCase>();
+        services.AddScoped<ReplaceCollaboratorInShiftUseCase>();
 
         return services;
     }

@@ -40,4 +40,14 @@ public sealed class ShiftAssignmentRepository
             .Where(x => x.ShiftId == shiftId)
             .ToListAsync();
     }
+
+    public async Task<ShiftAssignment?> GetActiveAssignmentAsync(Guid shiftId, Guid collaboratorId)
+    {
+        return await _context.Set<ShiftAssignment>()
+            .FirstOrDefaultAsync(x =>
+                x.ShiftId == shiftId &&
+                x.CollaboratorId == collaboratorId &&
+                x.Status == ShiftAssignmentStatus.Assigned
+            );
+    }
 }

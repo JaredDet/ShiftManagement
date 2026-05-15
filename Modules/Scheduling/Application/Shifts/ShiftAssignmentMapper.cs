@@ -1,7 +1,7 @@
 using ShiftManagement.Api.Modules.Scheduling.Api.Contracts;
 using ShiftManagement.Api.Modules.Scheduling.Domain;
 
-namespace ShiftManagement.Api.Modules.Scheduling.Application;
+namespace ShiftManagement.Api.Modules.Scheduling.Application.Shifts;
 
 public static class ShiftAssignmentMapper
 {

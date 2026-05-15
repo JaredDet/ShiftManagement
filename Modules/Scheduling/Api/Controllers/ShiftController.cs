@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using ShiftManagement.Api.Modules.Scheduling.Api.Contracts;
-using ShiftManagement.Api.Modules.Scheduling.Application;
+using ShiftManagement.Api.Modules.Scheduling.Application.Shifts;
 
 namespace ShiftManagement.Api.Modules.Scheduling.Api.Controllers;
 
@@ -9,7 +9,8 @@ namespace ShiftManagement.Api.Modules.Scheduling.Api.Controllers;
 public class ShiftController(
     CreateShiftUseCase createShiftUseCase,
     UpdateShiftUseCase updateShiftUseCase,
-    AssignCollaboratorToShiftUseCase assignCollaboratorToShiftUseCase
+    AssignCollaboratorToShiftUseCase assignCollaboratorToShiftUseCase,
+    ReplaceCollaboratorInShiftUseCase replaceCollaboratorInShiftUseCase
 ) : ControllerBase
 {
     private readonly CreateShiftUseCase _createShiftUseCase = createShiftUseCase;
@@ -48,8 +49,13 @@ public class ShiftController(
     }
 
     [HttpPost("replace")]
-    public Task<IActionResult> Replace(ReplaceCollaboratorInShiftRequest request)
+    public async Task<IActionResult> Replace(ReplaceCollaboratorInShiftRequest request)
     {
-        throw new NotImplementedException();
+        var result = await replaceCollaboratorInShiftUseCase.ExecuteAsync(request);
+
+        if (!result.IsSuccess)
+            return BadRequest(result.Error);
+
+        return Ok(result.Value);
     }
 }
