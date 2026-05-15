@@ -4,14 +4,9 @@ using ShiftManagement.Api.Modules.Identity.Domain;
 
 namespace ShiftManagement.Api.Modules.Identity.Infrastructure;
 
-public class UserRoleRepository
+public class UserRoleRepository(ShiftManagementDbContext context)
 {
-    private readonly ShiftManagementDbContext _context;
-
-    public UserRoleRepository(ShiftManagementDbContext context)
-    {
-        _context = context;
-    }
+    private readonly ShiftManagementDbContext _context = context;
 
     public async Task AddAsync(UserRole userRole)
     {

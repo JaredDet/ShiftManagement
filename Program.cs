@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using ShiftManagement.Api.Infrastructure;
 using ShiftManagement.Api.Modules.Identity;
 using ShiftManagement.Api.Modules.Organization;
+using ShiftManagement.Api.Modules.Scheduling;
 using ShiftManagement.Api.Modules.Staff;
 
 Env.Load();
@@ -35,6 +36,8 @@ builder.Services.AddDbContext<ShiftManagementDbContext>(options =>
 builder.Services.AddOrganization();
 builder.Services.AddStaff();
 builder.Services.AddIdentityModule(builder.Configuration);
+
+builder.Services.AddScheduling();
 
 var app = builder.Build();
 

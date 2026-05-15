@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using ShiftManagement.Api.Modules.Identity.Domain;
 using ShiftManagement.Api.Modules.Organization.Domain;
+using ShiftManagement.Api.Modules.Scheduling.Domain;
 using ShiftManagement.Api.Modules.Staff.Domain;
 
 namespace ShiftManagement.Api.Infrastructure;
@@ -23,6 +24,10 @@ public sealed class ShiftManagementDbContext : DbContext
     public DbSet<UserCredential> UserCredentials => Set<UserCredential>();
 
     public DbSet<UserRole> UserRoles => Set<UserRole>();
+
+    public DbSet<Shift> Shifts => Set<Shift>();
+    public DbSet<ShiftAssignment> ShiftAssignments => Set<ShiftAssignment>();
+    public DbSet<ShiftSwapRequest> ShiftSwapRequests => Set<ShiftSwapRequest>();
 
     public ShiftManagementDbContext(
         DbContextOptions<ShiftManagementDbContext> options

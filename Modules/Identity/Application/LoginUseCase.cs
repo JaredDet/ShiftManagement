@@ -9,6 +9,7 @@ namespace ShiftManagement.Api.Modules.Identity.Application;
 public sealed class LoginUseCase(
     UserRepository userRepository,
     UserCredentialRepository credentialRepository,
+    Argon2PasswordHasher argon2PasswordHasher,
     JwtTokenService tokenService
 )
 {
@@ -29,7 +30,7 @@ public sealed class LoginUseCase(
         if (credential is null)
             return Result<LoginResponse>.Failure(IdentityErrors.InvalidCredentials);
 
-        var passwordValid = BCryptPasswordHasher.Verify(
+        var passwordValid = argon2PasswordHasher.Verify(
             request.Password,
             credential.PasswordHash
         );

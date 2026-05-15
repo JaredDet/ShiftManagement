@@ -7,14 +7,9 @@ using ShiftManagement.Api.Modules.Identity.Domain;
 
 namespace ShiftManagement.Api.Modules.Identity.Infrastructure;
 
-public sealed class JwtTokenService
+public sealed class JwtTokenService(IOptions<JwtOptions> options)
 {
-    private readonly JwtOptions _options;
-
-    public JwtTokenService(IOptions<JwtOptions> options)
-    {
-        _options = options.Value;
-    }
+    private readonly JwtOptions _options = options.Value;
 
     public string GenerateToken(User user, IEnumerable<UserRole>? roles = null)
     {

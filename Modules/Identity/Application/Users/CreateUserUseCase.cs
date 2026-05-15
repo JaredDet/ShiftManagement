@@ -12,6 +12,7 @@ public sealed class CreateUserUseCase(
     UserRepository userRepository,
     UserCredentialRepository userCredentialRepository,
     CompanyRepository companyRepository,
+    Argon2PasswordHasher argon2PasswordHasher,
     ShiftManagementDbContext context
 )
 {
@@ -35,7 +36,7 @@ public sealed class CreateUserUseCase(
             emailNormalized
         );
 
-        var passwordHash = BCryptPasswordHasher
+        var passwordHash = argon2PasswordHasher
             .Hash(request.Password);
 
         var credential = new UserCredential(

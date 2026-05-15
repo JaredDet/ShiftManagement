@@ -16,6 +16,8 @@ public static class IdentityModule
         services.AddScoped<UserRoleRepository>();
         services.AddScoped<UserCredentialRepository>();
 
+        services.AddScoped<Argon2PasswordHasher>();
+
         services.AddScoped<CreateUserUseCase>();
         services.AddScoped<UpdateUserUseCase>();
         services.AddScoped<DeactivateUserUseCase>();
@@ -28,6 +30,11 @@ public static class IdentityModule
         services.Configure<JwtOptions>(
             configuration.GetSection("Jwt")
         );
+
+        services.AddOptions<Argon2Options>()
+            .Bind(configuration.GetSection("ARGON2"))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
 
         services.AddScoped<StaffAccessPolicy>();
 

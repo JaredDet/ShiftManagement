@@ -4,16 +4,11 @@ using ShiftManagement.Api.Modules.Identity.Domain;
 
 namespace ShiftManagement.Api.Modules.Identity.Infrastructure;
 
-public sealed class UserCredentialRepository
-{
-    private readonly ShiftManagementDbContext _context;
-
-    public UserCredentialRepository(
-        ShiftManagementDbContext context
+public sealed class UserCredentialRepository(
+    ShiftManagementDbContext context
     )
-    {
-        _context = context;
-    }
+{
+    private readonly ShiftManagementDbContext _context = context;
 
     public async Task AddAsync(
         UserCredential credential

@@ -2,14 +2,9 @@ using ShiftManagement.Api.Modules.Identity.Domain;
 
 namespace ShiftManagement.Api.Modules.Identity.Infrastructure;
 
-public sealed class StaffAccessPolicy
+public sealed class StaffAccessPolicy(UserRoleRepository userRoleRepository)
 {
-    private readonly UserRoleRepository _userRoleRepository;
-
-    public StaffAccessPolicy(UserRoleRepository userRoleRepository)
-    {
-        _userRoleRepository = userRoleRepository;
-    }
+    private readonly UserRoleRepository _userRoleRepository = userRoleRepository;
 
     public Task<bool> CanAccess(Guid userId)
     {

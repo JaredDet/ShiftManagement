@@ -4,14 +4,9 @@ using ShiftManagement.Api.Modules.Identity.Domain;
 
 namespace ShiftManagement.Api.Modules.Identity.Infrastructure;
 
-public class UserRepository
+public class UserRepository(ShiftManagementDbContext context)
 {
-    private readonly ShiftManagementDbContext _context;
-
-    public UserRepository(ShiftManagementDbContext context)
-    {
-        _context = context;
-    }
+    private readonly ShiftManagementDbContext _context = context;
 
     public Task<bool> ExistsAsync(Guid userId)
     {
