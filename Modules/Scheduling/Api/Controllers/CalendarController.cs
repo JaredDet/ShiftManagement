@@ -1,15 +1,23 @@
 using Microsoft.AspNetCore.Mvc;
 using ShiftManagement.Api.Modules.Scheduling.Api.Contracts;
+using ShiftManagement.Api.Modules.Scheduling.Application.Calendar;
 
 namespace ShiftManagement.Api.Modules.Scheduling.Api.Controllers;
 
 [ApiController]
 [Route("api/calendar")]
-public class CalendarController : ControllerBase
+public class CalendarController(
+    GetCalendarUseCase useCase
+) : ControllerBase
 {
     [HttpGet]
-    public Task<IActionResult> Get([FromQuery] CalendarRequest request)
+    public async Task<IActionResult> Get([FromQuery] CalendarRequest request)
     {
-        throw new NotImplementedException();
+        var result = await useCase.ExecuteAsync(request);
+
+        if (!result.IsSuccess)
+            return BadRequest(result.Error);
+
+        return Ok(result.Value);
     }
 }

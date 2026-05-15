@@ -3,7 +3,7 @@ using ShiftManagement.Api.Modules.Staff.Domain;
 
 namespace ShiftManagement.Api.Modules.Staff.Application.Projections;
 
-public static class PositionAssignmentProjections
+public static class PositionAssignmentProjection
 {
     public static IQueryable<CollaboratorPositionResponse> ToPositionResponse(this IQueryable<EmploymentAssignment> query)
     {

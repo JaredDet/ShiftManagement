@@ -6,7 +6,7 @@ using ShiftManagement.Api.Modules.Staff.Domain;
 
 namespace ShiftManagement.Api.Modules.Staff.Application.Projections;
 
-public static class EmployeeProjections
+public static class EmployeeProjection
 {
     public static IQueryable<CollaboratorResponse> ToCollaboratorResponse(
     this DbContext context

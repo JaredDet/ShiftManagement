@@ -3,7 +3,7 @@ using ShiftManagement.Api.Modules.Staff.Domain;
 
 namespace ShiftManagement.Api.Modules.Staff.Application.Projections;
 
-public static class PositionProjections
+public static class PositionProjection
 {
     public static IQueryable<PositionResponse> ToPositionResponse(this IQueryable<Position> query)
     {

@@ -54,4 +54,12 @@ public sealed class ShiftAssignment
         Status = ShiftAssignmentStatus.Cancelled;
         CancelledAt = DateTime.UtcNow;
     }
+
+    public void TransferTo(Guid newCollaboratorId)
+    {
+        if (Status == ShiftAssignmentStatus.Cancelled)
+            throw ShiftErrors.AssignmentCancelled();
+
+        CollaboratorId = newCollaboratorId;
+    }
 }

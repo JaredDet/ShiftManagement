@@ -1,6 +1,5 @@
 using ShiftManagement.Api.Infrastructure;
 using ShiftManagement.Api.Modules.Scheduling.Api.Contracts;
-using ShiftManagement.Api.Modules.Scheduling.Domain;
 using ShiftManagement.Api.Modules.Scheduling.Infrastructure;
 using ShiftManagement.Api.Shared;
 
@@ -36,24 +35,11 @@ public sealed class ApproveShiftSwapUseCase(
                     SchedulingErrors.AssignmentNotFound
                 );
 
-            var sourceCollaborator = sourceAssignment.CollaboratorId;
-            var targetCollaborator = targetAssignment.CollaboratorId;
+            var sourceCollaboratorId = sourceAssignment.CollaboratorId;
+            var targetCollaboratorId = targetAssignment.CollaboratorId;
 
-            sourceAssignment.Cancel();
-            targetAssignment.Cancel();
-
-            var newSourceAssignment = ShiftAssignment.Create(
-                swap.SourceShiftId,
-                targetCollaborator
-            );
-
-            var newTargetAssignment = ShiftAssignment.Create(
-                swap.TargetShiftId,
-                sourceCollaborator
-            );
-
-            await assignmentRepository.AddAsync(newSourceAssignment);
-            await assignmentRepository.AddAsync(newTargetAssignment);
+            sourceAssignment.TransferTo(targetCollaboratorId);
+            targetAssignment.TransferTo(sourceCollaboratorId);
 
             await context.SaveChangesAsync();
 

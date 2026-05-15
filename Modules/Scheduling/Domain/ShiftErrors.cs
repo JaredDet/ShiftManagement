@@ -7,4 +7,10 @@ public static class ShiftErrors
 {
     public static DomainException InvalidStateForSwap() =>
     new("scheduling.shift.invalid_state_for_swap", "Shift cannot participate in a swap in its current state");
+
+    public static DomainException AssignmentCancelled() =>
+    new(
+        "scheduling.shift_assignment.cancelled",
+        "Assignment is cancelled and cannot be modified"
+    );
 }

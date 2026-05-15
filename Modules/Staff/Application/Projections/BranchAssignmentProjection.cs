@@ -3,7 +3,7 @@ using ShiftManagement.Api.Modules.Staff.Domain;
 
 namespace ShiftManagement.Api.Modules.Staff.Application.Projections;
 
-public static class BranchAssignmentProjections
+public static class BranchAssignmentProjection
 {
     public static IQueryable<CollaboratorBranchResponse> ToBranchResponse(this IQueryable<EmploymentAssignment> query)
     {

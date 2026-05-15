@@ -1,3 +1,4 @@
+using ShiftManagement.Api.Modules.Scheduling.Application.Calendar;
 using ShiftManagement.Api.Modules.Scheduling.Application.Shifts;
 using ShiftManagement.Api.Modules.Scheduling.Application.Swaps;
 using ShiftManagement.Api.Modules.Scheduling.Infrastructure;
@@ -11,6 +12,7 @@ public static class SchedulingModule
         services.AddScoped<ShiftRepository>();
         services.AddScoped<ShiftAssignmentRepository>();
         services.AddScoped<ShiftSwapRequestRepository>();
+        services.AddScoped<CalendarReadRepository>();
 
         services.AddScoped<CreateShiftUseCase>();
         services.AddScoped<UpdateShiftUseCase>();
@@ -21,6 +23,8 @@ public static class SchedulingModule
         services.AddScoped<CancelShiftSwapUseCase>();
         services.AddScoped<RequestShiftSwapUseCase>();
         services.AddScoped<RespondToShiftSwapUseCase>();
+
+        services.AddScoped<GetCalendarUseCase>();
 
         return services;
     }
