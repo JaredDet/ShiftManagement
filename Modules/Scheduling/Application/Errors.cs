@@ -24,4 +24,13 @@ public static class SchedulingErrors
 
     public static readonly Error AssignmentNotFound =
         new("scheduling.assignment.not_found", "Assignment not found");
+
+    public static readonly Error SwapRequestNotFound =
+        new("scheduling.swap.not_found", "Swap request not found");
+
+    public static readonly Error SwapAlreadyProcessed =
+        new("scheduling.swap.already_processed", "Swap request already processed");
+
+    public static readonly Error InvalidSwapDecision =
+        new("scheduling.swap.invalid_decision", "Invalid swap decision");
 }

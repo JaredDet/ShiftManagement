@@ -82,4 +82,10 @@ public sealed class Shift
         StartsAt = startsAt;
         EndsAt = endsAt;
     }
+
+    public void EnsureCanParticipateInSwap()
+    {
+        if (Status != ShiftStatus.Active)
+            throw ShiftErrors.InvalidStateForSwap();
+    }
 }

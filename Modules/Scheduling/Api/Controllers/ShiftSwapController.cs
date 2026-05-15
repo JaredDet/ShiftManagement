@@ -1,33 +1,62 @@
 using Microsoft.AspNetCore.Mvc;
 using ShiftManagement.Api.Modules.Scheduling.Api.Contracts;
+using ShiftManagement.Api.Modules.Scheduling.Application.Swaps;
 
 namespace ShiftManagement.Api.Modules.Scheduling.Api.Controllers;
 
 [ApiController]
 [Route("api/shifts/swaps")]
-public class ShiftSwapController : ControllerBase
+public class ShiftSwapController(
+    RequestShiftSwapUseCase requestUseCase,
+    ApproveShiftSwapUseCase approveUseCase,
+    RespondToShiftSwapUseCase respondUseCase,
+    CancelShiftSwapUseCase cancelUseCase
+) : ControllerBase
 {
     [HttpPost]
-    public Task<IActionResult> Request(RequestShiftSwapRequest request)
+    public async Task<IActionResult> RequestSwap(RequestShiftSwapRequest request)
     {
-        throw new NotImplementedException();
+        var result = await requestUseCase.ExecuteAsync(request);
+
+        if (!result.IsSuccess)
+            return BadRequest(result.Error);
+
+        return Ok(result.Value);
     }
 
     [HttpPost("approve")]
-    public Task<IActionResult> Approve(ApproveShiftSwapRequest request)
+    public async Task<IActionResult> Approve(ApproveShiftSwapRequest request)
     {
-        throw new NotImplementedException();
+        var result = await approveUseCase.ExecuteAsync(request.SwapRequestId);
+
+        if (!result.IsSuccess)
+            return BadRequest(result.Error);
+
+        return Ok(result.Value);
     }
 
-    [HttpPost("reject")]
-    public Task<IActionResult> Reject(RejectShiftSwapRequest request)
+    [HttpPost("respond")]
+    public async Task<IActionResult> Respond(RespondShiftSwapRequest request)
     {
-        throw new NotImplementedException();
+        var result = await respondUseCase.ExecuteAsync(
+            request.SwapRequestId,
+            request.Decision
+        );
+
+        if (!result.IsSuccess)
+            return BadRequest(result.Error);
+
+        return Ok(result.Value);
     }
 
     [HttpPost("cancel")]
-    public Task<IActionResult> Cancel(CancelShiftSwapRequest request)
+    public async Task<IActionResult> Cancel(CancelShiftSwapRequest request)
     {
-        throw new NotImplementedException();
+        var result = await cancelUseCase.ExecuteAsync(request.SwapRequestId);
+
+        if (!result.IsSuccess)
+            return BadRequest(result.Error);
+
+        return Ok(result.Value);
     }
 }

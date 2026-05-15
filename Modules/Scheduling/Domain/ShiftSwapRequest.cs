@@ -21,9 +21,7 @@ public sealed class ShiftSwapRequest
     public DateTime? RespondedAt { get; private set; }
     public DateTime? ApprovedAt { get; private set; }
 
-    private ShiftSwapRequest()
-    {
-    }
+    private ShiftSwapRequest() { }
 
     public ShiftSwapRequest(
         Guid id,
@@ -68,24 +66,44 @@ public sealed class ShiftSwapRequest
 
     public void Accept()
     {
+        EnsurePendingState("accept");
+
         Status = ShiftSwapStatus.AcceptedByCollaborator;
         RespondedAt = DateTime.UtcNow;
     }
 
     public void Reject()
     {
+        EnsurePendingState("reject");
+
         Status = ShiftSwapStatus.Rejected;
         RespondedAt = DateTime.UtcNow;
     }
 
     public void Approve()
     {
+        EnsureAcceptedState("approve");
+
         Status = ShiftSwapStatus.Approved;
         ApprovedAt = DateTime.UtcNow;
     }
 
     public void Cancel()
     {
+        EnsurePendingState("cancel");
+
         Status = ShiftSwapStatus.Cancelled;
+    }
+
+    private void EnsurePendingState(string operation)
+    {
+        if (Status != ShiftSwapStatus.Pending)
+            throw ShiftSwapErrors.InvalidState(operation, Status);
+    }
+
+    private void EnsureAcceptedState(string operation)
+    {
+        if (Status != ShiftSwapStatus.AcceptedByCollaborator)
+            throw ShiftSwapErrors.InvalidState(operation, Status);
     }
 }
