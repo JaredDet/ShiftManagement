@@ -1,5 +1,6 @@
 using ShiftManagement.Api.Infrastructure;
 using ShiftManagement.Api.Modules.Organization.Api.Contracts.Companies;
+using ShiftManagement.Api.Modules.Organization.Application.Errors;
 using ShiftManagement.Api.Modules.Organization.Domain;
 using ShiftManagement.Api.Modules.Organization.Infrastructure.Persistence.Repositories;
 using ShiftManagement.Api.Shared;
@@ -12,14 +13,20 @@ public sealed class CreateCompanyUseCase(
 )
 {
     public async Task<Result<CompanyResponse>> ExecuteAsync(
-        CreateCompanyRequest request
-    )
+    CreateCompanyRequest request
+)
     {
-        var company = new Company(
-            Guid.NewGuid(),
-            request.Name,
-            CompanyStatus.Active,
-            DateTime.UtcNow
+        var nameNormalized = request.Name.Trim().ToLowerInvariant();
+
+        var exists = await companyRepository.ExistsByNameAsync(nameNormalized);
+
+        if (exists)
+            return Result<CompanyResponse>.Failure(
+                OrganizationErrors.CompanyAlreadyExists
+            );
+
+        var company = Company.Create(
+            request.Name
         );
 
         await companyRepository.AddAsync(company);

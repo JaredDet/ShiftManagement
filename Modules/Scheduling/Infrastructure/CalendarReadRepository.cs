@@ -14,10 +14,10 @@ public class CalendarReadRepository
         _context = context;
     }
 
-    public Task<List<CalendarResponse>> GetAsync(DateOnly start, DateOnly end)
+    public Task<List<CalendarResponse>> GetAsync(DateTime start, DateTime end)
     {
         return _context.ToCalendarResponse()
-            .Where(x => x.StartsOn >= start && x.EndsOn <= end)
+            .Where(x => x.StartsAt >= start && x.EndsAt <= end)
             .ToListAsync();
     }
 }

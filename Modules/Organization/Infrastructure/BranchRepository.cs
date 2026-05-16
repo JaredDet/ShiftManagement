@@ -4,26 +4,21 @@ using ShiftManagement.Api.Modules.Organization.Domain;
 
 namespace ShiftManagement.Api.Modules.Organization.Infrastructure.Persistence.Repositories;
 
-public sealed class BranchRepository
+public sealed class BranchRepository(ShiftManagementDbContext context)
 {
-    private readonly ShiftManagementDbContext _context;
-
-    public BranchRepository(ShiftManagementDbContext context)
-    {
-        _context = context;
-    }
+    private readonly ShiftManagementDbContext _context = context;
 
     public Task<Branch?> GetByIdAsync(Guid id)
     {
         return _context.Branches
-            .FirstOrDefaultAsync(branch => branch.Id == id);
+            .FirstOrDefaultAsync(b => b.Id == id);
     }
 
     public Task<List<Branch>> GetByCompanyIdAsync(Guid companyId)
     {
         return _context.Branches
             .AsNoTracking()
-            .Where(branch => branch.CompanyId == companyId)
+            .Where(b => b.CompanyId == companyId)
             .ToListAsync();
     }
 
@@ -34,21 +29,22 @@ public sealed class BranchRepository
             .ToListAsync();
     }
 
-    public async Task AddAsync(Branch branch)
+    public Task AddAsync(Branch branch)
     {
-        await _context.Branches.AddAsync(branch);
-    }
-
-    public Task UpdateAsync(Branch branch)
-    {
-        _context.Branches.Update(branch);
-
-        return Task.CompletedTask;
+        return _context.Branches.AddAsync(branch).AsTask();
     }
 
     public Task<bool> ExistsAsync(Guid id)
     {
-        return _context.Set<Branch>()
-            .AnyAsync(branch => branch.Id == id);
+        return _context.Branches
+            .AnyAsync(b => b.Id == id);
+    }
+
+    public Task<bool> ExistsByNameAndCompanyAsync(string name, Guid companyId)
+    {
+        return _context.Branches
+            .AnyAsync(b =>
+                b.CompanyId == companyId &&
+                b.Name.ToLower() == name.ToLower());
     }
 }

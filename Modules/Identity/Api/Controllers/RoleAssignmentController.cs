@@ -25,29 +25,43 @@ public class RoleAssignmentController(
 
     [HttpPost]
     public async Task<IActionResult> AssignRole(
-        Guid userId,
-        [FromBody] AssignRoleToUserRequest request
+    Guid userId,
+    [FromBody] AssignRoleToUserRequest request
     )
     {
         var result = await assignRoleToUserUseCase.ExecuteAsync(userId, request);
 
-        if (!result.IsSuccess)
-            return BadRequest(result.Error);
+        if (result.IsSuccess)
+            return Ok(result.Value);
 
-        return Ok(result.Value);
+        return result.Error.Code switch
+        {
+            "identity.user.not_found" => NotFound(result.Error),
+
+            "identity.role.already_assigned" => Conflict(result.Error),
+
+            "identity.role.branch_required" => BadRequest(result.Error),
+            "identity.role.branch_not_allowed" => BadRequest(result.Error),
+
+            _ => BadRequest(result.Error)
+        };
     }
 
     [HttpDelete]
     public async Task<IActionResult> RemoveRole(
-        Guid userId,
-        [FromBody] RemoveRoleFromUserRequest request
-    )
+    Guid userId,
+    [FromBody] RemoveRoleFromUserRequest request
+)
     {
         var result = await removeRoleFromUserUseCase.ExecuteAsync(userId, request);
 
-        if (!result.IsSuccess)
-            return BadRequest(result.Error);
+        if (result.IsSuccess)
+            return NoContent();
 
-        return NoContent();
+        return result.Error.Code switch
+        {
+            "identity.role.not_found" => NotFound(result.Error),
+            _ => BadRequest(result.Error)
+        };
     }
 }

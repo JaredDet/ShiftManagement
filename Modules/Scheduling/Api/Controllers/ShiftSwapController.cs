@@ -1,12 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
+
 using ShiftManagement.Api.Modules.Scheduling.Api.Contracts;
 using ShiftManagement.Api.Modules.Scheduling.Application.Swaps;
 
 namespace ShiftManagement.Api.Modules.Scheduling.Api.Controllers;
 
 [ApiController]
-[Route("api/shifts/swaps")]
-public class ShiftSwapController(
+[Route("api/shift-swaps")]
+public sealed class ShiftSwapController(
     RequestShiftSwapUseCase requestUseCase,
     ApproveShiftSwapUseCase approveUseCase,
     RespondToShiftSwapUseCase respondUseCase,
@@ -14,7 +15,8 @@ public class ShiftSwapController(
 ) : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> RequestSwap(RequestShiftSwapRequest request)
+    public async Task<IActionResult> RequestSwap(
+        RequestShiftSwapRequest request)
     {
         var result = await requestUseCase.ExecuteAsync(request);
 
@@ -24,10 +26,10 @@ public class ShiftSwapController(
         return Ok(result.Value);
     }
 
-    [HttpPost("approve")]
-    public async Task<IActionResult> Approve(ApproveShiftSwapRequest request)
+    [HttpPost("{id}/approve")]
+    public async Task<IActionResult> Approve(Guid id)
     {
-        var result = await approveUseCase.ExecuteAsync(request.SwapRequestId);
+        var result = await approveUseCase.ExecuteAsync(id);
 
         if (!result.IsSuccess)
             return BadRequest(result.Error);
@@ -35,12 +37,12 @@ public class ShiftSwapController(
         return Ok(result.Value);
     }
 
-    [HttpPost("respond")]
-    public async Task<IActionResult> Respond(RespondShiftSwapRequest request)
+    [HttpPost("{id}/accept")]
+    public async Task<IActionResult> Accept(Guid id)
     {
         var result = await respondUseCase.ExecuteAsync(
-            request.SwapRequestId,
-            request.Decision
+            id,
+            ShiftSwapDecision.Accept
         );
 
         if (!result.IsSuccess)
@@ -49,10 +51,24 @@ public class ShiftSwapController(
         return Ok(result.Value);
     }
 
-    [HttpPost("cancel")]
-    public async Task<IActionResult> Cancel(CancelShiftSwapRequest request)
+    [HttpPost("{id}/reject")]
+    public async Task<IActionResult> Reject(Guid id)
     {
-        var result = await cancelUseCase.ExecuteAsync(request.SwapRequestId);
+        var result = await respondUseCase.ExecuteAsync(
+            id,
+            ShiftSwapDecision.Reject
+        );
+
+        if (!result.IsSuccess)
+            return BadRequest(result.Error);
+
+        return Ok(result.Value);
+    }
+
+    [HttpPost("{id}/cancel")]
+    public async Task<IActionResult> Cancel(Guid id)
+    {
+        var result = await cancelUseCase.ExecuteAsync(id);
 
         if (!result.IsSuccess)
             return BadRequest(result.Error);

@@ -19,11 +19,9 @@ public sealed class Branch
 
     public DateTime CreatedAt { get; private set; }
 
-    private Branch()
-    {
-    }
+    private Branch() { }
 
-    public Branch(
+    private Branch(
         Guid id,
         Guid companyId,
         string name,
@@ -40,10 +38,23 @@ public sealed class Branch
         CreatedAt = createdAt;
     }
 
-    public void Update(
+    public static Branch Create(
+        Guid companyId,
         string name,
         string address
     )
+    {
+        return new Branch(
+            Guid.NewGuid(),
+            companyId,
+            name,
+            address,
+            BranchStatus.Active,
+            DateTime.UtcNow
+        );
+    }
+
+    public void Update(string name, string address)
     {
         Name = name;
         Address = address;

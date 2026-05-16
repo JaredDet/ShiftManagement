@@ -25,6 +25,17 @@ public sealed class UpdateCompanyUseCase(
             );
         }
 
+        var nameNormalized = request.Name.Trim().ToLowerInvariant();
+
+        var existsWithSameName = await companyRepository.ExistsByNameAsync(nameNormalized);
+
+        if (existsWithSameName && !string.Equals(company.Name, request.Name, StringComparison.OrdinalIgnoreCase))
+        {
+            return Result<CompanyResponse>.Failure(
+                OrganizationErrors.CompanyAlreadyExists
+            );
+        }
+
         company.Update(request.Name);
 
         await context.SaveChangesAsync();

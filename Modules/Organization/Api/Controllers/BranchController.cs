@@ -19,24 +19,29 @@ public class BranchController(
     {
         var result = await getBranchUseCase.ExecuteAsync(id);
 
-        if (!result.IsSuccess)
-        {
-            return NotFound(result.Error);
-        }
+        if (result.IsSuccess)
+            return Ok(result.Value);
 
-        return Ok(result.Value);
+        return result.Error.Code switch
+        {
+            "organization.branch.not_found" => NotFound(result.Error),
+            _ => BadRequest(result.Error)
+        };
     }
 
-    [HttpGet]
     [HttpGet]
     public async Task<IActionResult> ListBranches([FromQuery] Guid companyId)
     {
         var result = await listBranchesUseCase.ExecuteAsync(companyId);
 
-        if (!result.IsSuccess)
-            return NotFound(result.Error);
+        if (result.IsSuccess)
+            return Ok(result.Value);
 
-        return Ok(result.Value);
+        return result.Error.Code switch
+        {
+            "organization.company.not_found" => NotFound(result.Error),
+            _ => BadRequest(result.Error)
+        };
     }
 
     [HttpPost]
@@ -44,19 +49,21 @@ public class BranchController(
         CreateBranchRequest request
     )
     {
-        var result = await createBranchUseCase
-            .ExecuteAsync(request);
+        var result = await createBranchUseCase.ExecuteAsync(request);
 
-        if (!result.IsSuccess)
+        if (result.IsSuccess)
+            return CreatedAtAction(
+                nameof(GetBranch),
+                new { id = result.Value!.Id },
+                result.Value
+            );
+
+        return result.Error.Code switch
         {
-            return BadRequest(result.Error);
-        }
-
-        return CreatedAtAction(
-            nameof(GetBranch),
-            new { id = result.Value!.Id },
-            result.Value
-        );
+            "organization.company.not_found" => NotFound(result.Error),
+            "organization.branch.already_exists" => Conflict(result.Error),
+            _ => BadRequest(result.Error)
+        };
     }
 
     [HttpPut("{id:guid}")]
@@ -65,28 +72,31 @@ public class BranchController(
         UpdateBranchRequest request
     )
     {
-        var result = await updateBranchUseCase
-            .ExecuteAsync(id, request);
+        var result = await updateBranchUseCase.ExecuteAsync(id, request);
 
-        if (!result.IsSuccess)
+        if (result.IsSuccess)
+            return Ok(result.Value);
+
+        return result.Error.Code switch
         {
-            return NotFound(result.Error);
-        }
-
-        return Ok(result.Value);
+            "organization.branch.not_found" => NotFound(result.Error),
+            "organization.branch.already_exists" => Conflict(result.Error),
+            _ => BadRequest(result.Error)
+        };
     }
 
     [HttpPatch("{id:guid}/deactivate")]
     public async Task<IActionResult> DeactivateBranch(Guid id)
     {
-        var result = await deactivateBranchUseCase
-            .ExecuteAsync(id);
+        var result = await deactivateBranchUseCase.ExecuteAsync(id);
 
-        if (!result.IsSuccess)
+        if (result.IsSuccess)
+            return NoContent();
+
+        return result.Error.Code switch
         {
-            return NotFound(result.Error);
-        }
-
-        return NoContent();
+            "organization.branch.not_found" => NotFound(result.Error),
+            _ => BadRequest(result.Error)
+        };
     }
 }

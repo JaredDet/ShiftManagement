@@ -19,34 +19,47 @@ public class UserController(
     {
         var result = await createUserUseCase.ExecuteAsync(request);
 
-        if (!result.IsSuccess)
-            return BadRequest(result.Error);
+        if (result.IsSuccess)
+            return Ok(result.Value);
 
-        return Ok(result.Value);
+        return result.Error.Code switch
+        {
+            "organization.company.not_found" => NotFound(result.Error),
+            "identity.user.email_already_in_use" => Conflict(result.Error),
+            _ => BadRequest(result.Error)
+        };
     }
 
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateUser(
-        Guid id,
-        [FromBody] UpdateUserRequest request
-    )
+       Guid id,
+       [FromBody] UpdateUserRequest request
+   )
     {
         var result = await updateUserUseCase.ExecuteAsync(id, request);
 
-        if (!result.IsSuccess)
-            return BadRequest(result.Error);
+        if (result.IsSuccess)
+            return Ok(result.Value);
 
-        return Ok(result.Value);
+        return result.Error.Code switch
+        {
+            "identity.user.not_found" => NotFound(result.Error),
+            _ => BadRequest(result.Error)
+        };
     }
 
-    [HttpDelete("{id:guid}")]
+    [HttpPatch("{id:guid}/deactivate")]
     public async Task<IActionResult> DeactivateUser(Guid id)
     {
         var result = await deactivateUserUseCase.ExecuteAsync(id);
 
-        if (!result.IsSuccess)
-            return NotFound(result.Error);
+        if (result.IsSuccess)
+            return NoContent();
 
-        return NoContent();
+        return result.Error.Code switch
+        {
+            "identity.user.not_found" => NotFound(result.Error),
+            _ => BadRequest(result.Error)
+        };
     }
 }

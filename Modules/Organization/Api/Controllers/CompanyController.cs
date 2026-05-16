@@ -30,62 +30,69 @@ public class CompanyController(
     {
         var result = await getCompanyUseCase.ExecuteAsync(id);
 
-        if (!result.IsSuccess)
-        {
-            return NotFound(result.Error);
-        }
+        if (result.IsSuccess)
+            return Ok(result.Value);
 
-        return Ok(result.Value);
+        return result.Error.Code switch
+        {
+            "organization.company.not_found" => NotFound(result.Error),
+            _ => BadRequest(result.Error)
+        };
     }
+
 
     [HttpPost]
     public async Task<IActionResult> CreateCompany(
         CreateCompanyRequest request
     )
     {
-        var result = await createCompanyUseCase
-            .ExecuteAsync(request);
+        var result = await createCompanyUseCase.ExecuteAsync(request);
 
-        if (!result.IsSuccess)
+        if (result.IsSuccess)
+            return CreatedAtAction(
+                nameof(GetCompany),
+                new { id = result.Value!.Id },
+                result.Value
+            );
+
+        return result.Error.Code switch
         {
-            return BadRequest(result.Error);
-        }
-
-        return CreatedAtAction(
-            nameof(GetCompany),
-            new { id = result.Value!.Id },
-            result.Value
-        );
+            "organization.company.already_exists" => Conflict(result.Error),
+            _ => BadRequest(result.Error)
+        };
     }
 
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateCompany(
-        Guid id,
-        UpdateCompanyRequest request
-    )
+       Guid id,
+       UpdateCompanyRequest request
+   )
     {
-        var result = await updateCompanyUseCase
-            .ExecuteAsync(id, request);
+        var result = await updateCompanyUseCase.ExecuteAsync(id, request);
 
-        if (!result.IsSuccess)
+        if (result.IsSuccess)
+            return Ok(result.Value);
+
+        return result.Error.Code switch
         {
-            return NotFound(result.Error);
-        }
-
-        return Ok(result.Value);
+            "organization.company.not_found" => NotFound(result.Error),
+            "organization.company.already_exists" => Conflict(result.Error),
+            _ => BadRequest(result.Error)
+        };
     }
 
     [HttpPatch("{id:guid}/deactivate")]
     public async Task<IActionResult> DeactivateCompany(Guid id)
     {
-        var result = await deactivateCompanyUseCase
-            .ExecuteAsync(id);
+        var result = await deactivateCompanyUseCase.ExecuteAsync(id);
 
-        if (!result.IsSuccess)
+        if (result.IsSuccess)
+            return NoContent();
+
+        return result.Error.Code switch
         {
-            return NotFound(result.Error);
-        }
-
-        return NoContent();
+            "organization.company.not_found" => NotFound(result.Error),
+            _ => BadRequest(result.Error)
+        };
     }
 }

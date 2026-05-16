@@ -26,8 +26,8 @@ public static class CalendarProjection
             {
                 BranchId = s.BranchId,
                 BranchName = b.Name,
-                StartsOn = DateOnly.FromDateTime(s.StartsAt),
-                EndsOn = DateOnly.FromDateTime(s.EndsAt),
+                StartsAt = s.StartsAt,
+                EndsAt = s.EndsAt,
 
                 Shifts = ag.Select(a => new ShiftResponse
                 {

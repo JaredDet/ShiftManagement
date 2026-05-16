@@ -15,21 +15,24 @@ public sealed class Company
 
     public DateTime CreatedAt { get; private set; }
 
-    private Company()
-    {
-    }
+    private Company() { }
 
-    public Company(
-        Guid id,
-        string name,
-        CompanyStatus status,
-        DateTime createdAt
-    )
+    private Company(Guid id, string name, CompanyStatus status, DateTime createdAt)
     {
         Id = id;
         Name = name;
         Status = status;
         CreatedAt = createdAt;
+    }
+
+    public static Company Create(string name)
+    {
+        return new Company(
+            Guid.NewGuid(),
+            name,
+            CompanyStatus.Active,
+            DateTime.UtcNow
+        );
     }
 
     public void Update(string name)

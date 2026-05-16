@@ -15,7 +15,7 @@ public sealed class ListUserRolesUseCase(
         return Result<UserRolesResponse>.Success(
             new UserRolesResponse
             {
-                Roles = roles.Select(UserRoleMapper.ToResponse).ToList()
+                Roles = [.. roles.Select(UserRoleMapper.ToResponse)]
             }
         );
     }

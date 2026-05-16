@@ -7,8 +7,8 @@ public sealed record CalendarRequest
 
     [NotEmptyGuid]
     public Guid BranchId { get; init; }
-    public DateOnly StartsAt { get; init; }
+    public DateTime StartsAt { get; init; }
 
     [DateRange(nameof(StartsAt))]
-    public DateOnly EndsAt { get; init; }
+    public DateTime EndsAt { get; init; }
 }

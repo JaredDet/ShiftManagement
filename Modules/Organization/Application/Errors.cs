@@ -10,9 +10,21 @@ public static class OrganizationErrors
             "Company not found."
         );
 
+    public static readonly Error CompanyAlreadyExists =
+        new(
+            "organization.company.already_exists",
+            "Company already exists."
+        );
+
     public static readonly Error BranchNotFound =
         new(
             "organization.branch.not_found",
             "Branch not found."
         );
+
+    public static readonly Error BranchAlreadyExists =
+    new(
+        "organization.branch.already_exists",
+        "Branch already exists for this company."
+    );
 }

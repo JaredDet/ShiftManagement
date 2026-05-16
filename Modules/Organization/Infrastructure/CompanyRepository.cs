@@ -4,49 +4,37 @@ using ShiftManagement.Api.Modules.Organization.Domain;
 
 namespace ShiftManagement.Api.Modules.Organization.Infrastructure.Persistence.Repositories;
 
-public sealed class CompanyRepository
+public sealed class CompanyRepository(ShiftManagementDbContext context)
 {
-    private readonly ShiftManagementDbContext _context;
-
-    public CompanyRepository(ShiftManagementDbContext context)
-    {
-        _context = context;
-    }
+    private readonly ShiftManagementDbContext _context = context;
 
     public Task<Company?> GetByIdAsync(Guid id)
     {
         return _context.Companies
-            .FirstOrDefaultAsync(company => company.Id == id);
+            .FirstOrDefaultAsync(c => c.Id == id);
     }
 
     public Task<List<Company>> ListAsync()
     {
-        return _context.Set<Company>()
+        return _context.Companies
             .AsNoTracking()
             .ToListAsync();
     }
 
-    public Task<List<Company>> GetAllAsync()
+    public Task AddAsync(Company company)
     {
-        return _context.Companies
-            .ToListAsync();
-    }
-
-    public async Task AddAsync(Company company)
-    {
-        await _context.Companies.AddAsync(company);
-    }
-
-    public Task UpdateAsync(Company company)
-    {
-        _context.Companies.Update(company);
-
-        return Task.CompletedTask;
+        return _context.Companies.AddAsync(company).AsTask();
     }
 
     public Task<bool> ExistsAsync(Guid id)
     {
         return _context.Companies
-            .AnyAsync(company => company.Id == id);
+            .AnyAsync(c => c.Id == id);
+    }
+
+    public Task<bool> ExistsByNameAsync(string name)
+    {
+        return _context.Companies
+            .AnyAsync(c => c.Name.ToLower() == name.ToLower());
     }
 }

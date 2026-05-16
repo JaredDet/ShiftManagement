@@ -14,11 +14,10 @@ public sealed class CreateBranchUseCase(
 )
 {
     public async Task<Result<BranchResponse>> ExecuteAsync(
-        CreateBranchRequest request
-    )
+    CreateBranchRequest request
+)
     {
-        var company = await companyRepository
-            .GetByIdAsync(request.CompanyId);
+        var company = await companyRepository.GetByIdAsync(request.CompanyId);
 
         if (company is null)
         {
@@ -27,13 +26,24 @@ public sealed class CreateBranchUseCase(
             );
         }
 
-        var branch = new Branch(
-            Guid.NewGuid(),
+        var nameNormalized = request.Name.Trim().ToLowerInvariant();
+
+        var exists = await branchRepository.ExistsByNameAndCompanyAsync(
+            nameNormalized,
+            request.CompanyId
+        );
+
+        if (exists)
+        {
+            return Result<BranchResponse>.Failure(
+                OrganizationErrors.BranchAlreadyExists
+            );
+        }
+
+        var branch = Branch.Create(
             request.CompanyId,
             request.Name,
-            request.Address,
-            BranchStatus.Active,
-            DateTime.UtcNow
+            request.Address
         );
 
         await branchRepository.AddAsync(branch);

@@ -25,6 +25,19 @@ public sealed class UpdateBranchUseCase(
             );
         }
 
+        var nameNormalized = request.Name.Trim().ToLowerInvariant();
+
+        var existsWithSameName = await branchRepository
+            .ExistsByNameAndCompanyAsync(nameNormalized, branch.CompanyId);
+
+        if (existsWithSameName &&
+            !branch.Name.Equals(request.Name, StringComparison.OrdinalIgnoreCase))
+        {
+            return Result<BranchResponse>.Failure(
+                OrganizationErrors.BranchAlreadyExists
+            );
+        }
+
         branch.Update(
             request.Name,
             request.Address

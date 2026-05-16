@@ -10,18 +10,24 @@ public sealed class ShiftSwapRequest
     public Guid Id { get; private set; }
 
     public Guid RequesterId { get; private set; }
+
     public Guid TargetCollaboratorId { get; private set; }
 
     public Guid SourceShiftId { get; private set; }
+
     public Guid TargetShiftId { get; private set; }
 
     public ShiftSwapStatus Status { get; private set; }
 
     public DateTime CreatedAt { get; private set; }
+
     public DateTime? RespondedAt { get; private set; }
+
     public DateTime? ApprovedAt { get; private set; }
 
-    private ShiftSwapRequest() { }
+    private ShiftSwapRequest()
+    {
+    }
 
     public ShiftSwapRequest(
         Guid id,
@@ -66,44 +72,46 @@ public sealed class ShiftSwapRequest
 
     public void Accept()
     {
-        EnsurePendingState("accept");
+        TransitionTo(
+            ShiftSwapStatus.AcceptedByCollaborator
+        );
 
-        Status = ShiftSwapStatus.AcceptedByCollaborator;
         RespondedAt = DateTime.UtcNow;
     }
 
     public void Reject()
     {
-        EnsurePendingState("reject");
+        TransitionTo(
+            ShiftSwapStatus.Rejected
+        );
 
-        Status = ShiftSwapStatus.Rejected;
         RespondedAt = DateTime.UtcNow;
     }
 
     public void Approve()
     {
-        EnsureAcceptedState("approve");
+        TransitionTo(
+            ShiftSwapStatus.Approved
+        );
 
-        Status = ShiftSwapStatus.Approved;
         ApprovedAt = DateTime.UtcNow;
     }
 
     public void Cancel()
     {
-        EnsurePendingState("cancel");
-
-        Status = ShiftSwapStatus.Cancelled;
+        TransitionTo(
+            ShiftSwapStatus.Cancelled
+        );
     }
 
-    private void EnsurePendingState(string operation)
+    private void TransitionTo(
+        ShiftSwapStatus newStatus)
     {
-        if (Status != ShiftSwapStatus.Pending)
-            throw ShiftSwapErrors.InvalidState(operation, Status);
-    }
+        ShiftSwapStateMachine.EnsureTransition(
+            Status,
+            newStatus
+        );
 
-    private void EnsureAcceptedState(string operation)
-    {
-        if (Status != ShiftSwapStatus.AcceptedByCollaborator)
-            throw ShiftSwapErrors.InvalidState(operation, Status);
+        Status = newStatus;
     }
 }

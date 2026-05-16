@@ -29,7 +29,9 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<ShiftManagementDbContext>(options =>
 {
-    var connectionString = builder.Configuration["DATABASE_URL"];
+    var connectionString =
+        builder.Configuration["DATABASE_URL"];
+
     options.UseNpgsql(connectionString);
 });
 
