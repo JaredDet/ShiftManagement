@@ -21,6 +21,50 @@ def replace_collaborator(
     )
 
 
+def create_swap_request(
+    ctx,
+    requester_id,
+    target_collaborator_id,
+    source_shift_id,
+    target_shift_id
+):
+
+    return post_json(
+        ctx["base_url"],
+        "/api/shift-swaps",
+        {
+            "requesterId": requester_id,
+            "targetCollaboratorId": target_collaborator_id,
+            "sourceShiftId": source_shift_id,
+            "targetShiftId": target_shift_id
+        }
+    )
+
+
+def accept_swap_request(
+    ctx,
+    request_id
+):
+
+    return post_json(
+        ctx["base_url"],
+        f"/api/shift-swaps/{request_id}/accept",
+        {}
+    )
+
+
+def approve_swap_request(
+    ctx,
+    request_id
+):
+
+    return post_json(
+        ctx["base_url"],
+        f"/api/shift-swaps/{request_id}/approve",
+        {}
+    )
+
+
 def seed_scheduling(ctx):
 
     print("\nCreando turnos...")
@@ -28,13 +72,21 @@ def seed_scheduling(ctx):
     branches = ctx["branches"]
     employees = ctx["employees"]
 
+    # =========================
+    # SHIFTS
+    # =========================
     for i in range(10):
 
         branch = branches[i % len(branches)]
 
         start = (
             datetime.now(timezone.utc)
-            .replace(hour=9, minute=0, second=0, microsecond=0)
+            .replace(
+                hour=9,
+                minute=0,
+                second=0,
+                microsecond=0
+            )
             + timedelta(days=i)
         )
 
@@ -55,6 +107,11 @@ def seed_scheduling(ctx):
 
     print("Shifts creados:", len(ctx["shifts"]))
 
+    # =========================
+    # ASSIGNMENTS
+    # =========================
+    print("\nAsignando colaboradores...")
+
     for i, shift in enumerate(ctx["shifts"]):
 
         employee = employees[i % len(employees)]
@@ -72,6 +129,11 @@ def seed_scheduling(ctx):
 
     print("Assignments:", len(ctx["assignments"]))
 
+    # =========================
+    # DIRECT REPLACEMENTS
+    # =========================
+    print("\nProbando reemplazos directos...")
+
     for i in range(3):
 
         a = ctx["assignments"][i]
@@ -87,3 +149,41 @@ def seed_scheduling(ctx):
         ctx["replacements"].append(replacement)
 
     print("Replacements:", len(ctx["replacements"]))
+
+    # =========================
+    # SWAP REQUESTS
+    # =========================
+    print("\nProbando solicitudes de intercambio...")
+
+    a = ctx["assignments"][3]
+    b = ctx["assignments"][4]
+
+    swap_request = create_swap_request(
+        ctx,
+        a["collaboratorId"],
+        b["collaboratorId"],
+        a["shiftId"],
+        b["shiftId"]
+    )
+
+    ctx["swap_requests"].append(swap_request)
+
+    print("Swap request creada:", swap_request["id"])
+
+    accepted = accept_swap_request(
+        ctx,
+        swap_request["id"]
+    )
+
+    print("Swap request aceptada")
+
+    approved = approve_swap_request(
+        ctx,
+        swap_request["id"]
+    )
+
+    print("Swap request aprobada")
+
+    ctx["approved_swaps"].append(approved)
+
+    return ctx

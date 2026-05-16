@@ -14,13 +14,16 @@ ctx = {
     "base_url": f"http://localhost:{os.getenv('APP_PORT')}",
 
     "users": [],
+    "branches": [],
     "staff_users": [],
     "employees": [],
 
-    "branches": [],
     "shifts": [],
     "assignments": [],
-    "replacements": []
+    "replacements": [],
+
+    "swap_requests": [],
+    "approved_swaps": []
 }
 
 print("\nINICIANDO SEED PIPELINE")
