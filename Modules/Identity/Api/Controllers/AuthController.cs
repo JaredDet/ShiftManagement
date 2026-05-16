@@ -6,19 +6,13 @@ namespace ShiftManagement.Api.Modules.Identity.Api.Controllers;
 
 [ApiController]
 [Route("api/auth")]
-public class AuthController : ControllerBase
+public class AuthController(LoginUseCase loginUseCase) : ControllerBase
 {
-    private readonly LoginUseCase _loginUseCase;
-
-    public AuthController(LoginUseCase loginUseCase)
-    {
-        _loginUseCase = loginUseCase;
-    }
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
-        var result = await _loginUseCase.ExecuteAsync(request);
+        var result = await loginUseCase.ExecuteAsync(request);
 
         if (!result.IsSuccess)
             return Unauthorized(result.Error);

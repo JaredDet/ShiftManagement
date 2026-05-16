@@ -11,18 +11,27 @@ public sealed class UpdateUserUseCase(
 )
 {
     public async Task<Result<UserResponse>> ExecuteAsync(
-        Guid userId,
-        UpdateUserRequest request
-    )
+    Guid userId,
+    UpdateUserRequest request
+)
     {
         var user = await userRepository.GetByIdAsync(userId);
 
         if (user is null)
             return Result<UserResponse>.Failure(IdentityErrors.UserNotFound);
 
+        var normalizedEmail = request.Email.Trim().ToLowerInvariant();
+
+        var existingUser = await userRepository.GetByEmailAsync(normalizedEmail);
+
+        if (existingUser is not null && existingUser.Id != userId)
+            return Result<UserResponse>.Failure(
+                IdentityErrors.EmailAlreadyInUse
+            );
+
         user.Update(
             request.Name,
-            request.Email.Trim().ToLowerInvariant()
+            normalizedEmail
         );
 
         await context.SaveChangesAsync();

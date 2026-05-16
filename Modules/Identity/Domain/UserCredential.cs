@@ -15,21 +15,30 @@ public class UserCredential
 
     private UserCredential() { }
 
-    public UserCredential(
+    private UserCredential(
+        Guid userId,
+        string passwordHash,
+        DateTime createdAt
+    )
+    {
+        UserId = userId;
+        PasswordHash = passwordHash;
+        CreatedAt = createdAt;
+    }
+
+    public static UserCredential Create(
         Guid userId,
         string passwordHash
     )
     {
-        UserId = userId;
-
-        PasswordHash = passwordHash;
-
-        CreatedAt = DateTime.UtcNow;
+        return new UserCredential(
+            userId,
+            passwordHash,
+            DateTime.UtcNow
+        );
     }
 
-    public void ChangePassword(
-        string newPasswordHash
-    )
+    public void ChangePassword(string newPasswordHash)
     {
         PasswordHash = newPasswordHash;
     }

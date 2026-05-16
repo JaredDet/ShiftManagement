@@ -32,9 +32,9 @@ public class UserController(
 
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateUser(
-       Guid id,
-       [FromBody] UpdateUserRequest request
-   )
+    Guid id,
+    [FromBody] UpdateUserRequest request
+)
     {
         var result = await updateUserUseCase.ExecuteAsync(id, request);
 
@@ -44,6 +44,7 @@ public class UserController(
         return result.Error.Code switch
         {
             "identity.user.not_found" => NotFound(result.Error),
+            "identity.user.email_already_in_use" => Conflict(result.Error),
             _ => BadRequest(result.Error)
         };
     }

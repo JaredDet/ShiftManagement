@@ -30,7 +30,7 @@ public sealed class CreateUserUseCase(
         if (existingUser is not null)
             return Result<UserResponse>.Failure(IdentityErrors.EmailAlreadyInUse);
 
-        var user = new User(
+        var user = User.Create(
             request.CompanyId,
             request.Name,
             emailNormalized
@@ -39,7 +39,7 @@ public sealed class CreateUserUseCase(
         var passwordHash = argon2PasswordHasher
             .Hash(request.Password);
 
-        var credential = new UserCredential(
+        var credential = UserCredential.Create(
             user.Id,
             passwordHash
         );

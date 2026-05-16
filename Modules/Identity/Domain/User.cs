@@ -23,32 +23,42 @@ public class User
 
     private User() { }
 
-    public User(
+    private User(
+        Guid id,
+        Guid companyId,
+        string name,
+        string email,
+        UserStatus status,
+        DateTime createdAt
+    )
+    {
+        Id = id;
+        CompanyId = companyId;
+        Name = name;
+        Email = email;
+        Status = status;
+        CreatedAt = createdAt;
+    }
+
+    public static User Create(
         Guid companyId,
         string name,
         string email
     )
     {
-        Id = Guid.NewGuid();
-
-        CompanyId = companyId;
-
-        Name = name;
-
-        Email = email;
-
-        Status = UserStatus.Active;
-
-        CreatedAt = DateTime.UtcNow;
+        return new User(
+            Guid.NewGuid(),
+            companyId,
+            name,
+            email,
+            UserStatus.Active,
+            DateTime.UtcNow
+        );
     }
 
-    public void Update(
-        string name,
-        string email
-    )
+    public void Update(string name, string email)
     {
         Name = name;
-
         Email = email;
     }
 
