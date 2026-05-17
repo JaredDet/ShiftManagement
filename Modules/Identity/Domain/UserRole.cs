@@ -21,14 +21,35 @@ public class UserRole
 
     private UserRole() { }
 
-    public UserRole(Guid userId, Role role, Guid? branchId)
+    private UserRole(
+        Guid id,
+        Guid userId,
+        Role role,
+        Guid? branchId,
+        DateTime createdAt
+    )
     {
-        Id = Guid.NewGuid();
+        Id = id;
         UserId = userId;
         Role = role;
         BranchId = branchId;
         Status = UserRoleStatus.Active;
-        CreatedAt = DateTime.UtcNow;
+        CreatedAt = createdAt;
+    }
+
+    public static UserRole Create(
+        Guid userId,
+        Role role,
+        Guid? branchId
+    )
+    {
+        return new UserRole(
+            Guid.NewGuid(),
+            userId,
+            role,
+            branchId,
+            DateTime.UtcNow
+        );
     }
 
     public void Deactivate()

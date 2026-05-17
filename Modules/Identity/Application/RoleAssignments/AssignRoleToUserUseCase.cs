@@ -37,7 +37,7 @@ public sealed class AssignRoleToUserUseCase(
         if (alreadyExists)
             return Result<UserRoleResponse>.Failure(IdentityErrors.RoleAlreadyAssigned);
 
-        var userRole = new UserRole(
+        var userRole = UserRole.Create(
             userId,
             request.Role,
             request.BranchId

@@ -12,17 +12,12 @@ public class EmployeeController(
     ListCollaboratorsUseCase list,
     DeactivateCollaboratorUseCase deactivate) : ControllerBase
 {
-    private readonly CreateCollaboratorUseCase _create = create;
-    private readonly GetCollaboratorUseCase _get = get;
-    private readonly ListCollaboratorsUseCase _list = list;
-    private readonly DeactivateCollaboratorUseCase _deactivate = deactivate;
-
     [HttpPost]
     public async Task<IActionResult> CreateEmployee(
         [FromBody] CreateCollaboratorRequest request
     )
     {
-        var result = await _create.Execute(request);
+        var result = await create.Execute(request);
 
         if (result.IsSuccess)
         {
@@ -57,7 +52,7 @@ public class EmployeeController(
         Guid id
     )
     {
-        var result = await _get.Execute(companyId, id);
+        var result = await get.Execute(companyId, id);
 
         if (result.IsSuccess)
             return Ok(result.Value);
@@ -72,7 +67,7 @@ public class EmployeeController(
     [HttpGet]
     public async Task<IActionResult> ListEmployees([FromQuery] Guid companyId)
     {
-        var result = await _list.Execute(companyId);
+        var result = await list.Execute(companyId);
 
         if (!result.IsSuccess)
             return BadRequest(result.Error);
@@ -83,7 +78,7 @@ public class EmployeeController(
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeactivateEmployee(Guid id)
     {
-        var result = await _deactivate.Execute(id);
+        var result = await deactivate.Execute(id);
 
         if (result.IsSuccess)
             return NoContent();

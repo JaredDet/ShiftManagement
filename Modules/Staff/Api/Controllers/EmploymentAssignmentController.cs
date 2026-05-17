@@ -8,37 +8,21 @@ namespace ShiftManagement.Api.Modules.Staff.Api.Controllers;
 
 [ApiController]
 [Route("api/employment-assignments")]
-public class EmploymentAssignmentController : ControllerBase
+public class EmploymentAssignmentController(
+    AssignBranchToCollaboratorUseCase assignBranch,
+    RemoveBranchFromCollaboratorUseCase removeBranch,
+    AssignPositionToCollaboratorUseCase assignPosition,
+    RemovePositionFromCollaboratorUseCase removePosition,
+    ChangeMainBranchUseCase changeMainBranch,
+    ChangeMainPositionUseCase changeMainPosition) : ControllerBase
 {
-    private readonly AssignBranchToCollaboratorUseCase _assignBranch;
-    private readonly RemoveBranchFromCollaboratorUseCase _removeBranch;
-    private readonly AssignPositionToCollaboratorUseCase _assignPosition;
-    private readonly RemovePositionFromCollaboratorUseCase _removePosition;
-    private readonly ChangeMainBranchUseCase _changeMainBranch;
-    private readonly ChangeMainPositionUseCase _changeMainPosition;
-
-    public EmploymentAssignmentController(
-        AssignBranchToCollaboratorUseCase assignBranch,
-        RemoveBranchFromCollaboratorUseCase removeBranch,
-        AssignPositionToCollaboratorUseCase assignPosition,
-        RemovePositionFromCollaboratorUseCase removePosition,
-        ChangeMainBranchUseCase changeMainBranch,
-        ChangeMainPositionUseCase changeMainPosition)
-    {
-        _assignBranch = assignBranch;
-        _removeBranch = removeBranch;
-        _assignPosition = assignPosition;
-        _removePosition = removePosition;
-        _changeMainBranch = changeMainBranch;
-        _changeMainPosition = changeMainPosition;
-    }
 
     [HttpPost("{employeeId:guid}/assign-branch")]
     public async Task<IActionResult> AssignBranch(
         Guid employeeId,
         [FromBody] AssignBranchToCollaboratorRequest request)
     {
-        var result = await _assignBranch.Execute(employeeId, request);
+        var result = await assignBranch.Execute(employeeId, request);
 
         if (result.IsSuccess)
             return Ok();
@@ -59,7 +43,7 @@ public class EmploymentAssignmentController : ControllerBase
         Guid employeeId,
         [FromBody] RemoveBranchFromCollaboratorRequest request)
     {
-        var result = await _removeBranch.Execute(employeeId, request);
+        var result = await removeBranch.Execute(employeeId, request);
 
         if (result.IsSuccess)
             return Ok();
@@ -78,7 +62,7 @@ public class EmploymentAssignmentController : ControllerBase
         Guid employeeId,
         [FromBody] AssignPositionToCollaboratorRequest request)
     {
-        var result = await _assignPosition.Execute(employeeId, request);
+        var result = await assignPosition.Execute(employeeId, request);
 
         if (result.IsSuccess)
             return Ok();
@@ -99,7 +83,7 @@ public class EmploymentAssignmentController : ControllerBase
         Guid employeeId,
         [FromBody] RemovePositionFromCollaboratorRequest request)
     {
-        var result = await _removePosition.Execute(employeeId, request);
+        var result = await removePosition.Execute(employeeId, request);
 
         if (result.IsSuccess)
             return Ok();
@@ -118,7 +102,7 @@ public class EmploymentAssignmentController : ControllerBase
         Guid employeeId,
         [FromBody] ChangeMainBranchRequest request)
     {
-        var result = await _changeMainBranch.Execute(employeeId, request);
+        var result = await changeMainBranch.Execute(employeeId, request);
 
         if (result.IsSuccess)
             return Ok(result.Value);
@@ -137,7 +121,7 @@ public class EmploymentAssignmentController : ControllerBase
         Guid employeeId,
         [FromBody] ChangeMainPositionRequest request)
     {
-        var result = await _changeMainPosition.Execute(employeeId, request);
+        var result = await changeMainPosition.Execute(employeeId, request);
 
         if (result.IsSuccess)
             return Ok(result.Value);

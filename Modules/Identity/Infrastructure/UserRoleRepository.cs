@@ -6,22 +6,21 @@ namespace ShiftManagement.Api.Modules.Identity.Infrastructure;
 
 public class UserRoleRepository(ShiftManagementDbContext context)
 {
-    private readonly ShiftManagementDbContext _context = context;
 
     public async Task AddAsync(UserRole userRole)
     {
-        await _context.Set<UserRole>().AddAsync(userRole);
+        await context.Set<UserRole>().AddAsync(userRole);
     }
 
     public Task<UserRole?> GetByIdAsync(Guid id)
     {
-        return _context.Set<UserRole>()
+        return context.Set<UserRole>()
             .FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public Task<List<UserRole>> GetByUserIdAsync(Guid userId)
     {
-        return _context.Set<UserRole>()
+        return context.Set<UserRole>()
             .Where(x => x.UserId == userId)
             .ToListAsync();
     }
@@ -32,7 +31,7 @@ public class UserRoleRepository(ShiftManagementDbContext context)
         Guid? branchId
     )
     {
-        return _context.Set<UserRole>()
+        return context.Set<UserRole>()
             .FirstOrDefaultAsync(x =>
                 x.UserId == userId &&
                 x.Role == role &&
@@ -46,7 +45,7 @@ public class UserRoleRepository(ShiftManagementDbContext context)
         Guid? branchId
     )
     {
-        return _context.Set<UserRole>()
+        return context.Set<UserRole>()
             .AnyAsync(x =>
                 x.UserId == userId &&
                 x.Role == role &&
@@ -56,7 +55,7 @@ public class UserRoleRepository(ShiftManagementDbContext context)
 
     public Task<bool> UserHasRoleAsync(Guid userId, Role role)
     {
-        return _context.Set<UserRole>()
+        return context.Set<UserRole>()
             .AnyAsync(x =>
                 x.UserId == userId &&
                 x.Role == role

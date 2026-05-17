@@ -8,13 +8,12 @@ public sealed class UserCredentialRepository(
     ShiftManagementDbContext context
     )
 {
-    private readonly ShiftManagementDbContext _context = context;
 
     public async Task AddAsync(
         UserCredential credential
     )
     {
-        await _context.Set<UserCredential>()
+        await context.Set<UserCredential>()
             .AddAsync(credential);
     }
 
@@ -22,7 +21,7 @@ public sealed class UserCredentialRepository(
         Guid userId
     )
     {
-        return await _context.Set<UserCredential>()
+        return await context.Set<UserCredential>()
             .FirstOrDefaultAsync(x => x.UserId == userId);
     }
 }

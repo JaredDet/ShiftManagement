@@ -13,18 +13,13 @@ public class PositionController(
     ListPositionsUseCase list,
     DeactivatePositionUseCase deactivate) : ControllerBase
 {
-    private readonly CreatePositionUseCase _create = create;
-    private readonly UpdatePositionUseCase _update = update;
-    private readonly GetPositionUseCase _get = get;
-    private readonly ListPositionsUseCase _list = list;
-    private readonly DeactivatePositionUseCase _deactivate = deactivate;
 
     [HttpPost]
     public async Task<IActionResult> CreatePosition(
         [FromBody] CreatePositionRequest request
     )
     {
-        var result = await _create.Execute(request);
+        var result = await create.Execute(request);
 
         if (result.IsSuccess)
         {
@@ -48,7 +43,7 @@ public class PositionController(
         [FromBody] UpdatePositionRequest request
     )
     {
-        var result = await _update.Execute(id, request);
+        var result = await update.Execute(id, request);
 
         if (result.IsSuccess)
             return Ok(result.Value);
@@ -64,7 +59,7 @@ public class PositionController(
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetPosition(Guid id)
     {
-        var result = await _get.Execute(id);
+        var result = await get.Execute(id);
 
         if (result.IsSuccess)
             return Ok(result.Value);
@@ -79,7 +74,7 @@ public class PositionController(
     [HttpGet]
     public async Task<IActionResult> ListPositions()
     {
-        var result = await _list.Execute();
+        var result = await list.Execute();
 
         if (!result.IsSuccess)
             return BadRequest(result.Error);
@@ -90,7 +85,7 @@ public class PositionController(
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeactivatePosition(Guid id)
     {
-        var result = await _deactivate.Execute(id);
+        var result = await deactivate.Execute(id);
 
         if (result.IsSuccess)
             return NoContent();

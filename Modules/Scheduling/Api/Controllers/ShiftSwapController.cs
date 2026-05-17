@@ -16,28 +16,42 @@ public sealed class ShiftSwapController(
 {
     [HttpPost]
     public async Task<IActionResult> RequestSwap(
-        RequestShiftSwapRequest request)
+        [FromBody] RequestShiftSwapRequest request
+    )
     {
         var result = await requestUseCase.ExecuteAsync(request);
 
-        if (!result.IsSuccess)
-            return BadRequest(result.Error);
+        if (result.IsSuccess)
+            return Ok(result.Value);
 
-        return Ok(result.Value);
+        return result.Error.Code switch
+        {
+            "scheduling.shift.not_found" => NotFound(result.Error),
+            "scheduling.assignment.not_found" => NotFound(result.Error),
+            "scheduling.shift.invalid_state" => BadRequest(result.Error),
+            "scheduling.shift_swap.invalid_transition" => BadRequest(result.Error),
+            _ => BadRequest(result.Error)
+        };
     }
 
-    [HttpPost("{id}/approve")]
+    [HttpPost("{id:guid}/approve")]
     public async Task<IActionResult> Approve(Guid id)
     {
         var result = await approveUseCase.ExecuteAsync(id);
 
-        if (!result.IsSuccess)
-            return BadRequest(result.Error);
+        if (result.IsSuccess)
+            return Ok(result.Value);
 
-        return Ok(result.Value);
+        return result.Error.Code switch
+        {
+            "scheduling.swap_request.not_found" => NotFound(result.Error),
+            "scheduling.assignment.not_found" => NotFound(result.Error),
+            "scheduling.shift_swap.invalid_transition" => BadRequest(result.Error),
+            _ => BadRequest(result.Error)
+        };
     }
 
-    [HttpPost("{id}/accept")]
+    [HttpPost("{id:guid}/accept")]
     public async Task<IActionResult> Accept(Guid id)
     {
         var result = await respondUseCase.ExecuteAsync(
@@ -45,13 +59,19 @@ public sealed class ShiftSwapController(
             ShiftSwapDecision.Accept
         );
 
-        if (!result.IsSuccess)
-            return BadRequest(result.Error);
+        if (result.IsSuccess)
+            return Ok(result.Value);
 
-        return Ok(result.Value);
+        return result.Error.Code switch
+        {
+            "scheduling.swap_request.not_found" => NotFound(result.Error),
+            "scheduling.invalid_swap_decision" => BadRequest(result.Error),
+            "scheduling.shift_swap.invalid_transition" => BadRequest(result.Error),
+            _ => BadRequest(result.Error)
+        };
     }
 
-    [HttpPost("{id}/reject")]
+    [HttpPost("{id:guid}/reject")]
     public async Task<IActionResult> Reject(Guid id)
     {
         var result = await respondUseCase.ExecuteAsync(
@@ -59,20 +79,31 @@ public sealed class ShiftSwapController(
             ShiftSwapDecision.Reject
         );
 
-        if (!result.IsSuccess)
-            return BadRequest(result.Error);
+        if (result.IsSuccess)
+            return Ok(result.Value);
 
-        return Ok(result.Value);
+        return result.Error.Code switch
+        {
+            "scheduling.swap_request.not_found" => NotFound(result.Error),
+            "scheduling.invalid_swap_decision" => BadRequest(result.Error),
+            "scheduling.shift_swap.invalid_transition" => BadRequest(result.Error),
+            _ => BadRequest(result.Error)
+        };
     }
 
-    [HttpPost("{id}/cancel")]
+    [HttpPost("{id:guid}/cancel")]
     public async Task<IActionResult> Cancel(Guid id)
     {
         var result = await cancelUseCase.ExecuteAsync(id);
 
-        if (!result.IsSuccess)
-            return BadRequest(result.Error);
+        if (result.IsSuccess)
+            return Ok(result.Value);
 
-        return Ok(result.Value);
+        return result.Error.Code switch
+        {
+            "scheduling.swap_request.not_found" => NotFound(result.Error),
+            "scheduling.shift_swap.invalid_transition" => BadRequest(result.Error),
+            _ => BadRequest(result.Error)
+        };
     }
 }

@@ -7,28 +7,22 @@ using ShiftManagement.Api.Infrastructure;
 
 namespace ShiftManagement.Api.Modules.Staff.Infrastructure.Persistence.Repositories;
 
-public class EmploymentAssignmentRepository
+public class EmploymentAssignmentRepository(ShiftManagementDbContext context)
 {
-    private readonly ShiftManagementDbContext _context;
-
-    public EmploymentAssignmentRepository(ShiftManagementDbContext context)
-    {
-        _context = context;
-    }
 
     // ------------------------
     // DTO PROJECTIONS (READ API)
     // ------------------------
 
     public Task<List<CollaboratorBranchResponse>> GetBranchesByEmployeeAsync(Guid employeeId)
-        => _context.Set<EmploymentAssignment>()
+        => context.Set<EmploymentAssignment>()
             .AsNoTracking()
             .Where(x => x.EmployeeId == employeeId && x.Type == AssignmentType.Branch)
             .ToBranchResponse()
             .ToListAsync();
 
     public Task<List<CollaboratorPositionResponse>> GetPositionsByEmployeeAsync(Guid employeeId)
-        => _context.Set<EmploymentAssignment>()
+        => context.Set<EmploymentAssignment>()
             .AsNoTracking()
             .Where(x => x.EmployeeId == employeeId && x.Type == AssignmentType.Position)
             .ToPositionResponse()
@@ -39,7 +33,7 @@ public class EmploymentAssignmentRepository
     // ------------------------
 
     public Task<List<EmploymentAssignment>> GetByEmployeeAsync(Guid employeeId)
-        => _context.Set<EmploymentAssignment>()
+        => context.Set<EmploymentAssignment>()
             .Where(x => x.EmployeeId == employeeId)
             .ToListAsync();
 
@@ -47,7 +41,7 @@ public class EmploymentAssignmentRepository
         Guid employeeId,
         AssignmentType type
     )
-        => _context.Set<EmploymentAssignment>()
+        => context.Set<EmploymentAssignment>()
             .Where(x => x.EmployeeId == employeeId && x.Type == type)
             .ToListAsync();
 
@@ -56,18 +50,18 @@ public class EmploymentAssignmentRepository
     // ------------------------
 
     public async Task AddAsync(EmploymentAssignment assignment)
-        => await _context.Set<EmploymentAssignment>().AddAsync(assignment);
+        => await context.Set<EmploymentAssignment>().AddAsync(assignment);
 
     public void Update(EmploymentAssignment assignment)
-        => _context.Set<EmploymentAssignment>().Update(assignment);
+        => context.Set<EmploymentAssignment>().Update(assignment);
 
     public void UpdateRange(IEnumerable<EmploymentAssignment> assignments)
-        => _context.Set<EmploymentAssignment>().UpdateRange(assignments);
+        => context.Set<EmploymentAssignment>().UpdateRange(assignments);
 
     public void Remove(EmploymentAssignment assignment)
-        => _context.Set<EmploymentAssignment>().Remove(assignment);
+        => context.Set<EmploymentAssignment>().Remove(assignment);
 
     public Task<EmploymentAssignment?> GetByIdAsync(Guid id)
-        => _context.Set<EmploymentAssignment>()
+        => context.Set<EmploymentAssignment>()
             .FirstOrDefaultAsync(x => x.Id == id);
 }

@@ -6,18 +6,12 @@ using ShiftManagement.Api.Infrastructure;
 
 namespace ShiftManagement.Api.Modules.Staff.Infrastructure.Persistence.Repositories;
 
-public class PositionRepository
+public class PositionRepository(ShiftManagementDbContext context)
 {
-    private readonly ShiftManagementDbContext _context;
-
-    public PositionRepository(ShiftManagementDbContext context)
-    {
-        _context = context;
-    }
 
     public Task<PositionResponse?> GetByIdProjectedAsync(Guid id)
     {
-        return _context.Set<Position>()
+        return context.Set<Position>()
             .AsNoTracking()
             .Where(p => p.Id == id)
             .ToPositionResponse()
@@ -26,7 +20,7 @@ public class PositionRepository
 
     public Task<List<PositionResponse>> ListProjectedAsync()
     {
-        return _context.Set<Position>()
+        return context.Set<Position>()
             .AsNoTracking()
             .ToPositionResponse()
             .ToListAsync();
@@ -34,28 +28,28 @@ public class PositionRepository
 
     public Task<Position?> GetByIdAsync(Guid id)
     {
-        return _context.Set<Position>()
+        return context.Set<Position>()
             .FirstOrDefaultAsync(p => p.Id == id);
     }
 
     public async Task AddAsync(Position position)
     {
-        await _context.Set<Position>().AddAsync(position);
+        await context.Set<Position>().AddAsync(position);
     }
 
     public void Update(Position position)
     {
-        _context.Set<Position>().Update(position);
+        context.Set<Position>().Update(position);
     }
 
     public void Remove(Position position)
     {
-        _context.Set<Position>().Remove(position);
+        context.Set<Position>().Remove(position);
     }
 
     public Task<bool> ExistsAsync(Guid id)
     {
-        return _context.Set<Position>()
+        return context.Set<Position>()
             .AnyAsync(p => p.Id == id);
     }
 
@@ -64,7 +58,7 @@ public class PositionRepository
     string name
     )
     {
-        return _context.Set<Position>()
+        return context.Set<Position>()
             .AnyAsync(position =>
                 position.CompanyId == companyId &&
                 position.Name.ToLower() == name
