@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using ShiftManagement.Api.Modules.Staff.Application.Positions;
 using ShiftManagement.Api.Modules.Staff.Api.Contracts.Positions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ShiftManagement.Api.Modules.Staff.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/positions")]
 public class PositionController(
@@ -15,6 +17,7 @@ public class PositionController(
 {
 
     [HttpPost]
+    [Authorize(Policy = "CompanyAdminOnly")]
     public async Task<IActionResult> CreatePosition(
         [FromBody] CreatePositionRequest request
     )
@@ -38,6 +41,7 @@ public class PositionController(
     }
 
     [HttpPut("{id:guid}")]
+    [Authorize(Policy = "CompanyAdminOnly")]
     public async Task<IActionResult> UpdatePosition(
         Guid id,
         [FromBody] UpdatePositionRequest request
@@ -57,6 +61,7 @@ public class PositionController(
     }
 
     [HttpGet("{id:guid}")]
+    [Authorize(Policy = "StaffReadAccess")]
     public async Task<IActionResult> GetPosition(Guid id)
     {
         var result = await get.Execute(id);
@@ -72,6 +77,7 @@ public class PositionController(
     }
 
     [HttpGet]
+    [Authorize(Policy = "StaffReadAccess")]
     public async Task<IActionResult> ListPositions()
     {
         var result = await list.Execute();
@@ -83,6 +89,7 @@ public class PositionController(
     }
 
     [HttpDelete("{id:guid}")]
+    [Authorize(Policy = "CompanyAdminOnly")]
     public async Task<IActionResult> DeactivatePosition(Guid id)
     {
         var result = await deactivate.Execute(id);

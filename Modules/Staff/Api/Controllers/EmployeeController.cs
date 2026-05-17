@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using ShiftManagement.Api.Modules.Staff.Application.Collaborators;
 using ShiftManagement.Api.Modules.Staff.Api.Contracts.Collaborators;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ShiftManagement.Api.Modules.Staff.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/employees")]
 public class EmployeeController(
@@ -13,6 +15,7 @@ public class EmployeeController(
     DeactivateCollaboratorUseCase deactivate) : ControllerBase
 {
     [HttpPost]
+    [Authorize(Policy = "CompanyAdminOnly")]
     public async Task<IActionResult> CreateEmployee(
         [FromBody] CreateCollaboratorRequest request
     )
@@ -47,6 +50,7 @@ public class EmployeeController(
     }
 
     [HttpGet("{id:guid}")]
+    [Authorize(Policy = "StaffReadAccess")]
     public async Task<IActionResult> GetEmployee(
         [FromQuery] Guid companyId,
         Guid id
@@ -65,6 +69,7 @@ public class EmployeeController(
     }
 
     [HttpGet]
+    [Authorize(Policy = "StaffReadAccess")]
     public async Task<IActionResult> ListEmployees([FromQuery] Guid companyId)
     {
         var result = await list.Execute(companyId);
@@ -76,6 +81,7 @@ public class EmployeeController(
     }
 
     [HttpDelete("{id:guid}")]
+    [Authorize(Policy = "CompanyAdminOnly")]
     public async Task<IActionResult> DeactivateEmployee(Guid id)
     {
         var result = await deactivate.Execute(id);

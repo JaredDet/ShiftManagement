@@ -9,26 +9,45 @@ namespace ShiftManagement.Api.Modules.Identity.Application;
 public sealed class LoginUseCase(
     UserRepository userRepository,
     UserCredentialRepository credentialRepository,
+    UserRoleRepository userRoleRepository,
     Argon2PasswordHasher argon2PasswordHasher,
     JwtTokenService tokenService
 )
 {
-    public async Task<Result<LoginResponse>> ExecuteAsync(LoginRequest request)
+    public async Task<Result<LoginResponse>> ExecuteAsync(
+        LoginRequest request
+    )
     {
-        var email = request.Email.Trim().ToLowerInvariant();
+        var email = request.Email
+            .Trim()
+            .ToLowerInvariant();
 
-        var user = await userRepository.GetByEmailAsync(email);
+        var user = await userRepository
+            .GetByEmailAsync(email);
 
         if (user is null)
-            return Result<LoginResponse>.Failure(IdentityErrors.InvalidCredentials);
+        {
+            return Result<LoginResponse>.Failure(
+                IdentityErrors.InvalidCredentials
+            );
+        }
 
         if (user.Status == UserStatus.Inactive)
-            return Result<LoginResponse>.Failure(IdentityErrors.UserInactive);
+        {
+            return Result<LoginResponse>.Failure(
+                IdentityErrors.UserInactive
+            );
+        }
 
-        var credential = await credentialRepository.GetByUserIdAsync(user.Id);
+        var credential = await credentialRepository
+            .GetByUserIdAsync(user.Id);
 
         if (credential is null)
-            return Result<LoginResponse>.Failure(IdentityErrors.InvalidCredentials);
+        {
+            return Result<LoginResponse>.Failure(
+                IdentityErrors.InvalidCredentials
+            );
+        }
 
         var passwordValid = argon2PasswordHasher.Verify(
             request.Password,
@@ -36,9 +55,19 @@ public sealed class LoginUseCase(
         );
 
         if (!passwordValid)
-            return Result<LoginResponse>.Failure(IdentityErrors.InvalidCredentials);
+        {
+            return Result<LoginResponse>.Failure(
+                IdentityErrors.InvalidCredentials
+            );
+        }
 
-        var token = tokenService.GenerateToken(user);
+        var roles = await userRoleRepository
+            .GetActiveByUserIdAsync(user.Id);
+
+        var token = tokenService.GenerateToken(
+            user,
+            roles
+        );
 
         return Result<LoginResponse>.Success(
             new LoginResponse

@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShiftManagement.Api.Modules.Organization.Api.Contracts.Companies;
 using ShiftManagement.Api.Modules.Organization.Application.Companies;
 
 namespace ShiftManagement.Api.Modules.Organization.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/companies")]
 public class CompanyController(
@@ -40,10 +42,10 @@ public class CompanyController(
         };
     }
 
-
     [HttpPost]
+    [Authorize(Policy = "CompanyAdminOnly")]
     public async Task<IActionResult> CreateCompany(
-        CreateCompanyRequest request
+    CreateCompanyRequest request
     )
     {
         var result = await createCompanyUseCase.ExecuteAsync(request);
@@ -63,6 +65,7 @@ public class CompanyController(
     }
 
     [HttpPut("{id:guid}")]
+    [Authorize(Policy = "CompanyAdminOnly")]
     public async Task<IActionResult> UpdateCompany(
        Guid id,
        UpdateCompanyRequest request
@@ -82,6 +85,7 @@ public class CompanyController(
     }
 
     [HttpPatch("{id:guid}/deactivate")]
+    [Authorize(Policy = "CompanyAdminOnly")]
     public async Task<IActionResult> DeactivateCompany(Guid id)
     {
         var result = await deactivateCompanyUseCase.ExecuteAsync(id);

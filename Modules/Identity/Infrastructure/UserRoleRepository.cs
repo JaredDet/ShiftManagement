@@ -39,6 +39,16 @@ public class UserRoleRepository(ShiftManagementDbContext context)
             );
     }
 
+    public Task<List<UserRole>> GetActiveByUserIdAsync(Guid userId)
+    {
+        return context.UserRoles
+            .Where(role =>
+                role.UserId == userId &&
+                role.Status == UserRoleStatus.Active
+            )
+            .ToListAsync();
+    }
+
     public Task<bool> ExistsAsync(
         Guid userId,
         Role role,

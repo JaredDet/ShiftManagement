@@ -3,9 +3,11 @@ using ShiftManagement.Api.Modules.Staff.Api.Contracts.BranchAssignments;
 using ShiftManagement.Api.Modules.Staff.Api.Contracts.PositionAssignments;
 using ShiftManagement.Api.Modules.Staff.Api.Contracts.MainChanges;
 using ShiftManagement.Api.Modules.Staff.Application.EmploymentAssignments;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ShiftManagement.Api.Modules.Staff.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/employment-assignments")]
 public class EmploymentAssignmentController(
@@ -18,6 +20,7 @@ public class EmploymentAssignmentController(
 {
 
     [HttpPost("{employeeId:guid}/assign-branch")]
+    [Authorize(Policy = "CompanyAdminOnly")]
     public async Task<IActionResult> AssignBranch(
         Guid employeeId,
         [FromBody] AssignBranchToCollaboratorRequest request)
@@ -39,6 +42,7 @@ public class EmploymentAssignmentController(
     }
 
     [HttpPost("{employeeId:guid}/remove-branch")]
+    [Authorize(Policy = "CompanyAdminOnly")]
     public async Task<IActionResult> RemoveBranch(
         Guid employeeId,
         [FromBody] RemoveBranchFromCollaboratorRequest request)
@@ -58,6 +62,7 @@ public class EmploymentAssignmentController(
     }
 
     [HttpPost("{employeeId:guid}/assign-position")]
+    [Authorize(Policy = "CompanyAdminOnly")]
     public async Task<IActionResult> AssignPosition(
         Guid employeeId,
         [FromBody] AssignPositionToCollaboratorRequest request)
@@ -79,6 +84,7 @@ public class EmploymentAssignmentController(
     }
 
     [HttpPost("{employeeId:guid}/remove-position")]
+    [Authorize(Policy = "CompanyAdminOnly")]
     public async Task<IActionResult> RemovePosition(
         Guid employeeId,
         [FromBody] RemovePositionFromCollaboratorRequest request)
@@ -98,6 +104,7 @@ public class EmploymentAssignmentController(
     }
 
     [HttpPost("{employeeId:guid}/change-primary-branch")]
+    [Authorize(Policy = "CompanyAdminOnly")]
     public async Task<IActionResult> ChangePrimaryBranch(
         Guid employeeId,
         [FromBody] ChangeMainBranchRequest request)
@@ -117,6 +124,7 @@ public class EmploymentAssignmentController(
     }
 
     [HttpPost("{employeeId:guid}/change-primary-position")]
+    [Authorize(Policy = "CompanyAdminOnly")]
     public async Task<IActionResult> ChangePrimaryPosition(
         Guid employeeId,
         [FromBody] ChangeMainPositionRequest request)

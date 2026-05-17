@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShiftManagement.Api.Modules.Identity.Api.Contracts.RoleAssignments;
 using ShiftManagement.Api.Modules.Identity.Application.RoleAssignments;
 
 namespace ShiftManagement.Api.Modules.Identity.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/users/{userId:guid}/roles")]
 public class RoleAssignmentController(
@@ -24,6 +26,7 @@ public class RoleAssignmentController(
     }
 
     [HttpPost]
+    [Authorize(Policy = "CompanyAdminOnly")]
     public async Task<IActionResult> AssignRole(
     Guid userId,
     [FromBody] AssignRoleToUserRequest request
@@ -48,6 +51,7 @@ public class RoleAssignmentController(
     }
 
     [HttpDelete]
+    [Authorize(Policy = "CompanyAdminOnly")]
     public async Task<IActionResult> RemoveRole(
     Guid userId,
     [FromBody] RemoveRoleFromUserRequest request

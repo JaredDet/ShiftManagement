@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShiftManagement.Api.Modules.Organization.Api.Contracts.Branches;
 using ShiftManagement.Api.Modules.Organization.Application.Branches;
 
 namespace ShiftManagement.Api.Modules.Organization.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/branches")]
 public class BranchController(
@@ -45,9 +47,10 @@ public class BranchController(
     }
 
     [HttpPost]
+    [Authorize(Policy = "CompanyAdminOnly")]
     public async Task<IActionResult> CreateBranch(
-        CreateBranchRequest request
-    )
+            CreateBranchRequest request
+        )
     {
         var result = await createBranchUseCase.ExecuteAsync(request);
 
@@ -67,6 +70,7 @@ public class BranchController(
     }
 
     [HttpPut("{id:guid}")]
+    [Authorize(Policy = "CompanyAdminOnly")]
     public async Task<IActionResult> UpdateBranch(
         Guid id,
         UpdateBranchRequest request
@@ -86,6 +90,7 @@ public class BranchController(
     }
 
     [HttpPatch("{id:guid}/deactivate")]
+    [Authorize(Policy = "CompanyAdminOnly")]
     public async Task<IActionResult> DeactivateBranch(Guid id)
     {
         var result = await deactivateBranchUseCase.ExecuteAsync(id);

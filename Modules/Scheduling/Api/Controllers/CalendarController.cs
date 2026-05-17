@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShiftManagement.Api.Modules.Scheduling.Api.Contracts;
 using ShiftManagement.Api.Modules.Scheduling.Application.Calendar;
 
 namespace ShiftManagement.Api.Modules.Scheduling.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/calendar")]
 public class CalendarController(

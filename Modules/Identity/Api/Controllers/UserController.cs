@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShiftManagement.Api.Modules.Identity.Api.Contracts.Users;
 using ShiftManagement.Api.Modules.Identity.Application.Users;
 
 namespace ShiftManagement.Api.Modules.Identity.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/users")]
 public class UserController(
@@ -12,10 +14,12 @@ public class UserController(
     DeactivateUserUseCase deactivateUserUseCase
 ) : ControllerBase
 {
+
     [HttpPost]
+    [Authorize(Policy = "CompanyAdminOnly")]
     public async Task<IActionResult> CreateUser(
-        [FromBody] CreateUserRequest request
-    )
+    [FromBody] CreateUserRequest request
+)
     {
         var result = await createUserUseCase.ExecuteAsync(request);
 
@@ -31,10 +35,11 @@ public class UserController(
     }
 
     [HttpPut("{id:guid}")]
+    [Authorize(Policy = "CompanyAdminOnly")]
     public async Task<IActionResult> UpdateUser(
     Guid id,
     [FromBody] UpdateUserRequest request
-)
+    )
     {
         var result = await updateUserUseCase.ExecuteAsync(id, request);
 
@@ -50,6 +55,7 @@ public class UserController(
     }
 
     [HttpPatch("{id:guid}/deactivate")]
+    [Authorize(Policy = "CompanyAdminOnly")]
     public async Task<IActionResult> DeactivateUser(Guid id)
     {
         var result = await deactivateUserUseCase.ExecuteAsync(id);

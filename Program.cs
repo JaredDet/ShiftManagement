@@ -3,6 +3,8 @@ using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using ShiftManagement.Api.Infrastructure;
 using ShiftManagement.Api.Modules.Identity;
+using ShiftManagement.Api.Modules.Identity.Domain;
+using ShiftManagement.Api.Modules.Identity.Infrastructure.Authorization;
 using ShiftManagement.Api.Modules.Organization;
 using ShiftManagement.Api.Modules.Scheduling;
 using ShiftManagement.Api.Modules.Staff;
@@ -14,6 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddEnvironmentVariables();
 
 var port = builder.Configuration["APP_PORT"] ?? "5181";
+
 builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 
 builder.Services.AddControllers()
@@ -25,6 +28,7 @@ builder.Services.AddControllers()
     });
 
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<ShiftManagementDbContext>(options =>
@@ -35,8 +39,15 @@ builder.Services.AddDbContext<ShiftManagementDbContext>(options =>
     options.UseNpgsql(connectionString);
 });
 
+builder.Services.AddAuthorization(options =>
+{
+    AuthorizationPolicies.AddPolicies(options);
+});
+
 builder.Services.AddOrganization();
+
 builder.Services.AddStaff();
+
 builder.Services.AddIdentityModule(builder.Configuration);
 
 builder.Services.AddScheduling();
@@ -46,6 +57,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
+
     app.UseSwaggerUI();
 }
 
