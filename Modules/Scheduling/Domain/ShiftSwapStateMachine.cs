@@ -2,52 +2,65 @@ namespace ShiftManagement.Api.Modules.Scheduling.Domain;
 
 public static class ShiftSwapStateMachine
 {
-    private static readonly HashSet<(ShiftSwapStatus From, ShiftSwapStatus To)>
-        ValidTransitions =
-        [
-            (
-                ShiftSwapStatus.Pending,
-                ShiftSwapStatus.AcceptedByCollaborator
-            ),
+    private static readonly Dictionary<
+        (ShiftSwapStatus State, ShiftSwapAction Action),
+        ShiftSwapStatus
+    > Transitions =
+        new()
+        {
+            [
+                (
+                    ShiftSwapStatus.Pending,
+                    ShiftSwapAction.Accept
+                )
+            ] = ShiftSwapStatus.AcceptedByCollaborator,
 
-            (
-                ShiftSwapStatus.Pending,
-                ShiftSwapStatus.Rejected
-            ),
+            [
+                (
+                    ShiftSwapStatus.Pending,
+                    ShiftSwapAction.Reject
+                )
+            ] = ShiftSwapStatus.Rejected,
 
-            (
-                ShiftSwapStatus.Pending,
-                ShiftSwapStatus.Cancelled
-            ),
+            [
+                (
+                    ShiftSwapStatus.Pending,
+                    ShiftSwapAction.Cancel
+                )
+            ] = ShiftSwapStatus.Cancelled,
 
-            (
-                ShiftSwapStatus.AcceptedByCollaborator,
-                ShiftSwapStatus.Approved
-            ),
+            [
+                (
+                    ShiftSwapStatus.AcceptedByCollaborator,
+                    ShiftSwapAction.Approve
+                )
+            ] = ShiftSwapStatus.Approved,
 
-            (
-                ShiftSwapStatus.AcceptedByCollaborator,
-                ShiftSwapStatus.Rejected
+            [
+                (
+                    ShiftSwapStatus.AcceptedByCollaborator,
+                    ShiftSwapAction.Reject
+                )
+            ] = ShiftSwapStatus.Rejected
+        };
+
+    public static ShiftSwapStatus Transition(
+        ShiftSwapStatus current,
+        ShiftSwapAction action)
+    {
+        if (
+            !Transitions.TryGetValue(
+                (current, action),
+                out var nextState
             )
-        ];
-
-    public static bool CanTransition(
-        ShiftSwapStatus from,
-        ShiftSwapStatus to)
-    {
-        return ValidTransitions.Contains((from, to));
-    }
-
-    public static void EnsureTransition(
-        ShiftSwapStatus from,
-        ShiftSwapStatus to)
-    {
-        if (!CanTransition(from, to))
+        )
         {
             throw ShiftSwapErrors.InvalidStateTransition(
-                from,
-                to
+                current,
+                action
             );
         }
+
+        return nextState;
     }
 }

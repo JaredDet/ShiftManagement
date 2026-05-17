@@ -22,11 +22,12 @@ public class Position
 
     private Position() { }
 
-    public Position(
+    private Position(
         Guid id,
         Guid companyId,
         string name,
         string? description,
+        PositionStatus status,
         DateTime createdAt
     )
     {
@@ -34,9 +35,24 @@ public class Position
         CompanyId = companyId;
         Name = name;
         Description = description;
-
+        Status = status;
         CreatedAt = createdAt;
-        Status = PositionStatus.Active;
+    }
+
+    public static Position Create(
+        Guid companyId,
+        string name,
+        string? description
+    )
+    {
+        return new Position(
+            Guid.NewGuid(),
+            companyId,
+            name,
+            description,
+            PositionStatus.Active,
+            DateTime.UtcNow
+        );
     }
 
     public void Update(string name, string? description)

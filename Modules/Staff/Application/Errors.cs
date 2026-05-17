@@ -30,6 +30,11 @@ public static class StaffErrors
     public static readonly Error PositionInactive =
         new("staff.position.inactive", "Position is inactive.");
 
+    public static readonly Error PositionAlreadyExists =
+        new(
+            "staff.position.already_exists",
+            "Position already exists in this company."
+        );
     // ------------------------
     // ASSIGNMENTS (GENERIC)
     // ------------------------

@@ -4,6 +4,7 @@ using ShiftManagement.Api.Modules.Staff.Infrastructure.Persistence.Repositories;
 using ShiftManagement.Api.Modules.Staff.Domain;
 using ShiftManagement.Api.Modules.Staff.Application.Mappers;
 using ShiftManagement.Api.Infrastructure;
+using ShiftManagement.Api.Modules.Staff.Application.Errors;
 
 namespace ShiftManagement.Api.Modules.Staff.Application.Positions;
 
@@ -14,12 +15,20 @@ public sealed class CreatePositionUseCase(
 {
     public async Task<Result<PositionResponse>> Execute(CreatePositionRequest request)
     {
-        var position = new Position(
-            Guid.NewGuid(),
+        var exists = await repository.ExistsByNameAsync(
+            request.CompanyId,
+            request.Name.Trim().ToLowerInvariant()
+        );
+
+        if (exists)
+            return Result<PositionResponse>.Failure(
+                StaffErrors.PositionAlreadyExists
+            );
+
+        var position = Position.Create(
             request.CompanyId,
             request.Name,
-            request.Description,
-            DateTime.UtcNow
+            request.Description
         );
 
         await repository.AddAsync(position);

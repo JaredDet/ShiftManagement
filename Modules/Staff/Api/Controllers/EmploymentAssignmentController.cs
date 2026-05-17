@@ -35,69 +35,119 @@ public class EmploymentAssignmentController : ControllerBase
 
     [HttpPost("{employeeId:guid}/assign-branch")]
     public async Task<IActionResult> AssignBranch(
-    Guid employeeId,
-    [FromBody] AssignBranchToCollaboratorRequest request)
+        Guid employeeId,
+        [FromBody] AssignBranchToCollaboratorRequest request)
     {
         var result = await _assignBranch.Execute(employeeId, request);
 
-        if (!result.IsSuccess)
-            return BadRequest(result.Error);
+        if (result.IsSuccess)
+            return Ok();
 
-        return Ok();
+        return result.Error.Code switch
+        {
+            "staff.employee.not_found" => NotFound(result.Error),
+            "organization.branch.not_found" => NotFound(result.Error),
+
+            "staff.assignment.already_exists" => Conflict(result.Error),
+
+            _ => BadRequest(result.Error)
+        };
     }
 
     [HttpPost("{employeeId:guid}/remove-branch")]
-    public async Task<IActionResult> RemoveBranch(Guid employeeId, [FromBody] RemoveBranchFromCollaboratorRequest request)
+    public async Task<IActionResult> RemoveBranch(
+        Guid employeeId,
+        [FromBody] RemoveBranchFromCollaboratorRequest request)
     {
         var result = await _removeBranch.Execute(employeeId, request);
 
-        if (!result.IsSuccess)
-            return BadRequest(result.Error);
+        if (result.IsSuccess)
+            return Ok();
 
-        return Ok();
+        return result.Error.Code switch
+        {
+            "staff.employee.not_found" => NotFound(result.Error),
+            "staff.assignment.not_found" => NotFound(result.Error),
+
+            _ => BadRequest(result.Error)
+        };
     }
 
     [HttpPost("{employeeId:guid}/assign-position")]
-    public async Task<IActionResult> AssignPosition(Guid employeeId, [FromBody] AssignPositionToCollaboratorRequest request)
+    public async Task<IActionResult> AssignPosition(
+        Guid employeeId,
+        [FromBody] AssignPositionToCollaboratorRequest request)
     {
         var result = await _assignPosition.Execute(employeeId, request);
 
-        if (!result.IsSuccess)
-            return BadRequest(result.Error);
+        if (result.IsSuccess)
+            return Ok();
 
-        return Ok();
+        return result.Error.Code switch
+        {
+            "staff.employee.not_found" => NotFound(result.Error),
+            "staff.position.not_found" => NotFound(result.Error),
+
+            "staff.assignment.already_exists" => Conflict(result.Error),
+
+            _ => BadRequest(result.Error)
+        };
     }
 
     [HttpPost("{employeeId:guid}/remove-position")]
-    public async Task<IActionResult> RemovePosition(Guid employeeId, [FromBody] RemovePositionFromCollaboratorRequest request)
+    public async Task<IActionResult> RemovePosition(
+        Guid employeeId,
+        [FromBody] RemovePositionFromCollaboratorRequest request)
     {
         var result = await _removePosition.Execute(employeeId, request);
 
-        if (!result.IsSuccess)
-            return BadRequest(result.Error);
+        if (result.IsSuccess)
+            return Ok();
 
-        return Ok();
+        return result.Error.Code switch
+        {
+            "staff.employee.not_found" => NotFound(result.Error),
+            "staff.assignment.not_found" => NotFound(result.Error),
+
+            _ => BadRequest(result.Error)
+        };
     }
 
     [HttpPost("{employeeId:guid}/change-primary-branch")]
-    public async Task<IActionResult> ChangePrimaryBranch(Guid employeeId, [FromBody] ChangeMainBranchRequest request)
+    public async Task<IActionResult> ChangePrimaryBranch(
+        Guid employeeId,
+        [FromBody] ChangeMainBranchRequest request)
     {
         var result = await _changeMainBranch.Execute(employeeId, request);
 
-        if (!result.IsSuccess)
-            return BadRequest(result.Error);
+        if (result.IsSuccess)
+            return Ok(result.Value);
 
-        return Ok();
+        return result.Error.Code switch
+        {
+            "staff.employee.not_found" => NotFound(result.Error),
+            "staff.assignment.not_found" => NotFound(result.Error),
+
+            _ => BadRequest(result.Error)
+        };
     }
 
     [HttpPost("{employeeId:guid}/change-primary-position")]
-    public async Task<IActionResult> ChangePrimaryPosition(Guid employeeId, [FromBody] ChangeMainPositionRequest request)
+    public async Task<IActionResult> ChangePrimaryPosition(
+        Guid employeeId,
+        [FromBody] ChangeMainPositionRequest request)
     {
         var result = await _changeMainPosition.Execute(employeeId, request);
 
-        if (!result.IsSuccess)
-            return BadRequest(result.Error);
+        if (result.IsSuccess)
+            return Ok(result.Value);
 
-        return Ok();
+        return result.Error.Code switch
+        {
+            "staff.employee.not_found" => NotFound(result.Error),
+            "staff.assignment.not_found" => NotFound(result.Error),
+
+            _ => BadRequest(result.Error)
+        };
     }
 }

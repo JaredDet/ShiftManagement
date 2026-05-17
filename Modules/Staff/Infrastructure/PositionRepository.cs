@@ -58,4 +58,16 @@ public class PositionRepository
         return _context.Set<Position>()
             .AnyAsync(p => p.Id == id);
     }
+
+    public Task<bool> ExistsByNameAsync(
+    Guid companyId,
+    string name
+    )
+    {
+        return _context.Set<Position>()
+            .AnyAsync(position =>
+                position.CompanyId == companyId &&
+                position.Name.ToLower() == name
+            );
+    }
 }

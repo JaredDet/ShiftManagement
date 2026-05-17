@@ -72,8 +72,9 @@ public sealed class ShiftSwapRequest
 
     public void Accept()
     {
-        TransitionTo(
-            ShiftSwapStatus.AcceptedByCollaborator
+        Status = ShiftSwapStateMachine.Transition(
+            Status,
+            ShiftSwapAction.Accept
         );
 
         RespondedAt = DateTime.UtcNow;
@@ -81,8 +82,9 @@ public sealed class ShiftSwapRequest
 
     public void Reject()
     {
-        TransitionTo(
-            ShiftSwapStatus.Rejected
+        Status = ShiftSwapStateMachine.Transition(
+            Status,
+            ShiftSwapAction.Reject
         );
 
         RespondedAt = DateTime.UtcNow;
@@ -90,8 +92,9 @@ public sealed class ShiftSwapRequest
 
     public void Approve()
     {
-        TransitionTo(
-            ShiftSwapStatus.Approved
+        Status = ShiftSwapStateMachine.Transition(
+            Status,
+            ShiftSwapAction.Approve
         );
 
         ApprovedAt = DateTime.UtcNow;
@@ -99,19 +102,9 @@ public sealed class ShiftSwapRequest
 
     public void Cancel()
     {
-        TransitionTo(
-            ShiftSwapStatus.Cancelled
-        );
-    }
-
-    private void TransitionTo(
-        ShiftSwapStatus newStatus)
-    {
-        ShiftSwapStateMachine.EnsureTransition(
+        Status = ShiftSwapStateMachine.Transition(
             Status,
-            newStatus
+            ShiftSwapAction.Cancel
         );
-
-        Status = newStatus;
     }
 }

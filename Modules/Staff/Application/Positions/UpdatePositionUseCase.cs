@@ -12,14 +12,44 @@ public sealed class UpdatePositionUseCase(
     ShiftManagementDbContext context
 )
 {
-    public async Task<Result<PositionResponse>> Execute(Guid id, UpdatePositionRequest request)
+    public async Task<Result<PositionResponse>> Execute(
+        Guid id,
+        UpdatePositionRequest request
+    )
     {
         var position = await repository.GetByIdAsync(id);
 
         if (position is null)
-            return Result<PositionResponse>.Failure(StaffErrors.PositionNotFound);
+        {
+            return Result<PositionResponse>.Failure(
+                StaffErrors.PositionNotFound
+            );
+        }
 
-        position.Update(request.Name, request.Description);
+        var normalizedName = request.Name.Trim().ToLowerInvariant();
+
+        var exists = await repository.ExistsByNameAsync(
+            position.CompanyId,
+            normalizedName
+        );
+
+        if (
+            exists &&
+            !position.Name.Equals(
+                request.Name,
+                StringComparison.OrdinalIgnoreCase
+            )
+        )
+        {
+            return Result<PositionResponse>.Failure(
+                StaffErrors.PositionAlreadyExists
+            );
+        }
+
+        position.Update(
+            request.Name,
+            request.Description
+        );
 
         await context.SaveChangesAsync();
 

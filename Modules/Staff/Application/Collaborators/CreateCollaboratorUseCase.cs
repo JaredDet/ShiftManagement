@@ -7,7 +7,6 @@ using ShiftManagement.Api.Modules.Staff.Application.Mappers;
 using ShiftManagement.Api.Modules.Organization.Infrastructure.Persistence.Repositories;
 using ShiftManagement.Api.Modules.Organization.Application.Errors;
 using ShiftManagement.Api.Infrastructure;
-using ShiftManagement.Api.Modules.Identity.Domain;
 using ShiftManagement.Api.Modules.Identity.Infrastructure;
 using ShiftManagement.Api.Modules.Identity.Application;
 
