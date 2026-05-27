@@ -1,3 +1,5 @@
+using ShiftManagement.Api.Modules.Claims.Domain;
+
 namespace ShiftManagement.Api.Modules.Claims.Api.Contracts.Submissions;
 
 public sealed class UpdateClaimRequest
@@ -6,5 +8,5 @@ public sealed class UpdateClaimRequest
 
     public string Description { get; init; } = string.Empty;
 
-    public string Priority { get; init; } = string.Empty;
+    public ClaimPriority Priority { get; init; }
 }

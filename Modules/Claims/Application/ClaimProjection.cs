@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using ShiftManagement.Api.Modules.Claims.Api.Contracts.Queries;
 using ShiftManagement.Api.Modules.Claims.Api.Contracts.Responses;
 using ShiftManagement.Api.Modules.Claims.Domain;
 
@@ -38,6 +39,63 @@ public static class ClaimProjection
                 CommentsCount =
                     comments.Count(x => x.ClaimId == c.Id)
             };
+
+        return query;
+    }
+
+    public static IQueryable<ClaimResponse> ApplyFilters(
+        this IQueryable<ClaimResponse> query,
+        ListClaimsRequest request
+    )
+    {
+        if (request.CollaboratorId.HasValue)
+        {
+            query = query.Where(x =>
+                x.CollaboratorId == request.CollaboratorId.Value
+            );
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.Status))
+        {
+            query = query.Where(x =>
+                x.Status == request.Status
+            );
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.Reason))
+        {
+            query = query.Where(x =>
+                x.Reason == request.Reason
+            );
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.Priority))
+        {
+            query = query.Where(x =>
+                x.Priority == request.Priority
+            );
+        }
+
+        if (request.AssignedToUserId.HasValue)
+        {
+            query = query.Where(x =>
+                x.AssignedToUserId == request.AssignedToUserId.Value
+            );
+        }
+
+        if (request.CreatedFrom.HasValue)
+        {
+            query = query.Where(x =>
+                x.CreatedAt >= request.CreatedFrom.Value
+            );
+        }
+
+        if (request.CreatedTo.HasValue)
+        {
+            query = query.Where(x =>
+                x.CreatedAt <= request.CreatedTo.Value
+            );
+        }
 
         return query;
     }

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using ShiftManagement.Api.Modules.Claims.Api.Contracts.Queries;
 using ShiftManagement.Api.Modules.Claims.Api.Contracts.Reviews;
 using ShiftManagement.Api.Modules.Claims.Api.Contracts.Submissions;
+using ShiftManagement.Api.Modules.Claims.Application.Retrieval;
 using ShiftManagement.Api.Modules.Claims.Application.Submissions;
 using ShiftManagement.Api.Shared;
 
@@ -9,7 +10,7 @@ namespace ShiftManagement.Api.Modules.Claims.Api.Controllers;
 
 [ApiController]
 [Route("api/claims")]
-public sealed class ClaimController(
+public class ClaimController(
     CreateClaimUseCase create,
     UpdateClaimUseCase update,
     CancelClaimUseCase cancel,
@@ -44,14 +45,9 @@ public sealed class ClaimController(
         Guid claimId,
         [FromBody] UpdateClaimRequest request)
     {
-        var result = await update.ExecuteAsync(
+        return (await update.ExecuteAsync(
             claimId,
-            request);
-
-        if (!result.IsSuccess)
-            return BadRequest(result.Error);
-
-        return Ok(result.Value);
+            request)).Match(Ok);
     }
 
     [HttpDelete("{claimId:guid}")]
@@ -133,18 +129,15 @@ public sealed class ClaimController(
         if (!result.IsSuccess)
             return NotFound(result.Error);
 
-        return Ok(result.Value);
+        return (await get.ExecuteAsync(claimId))
+            .Match(Ok);
     }
 
     [HttpGet]
     public async Task<IActionResult> List(
         [FromQuery] ListClaimsRequest request)
     {
-        var result = await list.ExecuteAsync(request);
-
-        if (!result.IsSuccess)
-            return BadRequest(result.Error);
-
-        return Ok(result.Value);
+        return (await list.ExecuteAsync(request))
+            .Match(Ok);
     }
 }
