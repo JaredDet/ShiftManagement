@@ -1,8 +1,14 @@
+using System.ComponentModel.DataAnnotations;
+using ShiftManagement.Api.Shared;
+
 namespace ShiftManagement.Api.Modules.Claims.Api.Contracts.Reviews;
 
-public sealed class RejectClaimRequest
+public sealed record RejectClaimRequest
 {
-    public Guid ClaimId { get; init; }
+    [NotEmptyGuid]
+    public Guid ReviewerId { get; init; }
 
-    public string RejectionReason { get; init; } = string.Empty;
+    [Required]
+    [MaxLength(500)]
+    public string Reason { get; init; } = string.Empty;
 }

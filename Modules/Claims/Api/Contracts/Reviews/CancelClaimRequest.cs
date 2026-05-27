@@ -3,12 +3,11 @@ using ShiftManagement.Api.Shared;
 
 namespace ShiftManagement.Api.Modules.Claims.Api.Contracts.Reviews;
 
-public sealed record ResolveClaimRequest
+public sealed record CancelClaimRequest
 {
     [NotEmptyGuid]
-    public Guid ReviewerId { get; init; }
+    public Guid ActorId { get; init; }
 
-    [Required]
     [MaxLength(500)]
-    public string Reason { get; init; } = string.Empty;
+    public string? Reason { get; init; } = string.Empty;
 }

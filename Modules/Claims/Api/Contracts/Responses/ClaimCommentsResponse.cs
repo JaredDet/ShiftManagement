@@ -1,6 +1,6 @@
 namespace ShiftManagement.Api.Modules.Claims.Api.Contracts.Responses;
 
-public sealed class ClaimCommentsResponse
+public sealed record ClaimCommentsResponse
 {
     public Guid ClaimId { get; init; }
 

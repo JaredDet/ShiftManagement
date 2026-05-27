@@ -1,8 +1,9 @@
+using ShiftManagement.Api.Shared;
+
 namespace ShiftManagement.Api.Modules.Claims.Api.Contracts.Reviews;
 
-public sealed class AssignClaimRequest
+public sealed record AssignClaimRequest
 {
-    public Guid ClaimId { get; init; }
-
+    [NotEmptyGuid]
     public Guid AssignedToUserId { get; init; }
 }

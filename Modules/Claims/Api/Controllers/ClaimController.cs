@@ -51,10 +51,10 @@ public class ClaimController(
             request)).Match(Ok);
     }
 
-    [HttpDelete("{claimId:guid}")]
-    public async Task<IActionResult> Cancel(Guid claimId)
+    [HttpPost("{claimId:guid}/cancel")]
+    public async Task<IActionResult> Cancel(Guid claimId, CancelClaimRequest request)
     {
-        return (await cancel.ExecuteAsync(claimId))
+        return (await cancel.ExecuteAsync(claimId, request))
             .Match(Ok);
     }
 
@@ -76,23 +76,23 @@ public class ClaimController(
     }
 
     [HttpPost("{claimId:guid}/resolve")]
-    public async Task<IActionResult> Resolve(Guid claimId)
+    public async Task<IActionResult> Resolve(Guid claimId, ResolveClaimRequest request)
     {
-        return (await resolve.ExecuteAsync(claimId))
+        return (await resolve.ExecuteAsync(claimId, request))
             .Match(Ok);
     }
 
     [HttpPost("{claimId:guid}/reject")]
-    public async Task<IActionResult> Reject(Guid claimId)
+    public async Task<IActionResult> Reject(Guid claimId, RejectClaimRequest request)
     {
-        return (await reject.ExecuteAsync(claimId))
+        return (await reject.ExecuteAsync(claimId, request))
             .Match(Ok);
     }
 
     [HttpPost("{claimId:guid}/reopen")]
-    public async Task<IActionResult> Reopen(Guid claimId)
+    public async Task<IActionResult> Reopen(Guid claimId, ReopenClaimRequest request)
     {
-        return (await reopen.ExecuteAsync(claimId))
+        return (await reopen.ExecuteAsync(claimId, request))
             .Match(Ok);
     }
 

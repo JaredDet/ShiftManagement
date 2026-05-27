@@ -13,13 +13,11 @@ public sealed class ClaimComment
 
     public Guid AuthorUserId { get; private set; }
 
-    [MaxLength(2000)]
+    public ClaimCommentType Type { get; private set; }
+
     public string Content { get; private set; } = string.Empty;
 
     public DateTime CreatedAt { get; private set; }
-
-    [ForeignKey(nameof(ClaimId))]
-    public Claim Claim { get; private set; } = null!;
 
     private ClaimComment() { }
 
@@ -28,25 +26,29 @@ public sealed class ClaimComment
         Guid claimId,
         Guid authorUserId,
         string content,
+        ClaimCommentType type,
         DateTime createdAt)
     {
         Id = id;
         ClaimId = claimId;
         AuthorUserId = authorUserId;
         Content = content;
+        Type = type;
         CreatedAt = createdAt;
     }
 
     public static ClaimComment Create(
         Guid claimId,
         Guid authorUserId,
-        string content)
+        string content,
+        ClaimCommentType type)
     {
         return new ClaimComment(
             Guid.NewGuid(),
             claimId,
             authorUserId,
             content,
+            type,
             DateTime.UtcNow);
     }
 }

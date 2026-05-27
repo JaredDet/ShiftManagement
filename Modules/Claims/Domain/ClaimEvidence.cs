@@ -11,19 +11,13 @@ public sealed class ClaimEvidence
 
     public Guid ClaimId { get; private set; }
 
-    [MaxLength(255)]
     public string FileName { get; private set; } = string.Empty;
 
-    [MaxLength(1000)]
     public string FileUrl { get; private set; } = string.Empty;
 
-    [MaxLength(255)]
     public string MimeType { get; private set; } = string.Empty;
 
     public DateTime CreatedAt { get; private set; }
-
-    [ForeignKey(nameof(ClaimId))]
-    public Claim Claim { get; private set; } = null!;
 
     private ClaimEvidence() { }
 

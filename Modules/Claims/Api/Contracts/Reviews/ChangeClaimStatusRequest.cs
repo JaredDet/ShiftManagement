@@ -1,10 +1,10 @@
+using System.ComponentModel.DataAnnotations;
 using ShiftManagement.Api.Modules.Claims.Domain;
 
 namespace ShiftManagement.Api.Modules.Claims.Api.Contracts.Reviews;
 
-public sealed class ChangeClaimStatusRequest
+public sealed record ChangeClaimStatusRequest
 {
-    public Guid ClaimId { get; init; }
-
+    [EnumDataType(typeof(ClaimStatus))]
     public ClaimStatus Status { get; init; }
 }

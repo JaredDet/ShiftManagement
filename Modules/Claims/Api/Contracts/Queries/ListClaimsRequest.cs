@@ -1,14 +1,21 @@
+using System.ComponentModel.DataAnnotations;
+
+using ShiftManagement.Api.Modules.Claims.Domain;
+
 namespace ShiftManagement.Api.Modules.Claims.Api.Contracts.Queries;
 
-public sealed class ListClaimsRequest
+public sealed record ListClaimsRequest
 {
     public Guid? CollaboratorId { get; init; }
 
-    public string? Status { get; init; }
+    [EnumDataType(typeof(ClaimStatus))]
+    public ClaimStatus? Status { get; init; }
 
-    public string? Reason { get; init; }
+    [EnumDataType(typeof(ClaimReason))]
+    public ClaimReason? Reason { get; init; }
 
-    public string? Priority { get; init; }
+    [EnumDataType(typeof(ClaimPriority))]
+    public ClaimPriority? Priority { get; init; }
 
     public Guid? AssignedToUserId { get; init; }
 

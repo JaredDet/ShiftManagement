@@ -177,10 +177,7 @@ public sealed class Claim
 
     public void Reopen()
     {
-        Status = ClaimStateMachine.Transition(
-            Status,
-            ClaimAction.Reopen
-        );
+        Status = ClaimStateMachine.Transition(Status, ClaimAction.Reopen);
 
         ResolvedAt = null;
         CanceledAt = null;
@@ -189,15 +186,17 @@ public sealed class Claim
     }
 
     public void AddComment(
-        Guid authorUserId,
-        string content)
+    Guid authorUserId,
+    string content,
+    ClaimCommentType type = ClaimCommentType.General)
     {
         EnsureMutable();
 
         var comment = ClaimComment.Create(
             Id,
             authorUserId,
-            content
+            content,
+            type
         );
 
         _comments.Add(comment);
