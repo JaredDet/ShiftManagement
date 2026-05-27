@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-
+using ShiftManagement.Api.Modules.Claims.Domain;
 using ShiftManagement.Api.Modules.Identity.Domain;
 using ShiftManagement.Api.Modules.Organization.Domain;
 using ShiftManagement.Api.Modules.Scheduling.Domain;
@@ -19,6 +19,9 @@ public sealed class ShiftManagementDbContext(
     public DbSet<Employee> Employees => Set<Employee>();
 
     public DbSet<Position> Positions => Set<Position>();
+    public DbSet<Claim> Claims => Set<Claim>();
+    public DbSet<ClaimComment> ClaimComments => Set<ClaimComment>();
+    public DbSet<ClaimEvidence> ClaimEvidences => Set<ClaimEvidence>();
 
     public DbSet<EmploymentAssignment> EmploymentAssignments
         => Set<EmploymentAssignment>();

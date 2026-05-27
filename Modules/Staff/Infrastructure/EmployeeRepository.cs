@@ -37,4 +37,10 @@ public class EmployeeRepository(ShiftManagementDbContext context)
         return context.Set<Employee>()
             .FirstOrDefaultAsync(x => x.Id == id);
     }
+
+    public Task<bool> ExistsAsync(Guid id)
+    {
+        return context.Employees
+            .AnyAsync(c => c.Id == id);
+    }
 }
