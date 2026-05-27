@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using ShiftManagement.Api.Modules.Staff.Application.Collaborators;
 using ShiftManagement.Api.Modules.Staff.Api.Contracts.Collaborators;
 using Microsoft.AspNetCore.Authorization;
+using ShiftManagement.Api.Shared;
 
 namespace ShiftManagement.Api.Modules.Staff.Api.Controllers;
 
@@ -20,33 +21,14 @@ public class EmployeeController(
         [FromBody] CreateCollaboratorRequest request
     )
     {
-        var result = await create.Execute(request);
-
-        if (result.IsSuccess)
-        {
-            return CreatedAtAction(
-                nameof(GetEmployee),
-                new
-                {
-                    companyId = request.CompanyId,
-                    id = result.Value!.Id
-                },
-                result.Value
+        return (await create.Execute(request))
+            .Match(value =>
+                CreatedAtAction(
+                    nameof(GetEmployee),
+                    new { id = value.Id },
+                    value
+                )
             );
-        }
-
-        return result.Error.Code switch
-        {
-            "identity.user.not_found" => NotFound(result.Error),
-
-            "organization.company.not_found" => NotFound(result.Error),
-
-            "staff.employee.already_exists" => Conflict(result.Error),
-
-            "staff.employee.user_not_eligible" => Conflict(result.Error),
-
-            _ => BadRequest(result.Error)
-        };
     }
 
     [HttpGet("{id:guid}")]
@@ -56,43 +38,23 @@ public class EmployeeController(
         Guid id
     )
     {
-        var result = await get.Execute(companyId, id);
-
-        if (result.IsSuccess)
-            return Ok(result.Value);
-
-        return result.Error.Code switch
-        {
-            "staff.employee.not_found" => NotFound(result.Error),
-            _ => BadRequest(result.Error)
-        };
+        return (await get.Execute(companyId, id))
+            .Match(Ok);
     }
 
     [HttpGet]
     [Authorize(Policy = "StaffReadAccess")]
     public async Task<IActionResult> ListEmployees([FromQuery] Guid companyId)
     {
-        var result = await list.Execute(companyId);
-
-        if (!result.IsSuccess)
-            return BadRequest(result.Error);
-
-        return Ok(result.Value);
+        return (await list.Execute(companyId))
+            .Match(Ok);
     }
 
     [HttpDelete("{id:guid}")]
     [Authorize(Policy = "CompanyAdminOnly")]
     public async Task<IActionResult> DeactivateEmployee(Guid id)
     {
-        var result = await deactivate.Execute(id);
-
-        if (result.IsSuccess)
-            return NoContent();
-
-        return result.Error.Code switch
-        {
-            "staff.employee.not_found" => NotFound(result.Error),
-            _ => BadRequest(result.Error)
-        };
+        return (await deactivate.Execute(id))
+            .Match(NoContent);
     }
 }

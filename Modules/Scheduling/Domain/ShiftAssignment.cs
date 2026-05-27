@@ -58,7 +58,7 @@ public sealed class ShiftAssignment
     public void TransferTo(Guid newCollaboratorId)
     {
         if (Status == ShiftAssignmentStatus.Cancelled)
-            throw ShiftErrors.AssignmentCancelled();
+            throw ShiftExceptions.AssignmentCancelled();
 
         CollaboratorId = newCollaboratorId;
     }

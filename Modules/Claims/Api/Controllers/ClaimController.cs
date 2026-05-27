@@ -3,24 +3,25 @@ using ShiftManagement.Api.Modules.Claims.Api.Contracts.Queries;
 using ShiftManagement.Api.Modules.Claims.Api.Contracts.Reviews;
 using ShiftManagement.Api.Modules.Claims.Api.Contracts.Submissions;
 using ShiftManagement.Api.Modules.Claims.Application.Submissions;
+using ShiftManagement.Api.Shared;
 
 namespace ShiftManagement.Api.Modules.Claims.Api.Controllers;
 
 [ApiController]
 [Route("api/claims")]
 public sealed class ClaimController(
-    CreateClaimUseCase createClaimUseCase,
-    UpdateClaimUseCase updateClaimUseCase,
-    CancelClaimUseCase cancelClaimUseCase,
+    CreateClaimUseCase create,
+    UpdateClaimUseCase update,
+    CancelClaimUseCase cancel,
 
-    AssignClaimUseCase assignClaimUseCase,
-    ChangeClaimStatusUseCase changeClaimStatusUseCase,
+    AssignClaimUseCase assign,
+    ChangeClaimStatusUseCase changeStatus,
 
-    ResolveClaimUseCase resolveClaimUseCase,
-    RejectClaimUseCase rejectClaimUseCase,
+    ResolveClaimUseCase resolve,
+    RejectClaimUseCase reject,
 
-    GetClaimUseCase getClaimUseCase,
-    ListClaimsUseCase listClaimsUseCase
+    GetClaimUseCase get,
+    ListClaimsUseCase list
 ) : ControllerBase
 {
 
@@ -28,22 +29,14 @@ public sealed class ClaimController(
     public async Task<IActionResult> Create(
         [FromBody] CreateClaimRequest request)
     {
-        var result = await createClaimUseCase.ExecuteAsync(request);
-
-        if (!result.IsSuccess)
-        {
-            return result.Error.Code switch
-            {
-                "organization.company.not_found" => NotFound(result.Error),
-                "staff.employee.not_found" => NotFound(result.Error),
-                _ => BadRequest(result.Error)
-            };
-        }
-
-        return CreatedAtAction(
-            nameof(GetById),
-            new { claimId = result.Value.Id },
-            result.Value);
+        return (await create.ExecuteAsync(request))
+            .Match(value =>
+                CreatedAtAction(
+                    nameof(GetById),
+                    new { id = value.Id },
+                    value
+                )
+            );
     }
 
     [HttpPut("{claimId:guid}")]
@@ -51,7 +44,7 @@ public sealed class ClaimController(
         Guid claimId,
         [FromBody] UpdateClaimRequest request)
     {
-        var result = await updateClaimUseCase.ExecuteAsync(
+        var result = await update.ExecuteAsync(
             claimId,
             request);
 
@@ -64,7 +57,7 @@ public sealed class ClaimController(
     [HttpDelete("{claimId:guid}")]
     public async Task<IActionResult> Cancel(Guid claimId)
     {
-        var result = await cancelClaimUseCase.ExecuteAsync(claimId);
+        var result = await cancel.ExecuteAsync(claimId);
 
         if (!result.IsSuccess)
             return BadRequest(result.Error);
@@ -77,7 +70,7 @@ public sealed class ClaimController(
         Guid claimId,
         [FromBody] AssignClaimRequest request)
     {
-        var result = await assignClaimUseCase.ExecuteAsync(
+        var result = await assign.ExecuteAsync(
             claimId,
             request);
 
@@ -92,7 +85,7 @@ public sealed class ClaimController(
         Guid claimId,
         [FromBody] ChangeClaimStatusRequest request)
     {
-        var result = await changeClaimStatusUseCase.ExecuteAsync(
+        var result = await changeStatus.ExecuteAsync(
             claimId,
             request);
 
@@ -107,7 +100,7 @@ public sealed class ClaimController(
         Guid claimId,
         [FromBody] ResolveClaimRequest request)
     {
-        var result = await resolveClaimUseCase.ExecuteAsync(
+        var result = await resolve.ExecuteAsync(
             claimId,
             request);
 
@@ -122,7 +115,7 @@ public sealed class ClaimController(
         Guid claimId,
         [FromBody] RejectClaimRequest request)
     {
-        var result = await rejectClaimUseCase.ExecuteAsync(
+        var result = await reject.ExecuteAsync(
             claimId,
             request);
 
@@ -135,7 +128,7 @@ public sealed class ClaimController(
     [HttpGet("{claimId:guid}")]
     public async Task<IActionResult> GetById(Guid claimId)
     {
-        var result = await getClaimUseCase.ExecuteAsync(claimId);
+        var result = await get.ExecuteAsync(claimId);
 
         if (!result.IsSuccess)
             return NotFound(result.Error);
@@ -147,7 +140,7 @@ public sealed class ClaimController(
     public async Task<IActionResult> List(
         [FromQuery] ListClaimsRequest request)
     {
-        var result = await listClaimsUseCase.ExecuteAsync(request);
+        var result = await list.ExecuteAsync(request);
 
         if (!result.IsSuccess)
             return BadRequest(result.Error);

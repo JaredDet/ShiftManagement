@@ -12,28 +12,19 @@ public sealed class CancelShiftSwapUseCase(
 {
     public async Task<Result<ShiftSwapRequestResponse>> ExecuteAsync(Guid swapId)
     {
-        try
-        {
-            var swap = await swapRepository.GetByIdAsync(swapId);
+        var swap = await swapRepository.GetByIdAsync(swapId);
 
-            if (swap is null)
-                return Result<ShiftSwapRequestResponse>.Failure(
-                    SchedulingErrors.SwapRequestNotFound
-                );
-
-            swap.Cancel();
-
-            await context.SaveChangesAsync();
-
-            return Result<ShiftSwapRequestResponse>.Success(
-                ShiftSwapMapper.ToResponse(swap)
-            );
-        }
-        catch (DomainException ex)
-        {
+        if (swap is null)
             return Result<ShiftSwapRequestResponse>.Failure(
-                new Error(ex.Code, ex.Message)
+                SchedulingErrors.SwapRequestNotFound
             );
-        }
+
+        swap.Cancel();
+
+        await context.SaveChangesAsync();
+
+        return Result<ShiftSwapRequestResponse>.Success(
+            ShiftSwapMapper.ToResponse(swap)
+        );
     }
 }

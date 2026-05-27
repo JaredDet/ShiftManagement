@@ -3,8 +3,6 @@ using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using ShiftManagement.Api.Infrastructure;
 using ShiftManagement.Api.Modules.Identity;
-using ShiftManagement.Api.Modules.Identity.Domain;
-using ShiftManagement.Api.Modules.Identity.Infrastructure.Authorization;
 using ShiftManagement.Api.Modules.Organization;
 using ShiftManagement.Api.Modules.Scheduling;
 using ShiftManagement.Api.Modules.Staff;
@@ -60,6 +58,8 @@ if (app.Environment.IsDevelopment())
 
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<DomainExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 

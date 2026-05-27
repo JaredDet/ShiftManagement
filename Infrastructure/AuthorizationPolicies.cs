@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using ShiftManagement.Api.Modules.Identity.Domain;
 
-namespace ShiftManagement.Api.Modules.Identity.Infrastructure.Authorization;
+namespace ShiftManagement.Api.Infrastructure;
 
 public static class AuthorizationPolicies
 {

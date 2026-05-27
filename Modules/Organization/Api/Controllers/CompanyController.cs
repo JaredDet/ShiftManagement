@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShiftManagement.Api.Modules.Organization.Api.Contracts.Companies;
 using ShiftManagement.Api.Modules.Organization.Application.Companies;
+using ShiftManagement.Api.Shared;
 
 namespace ShiftManagement.Api.Modules.Organization.Api.Controllers;
 
@@ -9,37 +10,25 @@ namespace ShiftManagement.Api.Modules.Organization.Api.Controllers;
 [ApiController]
 [Route("api/companies")]
 public class CompanyController(
-    CreateCompanyUseCase createCompanyUseCase,
-    ListCompaniesUseCase listCompaniesUseCase,
-    GetCompanyUseCase getCompanyUseCase,
-    UpdateCompanyUseCase updateCompanyUseCase,
-    DeactivateCompanyUseCase deactivateCompanyUseCase
+    CreateCompanyUseCase create,
+    ListCompaniesUseCase list,
+    GetCompanyUseCase get,
+    UpdateCompanyUseCase update,
+    DeactivateCompanyUseCase deactivate
 ) : ControllerBase
 {
     [HttpGet]
     public async Task<IActionResult> ListCompanies()
     {
-        var result = await listCompaniesUseCase.ExecuteAsync();
-
-        if (!result.IsSuccess)
-            return BadRequest(result.Error);
-
-        return Ok(result.Value);
+        return (await list.ExecuteAsync())
+            .Match(Ok);
     }
 
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetCompany(Guid id)
     {
-        var result = await getCompanyUseCase.ExecuteAsync(id);
-
-        if (result.IsSuccess)
-            return Ok(result.Value);
-
-        return result.Error.Code switch
-        {
-            "organization.company.not_found" => NotFound(result.Error),
-            _ => BadRequest(result.Error)
-        };
+        return (await get.ExecuteAsync(id))
+            .Match(Ok);
     }
 
     [HttpPost]
@@ -48,20 +37,14 @@ public class CompanyController(
     CreateCompanyRequest request
     )
     {
-        var result = await createCompanyUseCase.ExecuteAsync(request);
-
-        if (result.IsSuccess)
-            return CreatedAtAction(
-                nameof(GetCompany),
-                new { id = result.Value!.Id },
-                result.Value
+        return (await create.ExecuteAsync(request))
+            .Match(value =>
+                CreatedAtAction(
+                    nameof(GetCompany),
+                    new { id = value.Id },
+                    value
+                )
             );
-
-        return result.Error.Code switch
-        {
-            "organization.company.already_exists" => Conflict(result.Error),
-            _ => BadRequest(result.Error)
-        };
     }
 
     [HttpPut("{id:guid}")]
@@ -71,32 +54,15 @@ public class CompanyController(
        UpdateCompanyRequest request
    )
     {
-        var result = await updateCompanyUseCase.ExecuteAsync(id, request);
-
-        if (result.IsSuccess)
-            return Ok(result.Value);
-
-        return result.Error.Code switch
-        {
-            "organization.company.not_found" => NotFound(result.Error),
-            "organization.company.already_exists" => Conflict(result.Error),
-            _ => BadRequest(result.Error)
-        };
+        return (await update.ExecuteAsync(id, request))
+            .Match(Ok);
     }
 
     [HttpPatch("{id:guid}/deactivate")]
     [Authorize(Policy = "CompanyAdminOnly")]
     public async Task<IActionResult> DeactivateCompany(Guid id)
     {
-        var result = await deactivateCompanyUseCase.ExecuteAsync(id);
-
-        if (result.IsSuccess)
-            return NoContent();
-
-        return result.Error.Code switch
-        {
-            "organization.company.not_found" => NotFound(result.Error),
-            _ => BadRequest(result.Error)
-        };
+        return (await deactivate.ExecuteAsync(id))
+            .Match(NoContent);
     }
 }

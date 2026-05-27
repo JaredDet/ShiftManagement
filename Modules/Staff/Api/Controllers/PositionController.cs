@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using ShiftManagement.Api.Modules.Staff.Application.Positions;
 using ShiftManagement.Api.Modules.Staff.Api.Contracts.Positions;
 using Microsoft.AspNetCore.Authorization;
+using ShiftManagement.Api.Shared;
 
 namespace ShiftManagement.Api.Modules.Staff.Api.Controllers;
 
@@ -22,22 +23,14 @@ public class PositionController(
         [FromBody] CreatePositionRequest request
     )
     {
-        var result = await create.Execute(request);
-
-        if (result.IsSuccess)
-        {
-            return CreatedAtAction(
-                nameof(GetPosition),
-                new { id = result.Value!.Id },
-                result.Value
+        return (await create.Execute(request))
+            .Match(value =>
+                CreatedAtAction(
+                    nameof(GetPosition),
+                    new { id = value.Id },
+                    value
+                )
             );
-        }
-
-        return result.Error.Code switch
-        {
-            "staff.position.already_exists" => Conflict(result.Error),
-            _ => BadRequest(result.Error)
-        };
     }
 
     [HttpPut("{id:guid}")]
@@ -47,60 +40,31 @@ public class PositionController(
         [FromBody] UpdatePositionRequest request
     )
     {
-        var result = await update.Execute(id, request);
-
-        if (result.IsSuccess)
-            return Ok(result.Value);
-
-        return result.Error.Code switch
-        {
-            "staff.position.not_found" => NotFound(result.Error),
-            "staff.position.already_exists" => Conflict(result.Error),
-            _ => BadRequest(result.Error)
-        };
+        return (await update.Execute(id, request))
+            .Match(Ok);
     }
 
     [HttpGet("{id:guid}")]
     [Authorize(Policy = "StaffReadAccess")]
     public async Task<IActionResult> GetPosition(Guid id)
     {
-        var result = await get.Execute(id);
-
-        if (result.IsSuccess)
-            return Ok(result.Value);
-
-        return result.Error.Code switch
-        {
-            "staff.position.not_found" => NotFound(result.Error),
-            _ => BadRequest(result.Error)
-        };
+        return (await get.Execute(id))
+            .Match(Ok);
     }
 
     [HttpGet]
     [Authorize(Policy = "StaffReadAccess")]
     public async Task<IActionResult> ListPositions()
     {
-        var result = await list.Execute();
-
-        if (!result.IsSuccess)
-            return BadRequest(result.Error);
-
-        return Ok(result.Value);
+        return (await list.Execute())
+            .Match(Ok);
     }
 
     [HttpDelete("{id:guid}")]
     [Authorize(Policy = "CompanyAdminOnly")]
     public async Task<IActionResult> DeactivatePosition(Guid id)
     {
-        var result = await deactivate.Execute(id);
-
-        if (result.IsSuccess)
-            return NoContent();
-
-        return result.Error.Code switch
-        {
-            "staff.position.not_found" => NotFound(result.Error),
-            _ => BadRequest(result.Error)
-        };
+        return (await deactivate.Execute(id))
+            .Match(NoContent);
     }
 }

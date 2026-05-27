@@ -2,7 +2,7 @@ using ShiftManagement.Api.Shared;
 
 namespace ShiftManagement.Api.Modules.Claims.Domain;
 
-public static class ClaimStateErrors
+public static class ClaimExceptions
 {
     public static DomainException InvalidStateTransition(
         ClaimStatus current,
@@ -10,7 +10,8 @@ public static class ClaimStateErrors
     {
         return new DomainException(
             "claims.invalid_transition",
-            $"Cannot execute '{action}' from '{current}'"
+            $"Cannot execute '{action}' from '{current}'",
+            ErrorType.Validation
         );
     }
 
@@ -18,7 +19,8 @@ public static class ClaimStateErrors
     {
         return new DomainException(
             "claims.already_closed",
-            $"Claim '{claimId}' is already closed"
+            $"Claim '{claimId}' is already closed",
+            ErrorType.Conflict
         );
     }
 }

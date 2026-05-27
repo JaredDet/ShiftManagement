@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShiftManagement.Api.Modules.Scheduling.Api.Contracts;
 using ShiftManagement.Api.Modules.Scheduling.Application.Shifts;
+using ShiftManagement.Api.Shared;
 
 namespace ShiftManagement.Api.Modules.Scheduling.Api.Controllers;
 
@@ -9,10 +10,10 @@ namespace ShiftManagement.Api.Modules.Scheduling.Api.Controllers;
 [ApiController]
 [Route("api/shifts")]
 public class ShiftController(
-    CreateShiftUseCase createShiftUseCase,
-    UpdateShiftUseCase updateShiftUseCase,
-    AssignCollaboratorToShiftUseCase assignCollaboratorToShiftUseCase,
-    ReplaceCollaboratorInShiftUseCase replaceCollaboratorInShiftUseCase
+    CreateShiftUseCase create,
+    UpdateShiftUseCase update,
+    AssignCollaboratorToShiftUseCase assign,
+    ReplaceCollaboratorInShiftUseCase replace
 ) : ControllerBase
 {
     [HttpPost]
@@ -21,17 +22,8 @@ public class ShiftController(
         [FromBody] CreateShiftRequest request
     )
     {
-        var result = await createShiftUseCase.ExecuteAsync(request);
-
-        if (result.IsSuccess)
-            return Ok(result.Value);
-
-        return result.Error.Code switch
-        {
-            "organization.branch.not_found" => NotFound(result.Error),
-            "staff.position.not_found" => NotFound(result.Error),
-            _ => BadRequest(result.Error)
-        };
+        return (await create.ExecuteAsync(request))
+            .Match(Ok);
     }
 
     [HttpPut("{id:guid}")]
@@ -41,18 +33,8 @@ public class ShiftController(
         [FromBody] UpdateShiftRequest request
     )
     {
-        var result = await updateShiftUseCase.ExecuteAsync(id, request);
-
-        if (result.IsSuccess)
-            return Ok(result.Value);
-
-        return result.Error.Code switch
-        {
-            "scheduling.shift.not_found" => NotFound(result.Error),
-            "organization.branch.not_found" => NotFound(result.Error),
-            "staff.position.not_found" => NotFound(result.Error),
-            _ => BadRequest(result.Error)
-        };
+        return (await update.ExecuteAsync(id, request))
+            .Match(Ok);
     }
 
     [HttpPost("assign")]
@@ -61,18 +43,8 @@ public class ShiftController(
     [FromBody] AssignCollaboratorToShiftRequest request
 )
     {
-        var result = await assignCollaboratorToShiftUseCase.ExecuteAsync(request);
-
-        if (result.IsSuccess)
-            return Ok(result.Value);
-
-        return result.Error.Code switch
-        {
-            "scheduling.shift.not_found" => NotFound(result.Error),
-            "scheduling.shift.already_assigned" => Conflict(result.Error),
-            "scheduling.shift.invalid_state" => BadRequest(result.Error),
-            _ => BadRequest(result.Error)
-        };
+        return (await assign.ExecuteAsync(request))
+            .Match(Ok);
     }
 
     [HttpPost("replace")]
@@ -81,18 +53,7 @@ public class ShiftController(
         [FromBody] ReplaceCollaboratorInShiftRequest request
     )
     {
-        var result = await replaceCollaboratorInShiftUseCase.ExecuteAsync(request);
-
-        if (result.IsSuccess)
-            return Ok(result.Value);
-
-        return result.Error.Code switch
-        {
-            "scheduling.shift.not_found" => NotFound(result.Error),
-            "scheduling.assignment.not_found" => NotFound(result.Error),
-            "scheduling.shift.already_assigned" => Conflict(result.Error),
-            "scheduling.shift.invalid_state" => BadRequest(result.Error),
-            _ => BadRequest(result.Error)
-        };
+        return (await replace.ExecuteAsync(request))
+            .Match(Ok);
     }
 }

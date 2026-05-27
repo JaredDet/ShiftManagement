@@ -4,6 +4,7 @@ using ShiftManagement.Api.Modules.Staff.Api.Contracts.PositionAssignments;
 using ShiftManagement.Api.Modules.Staff.Api.Contracts.MainChanges;
 using ShiftManagement.Api.Modules.Staff.Application.EmploymentAssignments;
 using Microsoft.AspNetCore.Authorization;
+using ShiftManagement.Api.Shared;
 
 namespace ShiftManagement.Api.Modules.Staff.Api.Controllers;
 
@@ -25,20 +26,8 @@ public class EmploymentAssignmentController(
         Guid employeeId,
         [FromBody] AssignBranchToCollaboratorRequest request)
     {
-        var result = await assignBranch.Execute(employeeId, request);
-
-        if (result.IsSuccess)
-            return Ok();
-
-        return result.Error.Code switch
-        {
-            "staff.employee.not_found" => NotFound(result.Error),
-            "organization.branch.not_found" => NotFound(result.Error),
-
-            "staff.assignment.already_exists" => Conflict(result.Error),
-
-            _ => BadRequest(result.Error)
-        };
+        return (await assignBranch.Execute(employeeId, request))
+            .Match(Ok);
     }
 
     [HttpPost("{employeeId:guid}/remove-branch")]
@@ -47,18 +36,8 @@ public class EmploymentAssignmentController(
         Guid employeeId,
         [FromBody] RemoveBranchFromCollaboratorRequest request)
     {
-        var result = await removeBranch.Execute(employeeId, request);
-
-        if (result.IsSuccess)
-            return Ok();
-
-        return result.Error.Code switch
-        {
-            "staff.employee.not_found" => NotFound(result.Error),
-            "staff.assignment.not_found" => NotFound(result.Error),
-
-            _ => BadRequest(result.Error)
-        };
+        return (await removeBranch.Execute(employeeId, request))
+            .Match(Ok);
     }
 
     [HttpPost("{employeeId:guid}/assign-position")]
@@ -67,20 +46,8 @@ public class EmploymentAssignmentController(
         Guid employeeId,
         [FromBody] AssignPositionToCollaboratorRequest request)
     {
-        var result = await assignPosition.Execute(employeeId, request);
-
-        if (result.IsSuccess)
-            return Ok();
-
-        return result.Error.Code switch
-        {
-            "staff.employee.not_found" => NotFound(result.Error),
-            "staff.position.not_found" => NotFound(result.Error),
-
-            "staff.assignment.already_exists" => Conflict(result.Error),
-
-            _ => BadRequest(result.Error)
-        };
+        return (await assignPosition.Execute(employeeId, request))
+            .Match(Ok);
     }
 
     [HttpPost("{employeeId:guid}/remove-position")]
@@ -89,18 +56,8 @@ public class EmploymentAssignmentController(
         Guid employeeId,
         [FromBody] RemovePositionFromCollaboratorRequest request)
     {
-        var result = await removePosition.Execute(employeeId, request);
-
-        if (result.IsSuccess)
-            return Ok();
-
-        return result.Error.Code switch
-        {
-            "staff.employee.not_found" => NotFound(result.Error),
-            "staff.assignment.not_found" => NotFound(result.Error),
-
-            _ => BadRequest(result.Error)
-        };
+        return (await removePosition.Execute(employeeId, request))
+            .Match(Ok);
     }
 
     [HttpPost("{employeeId:guid}/change-primary-branch")]
@@ -109,18 +66,8 @@ public class EmploymentAssignmentController(
         Guid employeeId,
         [FromBody] ChangeMainBranchRequest request)
     {
-        var result = await changeMainBranch.Execute(employeeId, request);
-
-        if (result.IsSuccess)
-            return Ok(result.Value);
-
-        return result.Error.Code switch
-        {
-            "staff.employee.not_found" => NotFound(result.Error),
-            "staff.assignment.not_found" => NotFound(result.Error),
-
-            _ => BadRequest(result.Error)
-        };
+        return (await changeMainBranch.Execute(employeeId, request))
+            .Match(Ok);
     }
 
     [HttpPost("{employeeId:guid}/change-primary-position")]
@@ -129,17 +76,7 @@ public class EmploymentAssignmentController(
         Guid employeeId,
         [FromBody] ChangeMainPositionRequest request)
     {
-        var result = await changeMainPosition.Execute(employeeId, request);
-
-        if (result.IsSuccess)
-            return Ok(result.Value);
-
-        return result.Error.Code switch
-        {
-            "staff.employee.not_found" => NotFound(result.Error),
-            "staff.assignment.not_found" => NotFound(result.Error),
-
-            _ => BadRequest(result.Error)
-        };
+        return (await changeMainPosition.Execute(employeeId, request))
+            .Match(Ok);
     }
 }

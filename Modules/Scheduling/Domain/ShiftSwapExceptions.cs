@@ -2,7 +2,7 @@ using ShiftManagement.Api.Shared;
 
 namespace ShiftManagement.Api.Modules.Scheduling.Domain;
 
-public static class ShiftSwapErrors
+public static class ShiftSwapExceptions
 {
     public static DomainException InvalidStateTransition(
     ShiftSwapStatus current,
@@ -12,7 +12,8 @@ public static class ShiftSwapErrors
             "scheduling.shift_swap.invalid_transition",
 
             $"Cannot execute action '{action}' " +
-            $"when shift swap is in state '{current}'"
+            $"when shift swap is in state '{current}'",
+            ErrorType.Validation
         );
     }
 }

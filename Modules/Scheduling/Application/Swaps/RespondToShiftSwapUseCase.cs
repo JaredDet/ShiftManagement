@@ -15,42 +15,33 @@ public sealed class RespondToShiftSwapUseCase(
         ShiftSwapDecision decision
     )
     {
-        try
-        {
-            var swap = await swapRepository.GetByIdAsync(swapId);
+        var swap = await swapRepository.GetByIdAsync(swapId);
 
-            if (swap is null)
-                return Result<ShiftSwapRequestResponse>.Failure(
-                    SchedulingErrors.SwapRequestNotFound
-                );
-
-            switch (decision)
-            {
-                case ShiftSwapDecision.Accept:
-                    swap.Accept();
-                    break;
-
-                case ShiftSwapDecision.Reject:
-                    swap.Reject();
-                    break;
-
-                default:
-                    return Result<ShiftSwapRequestResponse>.Failure(
-                        SchedulingErrors.InvalidSwapDecision
-                    );
-            }
-
-            await context.SaveChangesAsync();
-
-            return Result<ShiftSwapRequestResponse>.Success(
-                ShiftSwapMapper.ToResponse(swap)
-            );
-        }
-        catch (DomainException ex)
-        {
+        if (swap is null)
             return Result<ShiftSwapRequestResponse>.Failure(
-                new Error(ex.Code, ex.Message)
+                SchedulingErrors.SwapRequestNotFound
             );
+
+        switch (decision)
+        {
+            case ShiftSwapDecision.Accept:
+                swap.Accept();
+                break;
+
+            case ShiftSwapDecision.Reject:
+                swap.Reject();
+                break;
+
+            default:
+                return Result<ShiftSwapRequestResponse>.Failure(
+                    SchedulingErrors.InvalidSwapDecision
+                );
         }
+
+        await context.SaveChangesAsync();
+
+        return Result<ShiftSwapRequestResponse>.Success(
+            ShiftSwapMapper.ToResponse(swap)
+        );
     }
 }

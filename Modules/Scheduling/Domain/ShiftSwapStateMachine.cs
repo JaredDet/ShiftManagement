@@ -55,7 +55,7 @@ public static class ShiftSwapStateMachine
             )
         )
         {
-            throw ShiftSwapErrors.InvalidStateTransition(
+            throw ShiftSwapExceptions.InvalidStateTransition(
                 current,
                 action
             );

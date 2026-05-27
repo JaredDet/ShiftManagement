@@ -227,6 +227,6 @@ public sealed class Claim
     private void EnsureMutable()
     {
         if (ClaimStateMachine.IsTerminal(Status))
-            throw ClaimStateErrors.ClaimAlreadyClosed(Id);
+            throw ClaimExceptions.ClaimAlreadyClosed(Id);
     }
 }

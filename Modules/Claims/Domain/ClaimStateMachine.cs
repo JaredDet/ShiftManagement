@@ -23,7 +23,7 @@ public static class ClaimStateMachine
         ClaimAction action)
     {
         if (!Transitions.TryGetValue((current, action), out var next))
-            throw ClaimStateErrors.InvalidStateTransition(current, action);
+            throw ClaimExceptions.InvalidStateTransition(current, action);
 
         return next;
     }

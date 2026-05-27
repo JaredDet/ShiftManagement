@@ -86,6 +86,6 @@ public sealed class Shift
     public void EnsureCanParticipateInSwap()
     {
         if (Status != ShiftStatus.Active)
-            throw ShiftErrors.InvalidStateForSwap();
+            throw ShiftExceptions.InvalidStateForSwap();
     }
 }
