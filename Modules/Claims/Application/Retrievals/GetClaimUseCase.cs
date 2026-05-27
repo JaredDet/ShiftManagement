@@ -4,7 +4,7 @@ using ShiftManagement.Api.Modules.Claims.Infrastructure;
 
 using ShiftManagement.Api.Shared;
 
-namespace ShiftManagement.Api.Modules.Claims.Application.Retrieval;
+namespace ShiftManagement.Api.Modules.Claims.Application.Retrievalss;
 
 public sealed class GetClaimUseCase(
     ClaimReadRepositoryPostgres claimReadRepository

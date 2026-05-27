@@ -2,7 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using ShiftManagement.Api.Modules.Claims.Api.Contracts.Queries;
 using ShiftManagement.Api.Modules.Claims.Api.Contracts.Reviews;
 using ShiftManagement.Api.Modules.Claims.Api.Contracts.Submissions;
-using ShiftManagement.Api.Modules.Claims.Application.Retrieval;
+using ShiftManagement.Api.Modules.Claims.Application.Retrievalss;
+using ShiftManagement.Api.Modules.Claims.Application.Reviews;
 using ShiftManagement.Api.Modules.Claims.Application.Submissions;
 using ShiftManagement.Api.Shared;
 
@@ -16,10 +17,10 @@ public class ClaimController(
     CancelClaimUseCase cancel,
 
     AssignClaimUseCase assign,
-    ChangeClaimStatusUseCase changeStatus,
-
+    StartClaimReviewUseCase startReview,
     ResolveClaimUseCase resolve,
     RejectClaimUseCase reject,
+    ReopenClaimUseCase reopen,
 
     GetClaimUseCase get,
     ListClaimsUseCase list
@@ -53,12 +54,8 @@ public class ClaimController(
     [HttpDelete("{claimId:guid}")]
     public async Task<IActionResult> Cancel(Guid claimId)
     {
-        var result = await cancel.ExecuteAsync(claimId);
-
-        if (!result.IsSuccess)
-            return BadRequest(result.Error);
-
-        return NoContent();
+        return (await cancel.ExecuteAsync(claimId))
+            .Match(Ok);
     }
 
     [HttpPost("{claimId:guid}/assign")]
@@ -66,59 +63,37 @@ public class ClaimController(
         Guid claimId,
         [FromBody] AssignClaimRequest request)
     {
-        var result = await assign.ExecuteAsync(
+        return (await assign.ExecuteAsync(
             claimId,
-            request);
-
-        if (!result.IsSuccess)
-            return BadRequest(result.Error);
-
-        return NoContent();
+            request)).Match(Ok);
     }
 
-    [HttpPost("{claimId:guid}/status")]
-    public async Task<IActionResult> ChangeStatus(
-        Guid claimId,
-        [FromBody] ChangeClaimStatusRequest request)
+    [HttpPost("{claimId:guid}/start-review")]
+    public async Task<IActionResult> StartReview(Guid claimId)
     {
-        var result = await changeStatus.ExecuteAsync(
-            claimId,
-            request);
-
-        if (!result.IsSuccess)
-            return BadRequest(result.Error);
-
-        return NoContent();
+        return (await startReview.ExecuteAsync(claimId))
+            .Match(Ok);
     }
 
     [HttpPost("{claimId:guid}/resolve")]
-    public async Task<IActionResult> Resolve(
-        Guid claimId,
-        [FromBody] ResolveClaimRequest request)
+    public async Task<IActionResult> Resolve(Guid claimId)
     {
-        var result = await resolve.ExecuteAsync(
-            claimId,
-            request);
-
-        if (!result.IsSuccess)
-            return BadRequest(result.Error);
-
-        return NoContent();
+        return (await resolve.ExecuteAsync(claimId))
+            .Match(Ok);
     }
 
     [HttpPost("{claimId:guid}/reject")]
-    public async Task<IActionResult> Reject(
-        Guid claimId,
-        [FromBody] RejectClaimRequest request)
+    public async Task<IActionResult> Reject(Guid claimId)
     {
-        var result = await reject.ExecuteAsync(
-            claimId,
-            request);
+        return (await reject.ExecuteAsync(claimId))
+            .Match(Ok);
+    }
 
-        if (!result.IsSuccess)
-            return BadRequest(result.Error);
-
-        return NoContent();
+    [HttpPost("{claimId:guid}/reopen")]
+    public async Task<IActionResult> Reopen(Guid claimId)
+    {
+        return (await reopen.ExecuteAsync(claimId))
+            .Match(Ok);
     }
 
     [HttpGet("{claimId:guid}")]
