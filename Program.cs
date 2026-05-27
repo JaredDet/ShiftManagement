@@ -2,6 +2,7 @@ using System.Text.Json.Serialization;
 using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using ShiftManagement.Api.Infrastructure;
+using ShiftManagement.Api.Modules.Claims;
 using ShiftManagement.Api.Modules.Identity;
 using ShiftManagement.Api.Modules.Organization;
 using ShiftManagement.Api.Modules.Scheduling;
@@ -42,6 +43,13 @@ builder.Services.AddAuthorization(options =>
     AuthorizationPolicies.AddPolicies(options);
 });
 
+builder.Services.AddOptions<StorageOptions>()
+    .Bind(builder.Configuration.GetSection("Storage"))
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
+
+builder.Services.AddScoped<IFileStorage, LocalFileStorage>();
+
 builder.Services.AddOrganization();
 
 builder.Services.AddStaff();
@@ -49,6 +57,8 @@ builder.Services.AddStaff();
 builder.Services.AddIdentityModule(builder.Configuration);
 
 builder.Services.AddScheduling();
+
+builder.Services.AddClaims();
 
 var app = builder.Build();
 

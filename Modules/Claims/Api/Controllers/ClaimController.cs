@@ -52,7 +52,7 @@ public class ClaimController(
     }
 
     [HttpPost("{claimId:guid}/cancel")]
-    public async Task<IActionResult> Cancel(Guid claimId, CancelClaimRequest request)
+    public async Task<IActionResult> Cancel(Guid claimId, [FromBody] CancelClaimRequest request)
     {
         return (await cancel.ExecuteAsync(claimId, request))
             .Match(Ok);
@@ -76,21 +76,21 @@ public class ClaimController(
     }
 
     [HttpPost("{claimId:guid}/resolve")]
-    public async Task<IActionResult> Resolve(Guid claimId, ResolveClaimRequest request)
+    public async Task<IActionResult> Resolve(Guid claimId, [FromBody] ResolveClaimRequest request)
     {
         return (await resolve.ExecuteAsync(claimId, request))
             .Match(Ok);
     }
 
     [HttpPost("{claimId:guid}/reject")]
-    public async Task<IActionResult> Reject(Guid claimId, RejectClaimRequest request)
+    public async Task<IActionResult> Reject(Guid claimId, [FromBody] RejectClaimRequest request)
     {
         return (await reject.ExecuteAsync(claimId, request))
             .Match(Ok);
     }
 
     [HttpPost("{claimId:guid}/reopen")]
-    public async Task<IActionResult> Reopen(Guid claimId, ReopenClaimRequest request)
+    public async Task<IActionResult> Reopen(Guid claimId, [FromBody] ReopenClaimRequest request)
     {
         return (await reopen.ExecuteAsync(claimId, request))
             .Match(Ok);
