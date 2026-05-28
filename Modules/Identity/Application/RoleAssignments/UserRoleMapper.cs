@@ -11,7 +11,7 @@ public static class UserRoleMapper
         {
             Id = role.Id,
             UserId = role.UserId,
-            Role = role.Role,
+            Role = role.Role.ToString(),
             BranchId = role.BranchId,
             CreatedAt = role.CreatedAt
         };

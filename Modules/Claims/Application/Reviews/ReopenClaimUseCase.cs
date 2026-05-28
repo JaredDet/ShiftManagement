@@ -1,11 +1,9 @@
-using ShiftManagement.Api.Infrastructure;
-
+using ShiftManagement.Api.BuildingBlocks.Results;
+using ShiftManagement.Api.Infrastructure.Persistence;
 using ShiftManagement.Api.Modules.Claims.Api.Contracts.Responses;
 using ShiftManagement.Api.Modules.Claims.Api.Contracts.Reviews;
 using ShiftManagement.Api.Modules.Claims.Domain;
 using ShiftManagement.Api.Modules.Claims.Infrastructure;
-
-using ShiftManagement.Api.Shared;
 
 namespace ShiftManagement.Api.Modules.Claims.Application.Reviews;
 

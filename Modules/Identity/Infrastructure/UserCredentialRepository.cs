@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using ShiftManagement.Api.Infrastructure;
+using ShiftManagement.Api.Infrastructure.Persistence;
 using ShiftManagement.Api.Modules.Identity.Domain;
 
 namespace ShiftManagement.Api.Modules.Identity.Infrastructure;

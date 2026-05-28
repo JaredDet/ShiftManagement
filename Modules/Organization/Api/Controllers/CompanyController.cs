@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ShiftManagement.Api.BuildingBlocks.Results;
 using ShiftManagement.Api.Modules.Organization.Api.Contracts.Companies;
 using ShiftManagement.Api.Modules.Organization.Application.Companies;
-using ShiftManagement.Api.Shared;
 
 namespace ShiftManagement.Api.Modules.Organization.Api.Controllers;
 

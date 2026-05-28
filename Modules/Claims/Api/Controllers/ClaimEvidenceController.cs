@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using ShiftManagement.Api.BuildingBlocks.Results;
 using ShiftManagement.Api.Modules.Claims.Api.Contracts.Submissions;
 using ShiftManagement.Api.Modules.Claims.Application.Submissions;
-using ShiftManagement.Api.Shared;
 
 namespace ShiftManagement.Api.Modules.Claims.Api.Controllers;
 

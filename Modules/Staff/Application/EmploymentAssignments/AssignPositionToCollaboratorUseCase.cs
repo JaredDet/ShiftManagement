@@ -1,9 +1,9 @@
-using ShiftManagement.Api.Shared;
 using ShiftManagement.Api.Modules.Staff.Api.Contracts.PositionAssignments;
 using ShiftManagement.Api.Modules.Staff.Infrastructure.Persistence.Repositories;
 using ShiftManagement.Api.Modules.Staff.Application.Errors;
 using ShiftManagement.Api.Modules.Staff.Domain;
-using ShiftManagement.Api.Infrastructure;
+using ShiftManagement.Api.Infrastructure.Persistence;
+using ShiftManagement.Api.BuildingBlocks.Results;
 
 namespace ShiftManagement.Api.Modules.Staff.Application.EmploymentAssignments;
 
@@ -25,14 +25,11 @@ public sealed class AssignPositionToCollaboratorUseCase(
         if (!exists)
             return Result.Failure(StaffErrors.PositionNotFound);
 
-        var result = employee.AddAssignment(
+        employee.AddAssignment(
             request.PositionId,
             AssignmentType.Position,
             isPrimary: false
         );
-
-        if (!result.IsSuccess)
-            return result;
 
         await context.SaveChangesAsync();
 

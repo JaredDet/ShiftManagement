@@ -1,7 +1,7 @@
-using ShiftManagement.Api.Infrastructure;
+using ShiftManagement.Api.BuildingBlocks.Results;
+using ShiftManagement.Api.Infrastructure.Persistence;
 using ShiftManagement.Api.Modules.Scheduling.Api.Contracts;
 using ShiftManagement.Api.Modules.Scheduling.Infrastructure;
-using ShiftManagement.Api.Shared;
 
 namespace ShiftManagement.Api.Modules.Scheduling.Application.Swaps;
 

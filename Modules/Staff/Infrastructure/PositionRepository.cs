@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using ShiftManagement.Api.Modules.Staff.Domain;
 using ShiftManagement.Api.Modules.Staff.Application.Projections;
 using ShiftManagement.Api.Modules.Staff.Api.Contracts.Positions;
-using ShiftManagement.Api.Infrastructure;
+using ShiftManagement.Api.Infrastructure.Persistence;
 
 namespace ShiftManagement.Api.Modules.Staff.Infrastructure.Persistence.Repositories;
 

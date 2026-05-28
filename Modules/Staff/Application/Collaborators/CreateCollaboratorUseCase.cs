@@ -1,4 +1,3 @@
-using ShiftManagement.Api.Shared;
 using ShiftManagement.Api.Modules.Staff.Api.Contracts.Collaborators;
 using ShiftManagement.Api.Modules.Staff.Domain;
 using ShiftManagement.Api.Modules.Staff.Infrastructure.Persistence.Repositories;
@@ -6,9 +5,10 @@ using ShiftManagement.Api.Modules.Staff.Application.Errors;
 using ShiftManagement.Api.Modules.Staff.Application.Mappers;
 using ShiftManagement.Api.Modules.Organization.Infrastructure.Persistence.Repositories;
 using ShiftManagement.Api.Modules.Organization.Application.Errors;
-using ShiftManagement.Api.Infrastructure;
 using ShiftManagement.Api.Modules.Identity.Infrastructure;
 using ShiftManagement.Api.Modules.Identity.Application;
+using ShiftManagement.Api.Infrastructure.Persistence;
+using ShiftManagement.Api.BuildingBlocks.Results;
 
 namespace ShiftManagement.Api.Modules.Staff.Application.Collaborators;
 
@@ -20,33 +20,37 @@ public sealed class CreateCollaboratorUseCase(
     ShiftManagementDbContext context
 )
 {
-    public async Task<Result<CollaboratorResponse>> Execute(CreateCollaboratorRequest request)
+    public async Task<Result<CollaboratorResponse>> Execute(
+    CreateCollaboratorRequest request
+)
     {
         var validation = await ValidateRequest(request);
+
         if (!validation.IsSuccess)
-            return Result<CollaboratorResponse>.Failure(validation.Error!);
+        {
+            return Result<CollaboratorResponse>
+                .Failure(validation.Error!);
+        }
 
-        var employee = Employee.Create(request.UserId, request.CompanyId);
+        var employee = Employee.Create(
+            request.UserId,
+            request.CompanyId
+        );
 
-        var branchResult = employee.AddAssignment(
+        employee.AddAssignment(
             request.MainBranchId,
             AssignmentType.Branch,
             isPrimary: true
         );
 
-        if (!branchResult.IsSuccess)
-            return Result<CollaboratorResponse>.Failure(branchResult.Error!);
-
-        var positionResult = employee.AddAssignment(
+        employee.AddAssignment(
             request.MainPositionId,
             AssignmentType.Position,
             isPrimary: true
         );
 
-        if (!positionResult.IsSuccess)
-            return Result<CollaboratorResponse>.Failure(positionResult.Error!);
-
         await employeeRepository.AddAsync(employee);
+
         await context.SaveChangesAsync();
 
         return Result<CollaboratorResponse>.Success(

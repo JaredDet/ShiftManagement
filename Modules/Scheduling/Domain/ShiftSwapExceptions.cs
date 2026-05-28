@@ -1,4 +1,4 @@
-using ShiftManagement.Api.Shared;
+using ShiftManagement.Api.BuildingBlocks.Exceptions;
 
 namespace ShiftManagement.Api.Modules.Scheduling.Domain;
 

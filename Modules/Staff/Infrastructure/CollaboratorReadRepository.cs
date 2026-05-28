@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using ShiftManagement.Api.Infrastructure;
+using ShiftManagement.Api.Infrastructure.Persistence;
 using ShiftManagement.Api.Modules.Staff.Api.Contracts.Collaborators;
 using ShiftManagement.Api.Modules.Staff.Application.Projections;
 

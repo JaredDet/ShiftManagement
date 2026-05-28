@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using ShiftManagement.Api.Infrastructure;
+using ShiftManagement.Api.Infrastructure.Persistence;
 
 #nullable disable
 
@@ -21,6 +21,115 @@ namespace ShiftManagement.Api.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("ShiftManagement.Api.Modules.Claims.Domain.Claim", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("AssignedToUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("CanceledAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CollaboratorId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Reason")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("ResolvedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("claims");
+                });
+
+            modelBuilder.Entity("ShiftManagement.Api.Modules.Claims.Domain.ClaimComment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("AuthorUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ClaimId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClaimId");
+
+                    b.ToTable("claim_comment");
+                });
+
+            modelBuilder.Entity("ShiftManagement.Api.Modules.Claims.Domain.ClaimEvidence", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ClaimId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FileUrl")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("MimeType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClaimId");
+
+                    b.ToTable("claim_evidence");
+                });
 
             modelBuilder.Entity("ShiftManagement.Api.Modules.Identity.Domain.User", b =>
                 {
@@ -322,6 +431,24 @@ namespace ShiftManagement.Api.Migrations
                     b.ToTable("positions");
                 });
 
+            modelBuilder.Entity("ShiftManagement.Api.Modules.Claims.Domain.ClaimComment", b =>
+                {
+                    b.HasOne("ShiftManagement.Api.Modules.Claims.Domain.Claim", null)
+                        .WithMany("Comments")
+                        .HasForeignKey("ClaimId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ShiftManagement.Api.Modules.Claims.Domain.ClaimEvidence", b =>
+                {
+                    b.HasOne("ShiftManagement.Api.Modules.Claims.Domain.Claim", null)
+                        .WithMany("Evidences")
+                        .HasForeignKey("ClaimId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("ShiftManagement.Api.Modules.Staff.Domain.EmploymentAssignment", b =>
                 {
                     b.HasOne("ShiftManagement.Api.Modules.Staff.Domain.Employee", "Employee")
@@ -335,6 +462,13 @@ namespace ShiftManagement.Api.Migrations
                         .HasForeignKey("PositionId");
 
                     b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("ShiftManagement.Api.Modules.Claims.Domain.Claim", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("Evidences");
                 });
 
             modelBuilder.Entity("ShiftManagement.Api.Modules.Staff.Domain.Employee", b =>

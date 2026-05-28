@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using ShiftManagement.Api.Modules.Staff.Application.Collaborators;
 using ShiftManagement.Api.Modules.Staff.Api.Contracts.Collaborators;
 using Microsoft.AspNetCore.Authorization;
-using ShiftManagement.Api.Shared;
+using ShiftManagement.Api.BuildingBlocks.Results;
 
 namespace ShiftManagement.Api.Modules.Staff.Api.Controllers;
 

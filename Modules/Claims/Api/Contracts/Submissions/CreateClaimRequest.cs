@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using ShiftManagement.Api.Modules.Claims.Domain;
-using ShiftManagement.Api.Shared;
+using ShiftManagement.Api.Validations;
 
 namespace ShiftManagement.Api.Modules.Claims.Api.Contracts.Submissions;
 

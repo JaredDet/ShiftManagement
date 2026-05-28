@@ -1,8 +1,8 @@
-using ShiftManagement.Api.Shared;
 using ShiftManagement.Api.Modules.Identity.Domain;
 using ShiftManagement.Api.Modules.Identity.Infrastructure;
-using ShiftManagement.Api.Infrastructure;
 using ShiftManagement.Api.Modules.Identity.Api.Contracts.RoleAssignments;
+using ShiftManagement.Api.Infrastructure.Persistence;
+using ShiftManagement.Api.BuildingBlocks.Results;
 
 namespace ShiftManagement.Api.Modules.Identity.Application.RoleAssignments;
 

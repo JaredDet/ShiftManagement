@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ShiftManagement.Api.Modules.Staff.Domain;
-using ShiftManagement.Api.Infrastructure;
+using ShiftManagement.Api.Infrastructure.Persistence;
 
 namespace ShiftManagement.Api.Modules.Staff.Infrastructure.Persistence.Repositories;
 

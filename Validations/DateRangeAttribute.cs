@@ -1,0 +1,33 @@
+using System.ComponentModel.DataAnnotations;
+
+namespace ShiftManagement.Api.Validations;
+
+[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
+public sealed class DateRangeAttribute(string startPropertyName) : ValidationAttribute
+{
+
+    protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
+    {
+        if (value is not DateTime endDate)
+            return ValidationResult.Success;
+
+        var startProperty = validationContext.ObjectType.GetProperty(startPropertyName);
+
+        if (startProperty is null)
+            return new ValidationResult($"Unknown property: {startPropertyName}");
+
+        var startValue = startProperty.GetValue(validationContext.ObjectInstance);
+
+        if (startValue is not DateTime startDate)
+            return ValidationResult.Success;
+
+        if (startDate >= endDate)
+        {
+            return new ValidationResult(
+                "Start date must be earlier than end date"
+            );
+        }
+
+        return ValidationResult.Success;
+    }
+}

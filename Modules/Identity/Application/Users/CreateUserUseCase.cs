@@ -1,10 +1,10 @@
-using ShiftManagement.Api.Infrastructure;
+using ShiftManagement.Api.BuildingBlocks.Results;
+using ShiftManagement.Api.Infrastructure.Persistence;
 using ShiftManagement.Api.Modules.Identity.Api.Contracts.Users;
 using ShiftManagement.Api.Modules.Identity.Domain;
 using ShiftManagement.Api.Modules.Identity.Infrastructure;
 using ShiftManagement.Api.Modules.Organization.Application.Errors;
 using ShiftManagement.Api.Modules.Organization.Infrastructure.Persistence.Repositories;
-using ShiftManagement.Api.Shared;
 
 namespace ShiftManagement.Api.Modules.Identity.Application.Users;
 

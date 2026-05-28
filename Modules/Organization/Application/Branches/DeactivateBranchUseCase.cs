@@ -1,7 +1,7 @@
-using ShiftManagement.Api.Infrastructure;
+using ShiftManagement.Api.BuildingBlocks.Results;
+using ShiftManagement.Api.Infrastructure.Persistence;
 using ShiftManagement.Api.Modules.Organization.Application.Errors;
 using ShiftManagement.Api.Modules.Organization.Infrastructure.Persistence.Repositories;
-using ShiftManagement.Api.Shared;
 
 namespace ShiftManagement.Api.Modules.Organization.Application.Branches;
 

@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using ShiftManagement.Api.Shared;
+using ShiftManagement.Api.Validations;
 
 namespace ShiftManagement.Api.Modules.Identity.Api.Contracts.Users;
 

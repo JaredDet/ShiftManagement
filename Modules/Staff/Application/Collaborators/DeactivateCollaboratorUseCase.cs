@@ -1,7 +1,7 @@
 using ShiftManagement.Api.Modules.Staff.Application.Errors;
 using ShiftManagement.Api.Modules.Staff.Infrastructure.Persistence.Repositories;
-using ShiftManagement.Api.Infrastructure;
-using ShiftManagement.Api.Shared;
+using ShiftManagement.Api.Infrastructure.Persistence;
+using ShiftManagement.Api.BuildingBlocks.Results;
 
 namespace ShiftManagement.Api.Modules.Staff.Application.Collaborators;
 

@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ShiftManagement.Api.BuildingBlocks.Results;
 using ShiftManagement.Api.Modules.Identity.Api.Contracts.RoleAssignments;
 using ShiftManagement.Api.Modules.Identity.Application.RoleAssignments;
-using ShiftManagement.Api.Shared;
 
 namespace ShiftManagement.Api.Modules.Identity.Api.Controllers;
 

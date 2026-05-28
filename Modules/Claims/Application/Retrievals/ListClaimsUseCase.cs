@@ -1,9 +1,8 @@
+using ShiftManagement.Api.BuildingBlocks.Results;
 using ShiftManagement.Api.Modules.Claims.Api.Contracts.Queries;
 using ShiftManagement.Api.Modules.Claims.Api.Contracts.Responses;
 
 using ShiftManagement.Api.Modules.Claims.Infrastructure;
-
-using ShiftManagement.Api.Shared;
 
 namespace ShiftManagement.Api.Modules.Claims.Application.Retrievalss;
 

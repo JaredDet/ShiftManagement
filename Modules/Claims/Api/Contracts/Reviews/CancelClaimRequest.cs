@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-using ShiftManagement.Api.Shared;
+using ShiftManagement.Api.Validations;
 
 namespace ShiftManagement.Api.Modules.Claims.Api.Contracts.Reviews;
 
@@ -9,5 +9,5 @@ public sealed record CancelClaimRequest
     public Guid ActorId { get; init; }
 
     [MaxLength(500)]
-    public string? Reason { get; init; } = string.Empty;
+    public string? Reason { get; init; }
 }

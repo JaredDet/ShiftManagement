@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using ShiftManagement.Api.Shared;
 
 namespace ShiftManagement.Api.Modules.Claims.Api.Contracts.Submissions;
 

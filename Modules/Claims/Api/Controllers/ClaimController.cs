@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
+using ShiftManagement.Api.BuildingBlocks.Results;
 using ShiftManagement.Api.Modules.Claims.Api.Contracts.Queries;
 using ShiftManagement.Api.Modules.Claims.Api.Contracts.Reviews;
 using ShiftManagement.Api.Modules.Claims.Api.Contracts.Submissions;
 using ShiftManagement.Api.Modules.Claims.Application.Retrievalss;
 using ShiftManagement.Api.Modules.Claims.Application.Reviews;
 using ShiftManagement.Api.Modules.Claims.Application.Submissions;
-using ShiftManagement.Api.Shared;
 
 namespace ShiftManagement.Api.Modules.Claims.Api.Controllers;
 
@@ -99,11 +99,6 @@ public class ClaimController(
     [HttpGet("{claimId:guid}")]
     public async Task<IActionResult> GetById(Guid claimId)
     {
-        var result = await get.ExecuteAsync(claimId);
-
-        if (!result.IsSuccess)
-            return NotFound(result.Error);
-
         return (await get.ExecuteAsync(claimId))
             .Match(Ok);
     }

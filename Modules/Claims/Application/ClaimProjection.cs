@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+
 using ShiftManagement.Api.Modules.Claims.Api.Contracts.Queries;
 using ShiftManagement.Api.Modules.Claims.Api.Contracts.Responses;
 using ShiftManagement.Api.Modules.Claims.Domain;
@@ -8,10 +9,16 @@ namespace ShiftManagement.Api.Modules.Claims.Application;
 public static class ClaimProjection
 {
     public static IQueryable<ClaimResponse> ToClaimResponse(
-        this DbContext context)
+        this DbContext context
+    )
     {
-        var claims = context.Set<Claim>().AsNoTracking();
-        var comments = context.Set<ClaimComment>().AsNoTracking();
+        var claims = context
+            .Set<Claim>()
+            .AsNoTracking();
+
+        var comments = context
+            .Set<ClaimComment>()
+            .AsNoTracking();
 
         var query =
             from c in claims
@@ -19,21 +26,29 @@ public static class ClaimProjection
             select new ClaimResponse
             {
                 Id = c.Id,
+
                 CompanyId = c.CompanyId,
+
                 CollaboratorId = c.CollaboratorId,
 
                 Reason = c.Reason.ToString(),
+
                 Priority = c.Priority.ToString(),
+
                 Status = c.Status.ToString(),
 
                 Title = c.Title,
+
                 Description = c.Description,
 
                 AssignedToUserId = c.AssignedToUserId,
 
                 CreatedAt = c.CreatedAt,
+
                 UpdatedAt = c.UpdatedAt,
+
                 ResolvedAt = c.ResolvedAt,
+
                 CanceledAt = c.CanceledAt,
 
                 CommentsCount =
@@ -51,49 +66,62 @@ public static class ClaimProjection
         if (request.CollaboratorId.HasValue)
         {
             query = query.Where(x =>
-                x.CollaboratorId == request.CollaboratorId.Value
+                x.CollaboratorId ==
+                request.CollaboratorId.Value
             );
         }
 
-        if (!string.IsNullOrWhiteSpace(request.Status))
+        if (request.Status.HasValue)
         {
+            var status =
+                request.Status.Value.ToString();
+
             query = query.Where(x =>
-                x.Status == request.Status
+                x.Status == status
             );
         }
 
-        if (!string.IsNullOrWhiteSpace(request.Reason))
+        if (request.Reason.HasValue)
         {
+            var reason =
+                request.Reason.Value.ToString();
+
             query = query.Where(x =>
-                x.Reason == request.Reason
+                x.Reason == reason
             );
         }
 
-        if (!string.IsNullOrWhiteSpace(request.Priority))
+        if (request.Priority.HasValue)
         {
+            var priority =
+                request.Priority.Value.ToString();
+
             query = query.Where(x =>
-                x.Priority == request.Priority
+                x.Priority == priority
             );
         }
 
         if (request.AssignedToUserId.HasValue)
         {
             query = query.Where(x =>
-                x.AssignedToUserId == request.AssignedToUserId.Value
+                x.AssignedToUserId ==
+                request.AssignedToUserId.Value
             );
         }
 
         if (request.CreatedFrom.HasValue)
         {
             query = query.Where(x =>
-                x.CreatedAt >= request.CreatedFrom.Value
+                x.CreatedAt >=
+                request.CreatedFrom.Value
             );
         }
 
         if (request.CreatedTo.HasValue)
         {
             query = query.Where(x =>
-                x.CreatedAt <= request.CreatedTo.Value
+                x.CreatedAt <=
+                request.CreatedTo.Value
             );
         }
 

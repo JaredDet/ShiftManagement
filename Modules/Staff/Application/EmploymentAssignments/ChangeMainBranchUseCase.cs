@@ -1,11 +1,11 @@
-using ShiftManagement.Api.Shared;
 using ShiftManagement.Api.Modules.Staff.Api.Contracts.MainChanges;
 using ShiftManagement.Api.Modules.Staff.Infrastructure.Persistence.Repositories;
 using ShiftManagement.Api.Modules.Staff.Application.Errors;
 using ShiftManagement.Api.Modules.Staff.Application.Mappers;
 using ShiftManagement.Api.Modules.Staff.Domain;
 using ShiftManagement.Api.Modules.Staff.Api.Contracts.Collaborators;
-using ShiftManagement.Api.Infrastructure;
+using ShiftManagement.Api.Infrastructure.Persistence;
+using ShiftManagement.Api.BuildingBlocks.Results;
 
 namespace ShiftManagement.Api.Modules.Staff.Application.EmploymentAssignments;
 
@@ -24,13 +24,10 @@ public sealed class ChangeMainBranchUseCase(
         if (employee is null)
             return Result<CollaboratorResponse>.Failure(StaffErrors.EmployeeNotFound);
 
-        var result = employee.SetPrimary(
-            request.BranchId,
-            AssignmentType.Branch
-        );
-
-        if (!result.IsSuccess)
-            return Result<CollaboratorResponse>.Failure(result.Error!);
+        employee.SetPrimary(
+           request.BranchId,
+           AssignmentType.Branch
+       );
 
         await context.SaveChangesAsync();
 

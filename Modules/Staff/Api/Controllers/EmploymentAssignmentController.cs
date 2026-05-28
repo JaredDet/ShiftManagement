@@ -4,7 +4,7 @@ using ShiftManagement.Api.Modules.Staff.Api.Contracts.PositionAssignments;
 using ShiftManagement.Api.Modules.Staff.Api.Contracts.MainChanges;
 using ShiftManagement.Api.Modules.Staff.Application.EmploymentAssignments;
 using Microsoft.AspNetCore.Authorization;
-using ShiftManagement.Api.Shared;
+using ShiftManagement.Api.BuildingBlocks.Results;
 
 namespace ShiftManagement.Api.Modules.Staff.Api.Controllers;
 

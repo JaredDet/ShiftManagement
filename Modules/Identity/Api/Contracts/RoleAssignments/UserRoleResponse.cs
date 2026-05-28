@@ -6,7 +6,7 @@ public sealed record UserRoleResponse
 {
     public Guid Id { get; set; }
     public Guid UserId { get; set; }
-    public Role Role { get; set; }
+    public string Role { get; set; } = string.Empty;
     public Guid? BranchId { get; set; }
     public DateTime CreatedAt { get; set; }
 }

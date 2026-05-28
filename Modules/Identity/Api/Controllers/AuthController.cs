@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using ShiftManagement.Api.BuildingBlocks.Results;
 using ShiftManagement.Api.Modules.Identity.Api.Contracts.Auth;
 using ShiftManagement.Api.Modules.Identity.Application;
-using ShiftManagement.Api.Shared;
 
 namespace ShiftManagement.Api.Modules.Identity.Api.Controllers;
 

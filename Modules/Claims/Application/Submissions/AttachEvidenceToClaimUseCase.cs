@@ -1,16 +1,17 @@
-using ShiftManagement.Api.Infrastructure;
 using ShiftManagement.Api.Modules.Claims.Api.Contracts.Submissions;
 using ShiftManagement.Api.Modules.Claims.Api.Contracts.Responses;
-using ShiftManagement.Api.Modules.Claims.Domain;
 using ShiftManagement.Api.Modules.Claims.Infrastructure;
-using ShiftManagement.Api.Shared;
+using ShiftManagement.Api.Infrastructure.Persistence;
+using ShiftManagement.Api.Infrastructure.Storage;
+using ShiftManagement.Api.BuildingBlocks.Results;
+using ShiftManagement.Api.BuildingBlocks.Storage;
 
 namespace ShiftManagement.Api.Modules.Claims.Application.Submissions;
 
 public sealed class AttachEvidenceToClaimUseCase(
     ClaimRepository claimRepository,
     ShiftManagementDbContext context,
-    LocalFileStorage storage
+    IFileStorage storage
 )
 {
     public async Task<Result<ClaimResponse>> ExecuteAsync(

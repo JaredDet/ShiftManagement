@@ -1,4 +1,4 @@
-using ShiftManagement.Api.Shared;
+using ShiftManagement.Api.Validations;
 
 namespace ShiftManagement.Api.Modules.Staff.Api.Contracts.PositionAssignments;
 

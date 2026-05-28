@@ -1,8 +1,8 @@
-using ShiftManagement.Api.Shared;
 using ShiftManagement.Api.Modules.Identity.Domain;
 using ShiftManagement.Api.Modules.Identity.Infrastructure;
 using ShiftManagement.Api.Modules.Identity.Api.Contracts.Auth;
 using ShiftManagement.Api.Modules.Identity.Application.Users;
+using ShiftManagement.Api.BuildingBlocks.Results;
 
 namespace ShiftManagement.Api.Modules.Identity.Application;
 

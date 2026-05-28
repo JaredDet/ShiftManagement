@@ -1,7 +1,5 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using ShiftManagement.Api.Modules.Staff.Application.Errors;
-using ShiftManagement.Api.Shared;
 
 namespace ShiftManagement.Api.Modules.Staff.Domain;
 
@@ -12,17 +10,26 @@ public class Employee
     public Guid Id { get; private set; }
 
     public Guid UserId { get; private set; }
+
     public Guid CompanyId { get; private set; }
+
     public EmployeeStatus Status { get; private set; }
+
     public DateTime CreatedAt { get; private set; }
 
     private readonly List<EmploymentAssignment> _assignments = new();
 
-    public IReadOnlyCollection<EmploymentAssignment> Assignments => _assignments;
+    public IReadOnlyCollection<EmploymentAssignment>
+        Assignments => _assignments;
 
     private Employee() { }
 
-    private Employee(Guid id, Guid userId, Guid companyId, DateTime createdAt)
+    private Employee(
+        Guid id,
+        Guid userId,
+        Guid companyId,
+        DateTime createdAt
+    )
     {
         Id = id;
         UserId = userId;
@@ -31,23 +38,54 @@ public class Employee
         Status = EmployeeStatus.Active;
     }
 
-    public static Employee Create(Guid userId, Guid companyId)
-        => new(Guid.NewGuid(), userId, companyId, DateTime.UtcNow);
+    public static Employee Create(
+        Guid userId,
+        Guid companyId
+    )
+    {
+        return new Employee(
+            Guid.NewGuid(),
+            userId,
+            companyId,
+            DateTime.UtcNow
+        );
+    }
 
-    public void Activate() => Status = EmployeeStatus.Active;
-    public void Deactivate() => Status = EmployeeStatus.Inactive;
+    public void Activate()
+    {
+        Status = EmployeeStatus.Active;
+    }
 
-    public Result AddAssignment(Guid referenceId, AssignmentType type, bool isPrimary)
+    public void Deactivate()
+    {
+        Status = EmployeeStatus.Inactive;
+    }
+
+    public void AddAssignment(
+        Guid referenceId,
+        AssignmentType type,
+        bool isPrimary
+    )
     {
         if (referenceId == Guid.Empty)
-            return Result.Failure(StaffErrors.InvalidAssignmentType);
+        {
+            throw StaffExceptions
+                .InvalidAssignmentReference();
+        }
 
-        if (_assignments.Any(x =>
+        var alreadyExists = _assignments.Any(x =>
             x.ReferenceId == referenceId &&
             x.Type == type &&
-            x.Status == AssignmentStatus.Active))
+            x.Status == AssignmentStatus.Active
+        );
+
+        if (alreadyExists)
         {
-            return Result.Failure(StaffErrors.AssignmentAlreadyExists);
+            throw StaffExceptions.AssignmentAlreadyExists(
+                Id,
+                referenceId,
+                type
+            );
         }
 
         var assignment = EmploymentAssignment.Create(
@@ -59,42 +97,59 @@ public class Employee
         );
 
         _assignments.Add(assignment);
-
-        return Result.Success();
     }
 
-    public Result RemoveAssignment(Guid referenceId, AssignmentType type)
+    public void RemoveAssignment(
+        Guid referenceId,
+        AssignmentType type
+    )
     {
         var assignment = _assignments.FirstOrDefault(x =>
             x.ReferenceId == referenceId &&
             x.Type == type &&
-            x.Status == AssignmentStatus.Active);
+            x.Status == AssignmentStatus.Active
+        );
 
         if (assignment is null)
-            return Result.Failure(StaffErrors.AssignmentNotFound);
+        {
+            throw StaffExceptions.AssignmentNotFound(
+                referenceId,
+                type
+            );
+        }
 
         assignment.Deactivate();
-
-        return Result.Success();
     }
 
-    public Result SetPrimary(Guid referenceId, AssignmentType type)
+    public void SetPrimary(
+        Guid referenceId,
+        AssignmentType type
+    )
     {
-        var active = _assignments
-            .Where(x => x.Type == type && x.Status == AssignmentStatus.Active)
+        var activeAssignments = _assignments
+            .Where(x =>
+                x.Type == type &&
+                x.Status == AssignmentStatus.Active
+            )
             .ToList();
 
-        var target = active.FirstOrDefault(x =>
-            x.ReferenceId == referenceId);
+        var target = activeAssignments.FirstOrDefault(x =>
+            x.ReferenceId == referenceId
+        );
 
         if (target is null)
-            return Result.Failure(StaffErrors.AssignmentNotFound);
+        {
+            throw StaffExceptions.PrimaryAssignmentNotFound(
+                referenceId,
+                type
+            );
+        }
 
-        foreach (var assignment in active)
+        foreach (var assignment in activeAssignments)
+        {
             assignment.UnmarkAsPrimary();
+        }
 
         target.MarkAsPrimary();
-
-        return Result.Success();
     }
 }

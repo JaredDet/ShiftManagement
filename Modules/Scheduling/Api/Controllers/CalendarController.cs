@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ShiftManagement.Api.BuildingBlocks.Results;
 using ShiftManagement.Api.Modules.Scheduling.Api.Contracts;
 using ShiftManagement.Api.Modules.Scheduling.Application.Calendar;
-using ShiftManagement.Api.Shared;
 
 namespace ShiftManagement.Api.Modules.Scheduling.Api.Controllers;
 
