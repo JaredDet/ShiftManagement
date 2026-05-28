@@ -11,7 +11,7 @@ public static class BranchAssignmentProjection
             .Where(x => x.Type == AssignmentType.Branch)
             .Select(x => new CollaboratorBranchResponse
             {
-                CollaboratorId = x.EmployeeId,
+                CollaboratorId = x.CollaboratorId,
                 BranchId = x.ReferenceId,
                 BranchName = "",
                 Status = x.Status.ToString(),

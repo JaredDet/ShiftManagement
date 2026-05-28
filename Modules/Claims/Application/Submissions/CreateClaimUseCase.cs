@@ -14,22 +14,22 @@ namespace ShiftManagement.Api.Modules.Claims.Application.Submissions;
 public sealed class CreateClaimUseCase(
     ClaimRepository claimRepository,
     CompanyRepository companyRepository,
-    EmployeeRepository employeeRepository,
+    CollaboratorRepository CollaboratorRepository,
     ShiftManagementDbContext context
 )
 {
     public async Task<Result<ClaimResponse>> ExecuteAsync(CreateClaimRequest request)
     {
         var companyExistsTask = companyRepository.ExistsAsync(request.CompanyId);
-        var employeeExistsTask = employeeRepository.ExistsAsync(request.CollaboratorId);
+        var collaboratorExistsTask = CollaboratorRepository.ExistsAsync(request.CollaboratorId);
 
-        await Task.WhenAll(companyExistsTask, employeeExistsTask);
+        await Task.WhenAll(companyExistsTask, collaboratorExistsTask);
 
         if (!companyExistsTask.Result)
             return Result<ClaimResponse>.Failure(OrganizationErrors.CompanyNotFound);
 
-        if (!employeeExistsTask.Result)
-            return Result<ClaimResponse>.Failure(StaffErrors.EmployeeNotFound);
+        if (!collaboratorExistsTask.Result)
+            return Result<ClaimResponse>.Failure(StaffErrors.CollaboratorNotFound);
 
         var claim = Claim.Create(
             request.CompanyId,

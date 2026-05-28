@@ -8,21 +8,21 @@ using ShiftManagement.Api.BuildingBlocks.Results;
 namespace ShiftManagement.Api.Modules.Staff.Application.EmploymentAssignments;
 
 public sealed class RemovePositionFromCollaboratorUseCase(
-    EmployeeRepository employeeRepository,
+    CollaboratorRepository CollaboratorRepository,
     ShiftManagementDbContext context
 )
 {
     public async Task<Result> Execute(
-        Guid employeeId,
+        Guid collaboratorId,
         RemovePositionFromCollaboratorRequest request
     )
     {
-        var employee = await employeeRepository.GetByIdAsync(employeeId);
+        var collaborator = await CollaboratorRepository.GetByIdAsync(collaboratorId);
 
-        if (employee is null)
-            return Result.Failure(StaffErrors.EmployeeNotFound);
+        if (collaborator is null)
+            return Result.Failure(StaffErrors.CollaboratorNotFound);
 
-        employee.RemoveAssignment(
+        collaborator.RemoveAssignment(
            request.PositionId,
            AssignmentType.Position
        );

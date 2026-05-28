@@ -9,7 +9,7 @@ public class EmploymentAssignment
     [Key]
     public Guid Id { get; private set; }
 
-    public Guid EmployeeId { get; private set; }
+    public Guid CollaboratorId { get; private set; }
 
     public Guid ReferenceId { get; private set; }
 
@@ -21,12 +21,10 @@ public class EmploymentAssignment
 
     public DateTime CreatedAt { get; private set; }
 
-    public Employee Employee { get; private set; } = null!;
-
     private EmploymentAssignment() { }
 
     public static EmploymentAssignment Create(
-        Guid employeeId,
+        Guid CollaboratorId,
         Guid referenceId,
         AssignmentType type,
         bool isPrimary,
@@ -35,7 +33,7 @@ public class EmploymentAssignment
     {
         return new EmploymentAssignment(
             Guid.NewGuid(),
-            employeeId,
+            CollaboratorId,
             referenceId,
             type,
             isPrimary,
@@ -45,7 +43,7 @@ public class EmploymentAssignment
 
     private EmploymentAssignment(
         Guid id,
-        Guid employeeId,
+        Guid collaboratorId,
         Guid referenceId,
         AssignmentType type,
         bool isPrimary,
@@ -53,7 +51,7 @@ public class EmploymentAssignment
     )
     {
         Id = id;
-        EmployeeId = employeeId;
+        CollaboratorId = collaboratorId;
         ReferenceId = referenceId;
         Type = type;
         IsPrimary = isPrimary;

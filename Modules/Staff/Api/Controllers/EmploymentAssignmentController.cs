@@ -20,63 +20,63 @@ public class EmploymentAssignmentController(
     ChangeMainPositionUseCase changeMainPosition) : ControllerBase
 {
 
-    [HttpPost("{employeeId:guid}/assign-branch")]
+    [HttpPost("{collaboratorId:guid}/assign-branch")]
     [Authorize(Policy = "CompanyAdminOnly")]
     public async Task<IActionResult> AssignBranch(
-        Guid employeeId,
+        Guid collaboratorId,
         [FromBody] AssignBranchToCollaboratorRequest request)
     {
-        return (await assignBranch.Execute(employeeId, request))
+        return (await assignBranch.Execute(collaboratorId, request))
             .Match(Ok);
     }
 
-    [HttpPost("{employeeId:guid}/remove-branch")]
+    [HttpPost("{collaboratorId:guid}/remove-branch")]
     [Authorize(Policy = "CompanyAdminOnly")]
     public async Task<IActionResult> RemoveBranch(
-        Guid employeeId,
+        Guid collaboratorId,
         [FromBody] RemoveBranchFromCollaboratorRequest request)
     {
-        return (await removeBranch.Execute(employeeId, request))
+        return (await removeBranch.Execute(collaboratorId, request))
             .Match(Ok);
     }
 
-    [HttpPost("{employeeId:guid}/assign-position")]
+    [HttpPost("{collaboratorId:guid}/assign-position")]
     [Authorize(Policy = "CompanyAdminOnly")]
     public async Task<IActionResult> AssignPosition(
-        Guid employeeId,
+        Guid collaboratorId,
         [FromBody] AssignPositionToCollaboratorRequest request)
     {
-        return (await assignPosition.Execute(employeeId, request))
+        return (await assignPosition.Execute(collaboratorId, request))
             .Match(Ok);
     }
 
-    [HttpPost("{employeeId:guid}/remove-position")]
+    [HttpPost("{collaboratorId:guid}/remove-position")]
     [Authorize(Policy = "CompanyAdminOnly")]
     public async Task<IActionResult> RemovePosition(
-        Guid employeeId,
+        Guid collaboratorId,
         [FromBody] RemovePositionFromCollaboratorRequest request)
     {
-        return (await removePosition.Execute(employeeId, request))
+        return (await removePosition.Execute(collaboratorId, request))
             .Match(Ok);
     }
 
-    [HttpPost("{employeeId:guid}/change-primary-branch")]
+    [HttpPost("{collaboratorId:guid}/change-primary-branch")]
     [Authorize(Policy = "CompanyAdminOnly")]
     public async Task<IActionResult> ChangePrimaryBranch(
-        Guid employeeId,
+        Guid collaboratorId,
         [FromBody] ChangeMainBranchRequest request)
     {
-        return (await changeMainBranch.Execute(employeeId, request))
+        return (await changeMainBranch.Execute(collaboratorId, request))
             .Match(Ok);
     }
 
-    [HttpPost("{employeeId:guid}/change-primary-position")]
+    [HttpPost("{collaboratorId:guid}/change-primary-position")]
     [Authorize(Policy = "CompanyAdminOnly")]
     public async Task<IActionResult> ChangePrimaryPosition(
-        Guid employeeId,
+        Guid collaboratorId,
         [FromBody] ChangeMainPositionRequest request)
     {
-        return (await changeMainPosition.Execute(employeeId, request))
+        return (await changeMainPosition.Execute(collaboratorId, request))
             .Match(Ok);
     }
 }

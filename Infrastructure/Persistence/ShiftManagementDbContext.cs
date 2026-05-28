@@ -16,7 +16,7 @@ public sealed class ShiftManagementDbContext(
 
     public DbSet<Branch> Branches => Set<Branch>();
 
-    public DbSet<Employee> Employees => Set<Employee>();
+    public DbSet<Collaborator> Collaborators => Set<Collaborator>();
 
     public DbSet<Position> Positions => Set<Position>();
     public DbSet<Claim> Claims => Set<Claim>();

@@ -1,6 +1,6 @@
 namespace ShiftManagement.Api.Modules.Staff.Domain;
 
-public enum EmployeeStatus
+public enum CollaboratorStatus
 {
     Active,
     Inactive

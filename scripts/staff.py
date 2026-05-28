@@ -1,7 +1,7 @@
 from common import post_json
 
 
-def create_employee(
+def create_collaborator(
     ctx,
     user_id,
     company_id,
@@ -11,7 +11,7 @@ def create_employee(
 
     return post_json(
         ctx["base_url"],
-        "/api/employees",
+        "/api/collaborators",
         {
             "userId": user_id,
             "companyId": company_id,
@@ -55,7 +55,7 @@ def seed_staff(ctx):
         else:
             position_id = ctx["seller_position_id"]
 
-        employee = create_employee(
+        collaborator = create_collaborator(
             ctx,
             user["id"],
             user["companyId"],
@@ -63,6 +63,6 @@ def seed_staff(ctx):
             position_id
         )
 
-        ctx["employees"].append(employee)
+        ctx["collaborators"].append(collaborator)
 
-    print("Employees creados:", len(ctx["employees"]))
+    print("collaborators creados:", len(ctx["collaborators"]))

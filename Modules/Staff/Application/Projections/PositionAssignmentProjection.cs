@@ -11,7 +11,7 @@ public static class PositionAssignmentProjection
             .Where(x => x.Type == AssignmentType.Position)
             .Select(x => new CollaboratorPositionResponse
             {
-                CollaboratorId = x.EmployeeId,
+                CollaboratorId = x.CollaboratorId,
                 PositionId = x.ReferenceId,
                 PositionName = "",
                 Status = x.Status.ToString(),

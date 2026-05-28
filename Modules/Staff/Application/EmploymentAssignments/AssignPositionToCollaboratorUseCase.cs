@@ -8,24 +8,24 @@ using ShiftManagement.Api.BuildingBlocks.Results;
 namespace ShiftManagement.Api.Modules.Staff.Application.EmploymentAssignments;
 
 public sealed class AssignPositionToCollaboratorUseCase(
-    EmployeeRepository employeeRepository,
+    CollaboratorRepository CollaboratorRepository,
     PositionRepository positionRepository,
     ShiftManagementDbContext context
 )
 {
-    public async Task<Result> Execute(Guid employeeId, AssignPositionToCollaboratorRequest request)
+    public async Task<Result> Execute(Guid collaboratorId, AssignPositionToCollaboratorRequest request)
     {
-        var employee = await employeeRepository.GetByIdAsync(employeeId);
+        var collaborator = await CollaboratorRepository.GetByIdAsync(collaboratorId);
 
-        if (employee is null)
-            return Result.Failure(StaffErrors.EmployeeNotFound);
+        if (collaborator is null)
+            return Result.Failure(StaffErrors.CollaboratorNotFound);
 
         var exists = await positionRepository.ExistsAsync(request.PositionId);
 
         if (!exists)
             return Result.Failure(StaffErrors.PositionNotFound);
 
-        employee.AddAssignment(
+        collaborator.AddAssignment(
             request.PositionId,
             AssignmentType.Position,
             isPrimary: false

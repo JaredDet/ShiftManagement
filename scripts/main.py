@@ -16,7 +16,7 @@ ctx = {
     "users": [],
     "branches": [],
     "staff_users": [],
-    "employees": [],
+    "collaborators": [],
 
     "shifts": [],
     "assignments": [],

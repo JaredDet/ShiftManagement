@@ -70,7 +70,7 @@ def seed_scheduling(ctx):
     print("\nCreando turnos...")
 
     branches = ctx["branches"]
-    employees = ctx["employees"]
+    collaborators = ctx["collaborators"]
 
     # =========================
     # SHIFTS
@@ -114,14 +114,14 @@ def seed_scheduling(ctx):
 
     for i, shift in enumerate(ctx["shifts"]):
 
-        employee = employees[i % len(employees)]
+        collaborator = collaborators[i % len(collaborators)]
 
         assignment = post_json(
             ctx["base_url"],
             "/api/shifts/assign",
             {
                 "shiftId": shift["id"],
-                "collaboratorId": employee["id"]
+                "collaboratorId": collaborator["id"]
             }
         )
 

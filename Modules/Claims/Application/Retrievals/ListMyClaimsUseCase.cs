@@ -9,7 +9,7 @@ namespace ShiftManagement.Api.Modules.Claims.Application.Retrievals;
 
 public sealed class ListMyClaimsUseCase(
     ClaimReadRepositoryPostgres repository,
-    EmployeeRepository collaboratorRepository,
+    CollaboratorRepository collaboratorRepository,
     IExecutionContext context
 )
 {
@@ -24,7 +24,7 @@ public sealed class ListMyClaimsUseCase(
         if (collaborator is null)
         {
             return Result<List<MyClaimResponse>>.Failure(
-                StaffErrors.EmployeeNotFound
+                StaffErrors.CollaboratorNotFound
             );
         }
 

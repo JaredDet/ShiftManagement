@@ -27,10 +27,9 @@ public static class StaffModule
         services.AddScoped<ChangeMainBranchUseCase>();
         services.AddScoped<ChangeMainPositionUseCase>();
 
-        services.AddScoped<EmployeeRepository>();
+        services.AddScoped<CollaboratorRepository>();
         services.AddScoped<CollaboratorReadRepository>();
         services.AddScoped<PositionRepository>();
-        services.AddScoped<EmploymentAssignmentRepository>();
 
         return services;
     }

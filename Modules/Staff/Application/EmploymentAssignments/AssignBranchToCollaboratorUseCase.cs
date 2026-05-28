@@ -10,24 +10,24 @@ using ShiftManagement.Api.BuildingBlocks.Results;
 namespace ShiftManagement.Api.Modules.Staff.Application.EmploymentAssignments;
 
 public sealed class AssignBranchToCollaboratorUseCase(
-    EmployeeRepository employeeRepository,
+    CollaboratorRepository CollaboratorRepository,
     BranchRepository branchRepository,
     ShiftManagementDbContext context
 )
 {
-    public async Task<Result> Execute(Guid employeeId, AssignBranchToCollaboratorRequest request)
+    public async Task<Result> Execute(Guid collaboratorId, AssignBranchToCollaboratorRequest request)
     {
-        var employee = await employeeRepository.GetByIdAsync(employeeId);
+        var collaborator = await CollaboratorRepository.GetByIdAsync(collaboratorId);
 
-        if (employee is null)
-            return Result.Failure(StaffErrors.EmployeeNotFound);
+        if (collaborator is null)
+            return Result.Failure(StaffErrors.CollaboratorNotFound);
 
         var exists = await branchRepository.ExistsAsync(request.BranchId);
 
         if (!exists)
             return Result.Failure(OrganizationErrors.BranchNotFound);
 
-        employee.AddAssignment(
+        collaborator.AddAssignment(
             request.BranchId,
             AssignmentType.Branch,
             isPrimary: false

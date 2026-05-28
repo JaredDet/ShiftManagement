@@ -14,7 +14,7 @@ public sealed class GetCollaboratorUseCase(
         var collaborator = await repository.GetByIdAsync(id, companyId);
 
         if (collaborator is null)
-            return Result<CollaboratorResponse>.Failure(StaffErrors.EmployeeNotFound);
+            return Result<CollaboratorResponse>.Failure(StaffErrors.CollaboratorNotFound);
 
         return Result<CollaboratorResponse>.Success(collaborator);
     }

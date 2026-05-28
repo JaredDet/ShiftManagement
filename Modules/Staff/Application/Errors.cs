@@ -5,20 +5,17 @@ namespace ShiftManagement.Api.Modules.Staff.Application.Errors;
 public static class StaffErrors
 {
     // ------------------------
-    // EMPLOYEE
+    // COLLABORATOR
     // ------------------------
 
-    public static readonly Error EmployeeNotFound =
-        new("staff.employee.not_found", "Employee not found.", ErrorType.NotFound);
+    public static readonly Error CollaboratorNotFound =
+        new("staff.collaborator.not_found", "Collaborator not found.", ErrorType.NotFound);
 
-    public static readonly Error EmployeeAlreadyExists =
-        new("staff.employee.already_exists", "Employee already exists.", ErrorType.Conflict);
+    public static readonly Error CollaboratorAlreadyExists =
+        new("staff.collaborator.already_exists", "Collaborator already exists.", ErrorType.Conflict);
 
-    public static readonly Error EmployeeInactive =
-        new("staff.employee.inactive", "Employee is inactive.", ErrorType.Forbidden);
-
-    public static readonly Error EmployeeInvalidState =
-        new("staff.employee.invalid_state", "Employee is in an invalid state.", ErrorType.Conflict);
+    public static readonly Error CollaboratorInactive =
+        new("staff.collaborator.inactive", "Collaborator is inactive.", ErrorType.Forbidden);
 
     // ------------------------
     // POSITION
@@ -58,29 +55,29 @@ public static class StaffErrors
 
     public static readonly Error InvalidPrimaryBranch =
         new(
-            "staff.employee.invalid_primary_branch",
-            "Employee does not have this branch assigned.",
+            "staff.collaborator.invalid_primary_branch",
+            "Collaborator does not have this branch assigned.",
             ErrorType.Validation
         );
 
     public static readonly Error InvalidPrimaryPosition =
         new(
-            "staff.employee.invalid_primary_position",
-            "Employee does not have this position assigned.",
+            "staff.collaborator.invalid_primary_position",
+            "Collaborator does not have this position assigned.",
             ErrorType.Validation
         );
 
     public static readonly Error InvalidPrimaryAssignmentState =
         new(
-            "staff.employee.invalid_primary_state",
-            "Employee primary assignment state is invalid.",
+            "staff.collaborator.invalid_primary_state",
+            "Collaborator primary assignment state is invalid.",
             ErrorType.Validation
         );
 
-    public static readonly Error UserNotEligibleForEmployee =
+    public static readonly Error UserNotEligibleForCollaborator =
         new(
-            "staff.employee.user_not_eligible",
-            "User does not have a valid role to become an employee.",
+            "staff.collaborator.user_not_eligible",
+            "User does not have a valid role to become an collaborator.",
             ErrorType.Validation
         );
 }

@@ -14,14 +14,14 @@ public static class StaffExceptions
     }
 
     public static DomainException AssignmentAlreadyExists(
-        Guid employeeId,
+        Guid collaboratorId,
         Guid referenceId,
         AssignmentType type
     )
     {
         return new DomainException(
             "staff.assignment.already_exists",
-            $"Assignment '{type}' with reference '{referenceId}' already exists for employee '{employeeId}'",
+            $"Assignment '{type}' with reference '{referenceId}' already exists for collaborator '{collaboratorId}'",
             ErrorType.Conflict
         );
     }

@@ -10,21 +10,21 @@ using ShiftManagement.Api.BuildingBlocks.Results;
 namespace ShiftManagement.Api.Modules.Staff.Application.EmploymentAssignments;
 
 public sealed class ChangeMainPositionUseCase(
-    EmployeeRepository employeeRepository,
+    CollaboratorRepository CollaboratorRepository,
     ShiftManagementDbContext context
 )
 {
     public async Task<Result<CollaboratorResponse>> Execute(
-        Guid employeeId,
+        Guid collaboratorId,
         ChangeMainPositionRequest request
     )
     {
-        var employee = await employeeRepository.GetByIdAsync(employeeId);
+        var collaborator = await CollaboratorRepository.GetByIdAsync(collaboratorId);
 
-        if (employee is null)
-            return Result<CollaboratorResponse>.Failure(StaffErrors.EmployeeNotFound);
+        if (collaborator is null)
+            return Result<CollaboratorResponse>.Failure(StaffErrors.CollaboratorNotFound);
 
-        employee.SetPrimary(
+        collaborator.SetPrimary(
             request.PositionId,
             AssignmentType.Position
         );
@@ -32,7 +32,7 @@ public sealed class ChangeMainPositionUseCase(
         await context.SaveChangesAsync();
 
         return Result<CollaboratorResponse>.Success(
-            EmployeeMapper.ToResponse(employee)
+            CollaboratorMapper.ToResponse(collaborator)
         );
     }
 }

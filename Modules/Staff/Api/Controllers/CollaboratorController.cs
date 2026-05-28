@@ -8,8 +8,8 @@ namespace ShiftManagement.Api.Modules.Staff.Api.Controllers;
 
 [Authorize]
 [ApiController]
-[Route("api/employees")]
-public class EmployeeController(
+[Route("api/collaborator")]
+public class CollaboratorController(
     CreateCollaboratorUseCase create,
     GetCollaboratorUseCase get,
     ListCollaboratorsUseCase list,
@@ -17,14 +17,14 @@ public class EmployeeController(
 {
     [HttpPost]
     [Authorize(Policy = "CompanyAdminOnly")]
-    public async Task<IActionResult> CreateEmployee(
+    public async Task<IActionResult> CreateCollaborator(
         [FromBody] CreateCollaboratorRequest request
     )
     {
         return (await create.Execute(request))
             .Match(value =>
                 CreatedAtAction(
-                    nameof(GetEmployee),
+                    nameof(GetCollaborator),
                     new { id = value.Id },
                     value
                 )
@@ -33,7 +33,7 @@ public class EmployeeController(
 
     [HttpGet("{id:guid}")]
     [Authorize(Policy = "StaffReadAccess")]
-    public async Task<IActionResult> GetEmployee(
+    public async Task<IActionResult> GetCollaborator(
         [FromQuery] Guid companyId,
         Guid id
     )
@@ -44,7 +44,7 @@ public class EmployeeController(
 
     [HttpGet]
     [Authorize(Policy = "StaffReadAccess")]
-    public async Task<IActionResult> ListEmployees([FromQuery] Guid companyId)
+    public async Task<IActionResult> ListCollaborators([FromQuery] Guid companyId)
     {
         return (await list.Execute(companyId))
             .Match(Ok);
@@ -52,7 +52,7 @@ public class EmployeeController(
 
     [HttpDelete("{id:guid}")]
     [Authorize(Policy = "CompanyAdminOnly")]
-    public async Task<IActionResult> DeactivateEmployee(Guid id)
+    public async Task<IActionResult> DeactivateCollaborator(Guid id)
     {
         return (await deactivate.Execute(id))
             .Match(NoContent);

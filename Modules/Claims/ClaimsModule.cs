@@ -1,7 +1,7 @@
 using ShiftManagement.Api.Modules.Claims.Application.Submissions;
 using ShiftManagement.Api.Modules.Claims.Application.Reviews;
 using ShiftManagement.Api.Modules.Claims.Infrastructure;
-using ShiftManagement.Api.Modules.Claims.Application.Retrievalss;
+using ShiftManagement.Api.Modules.Claims.Application.Retrievals;
 
 namespace ShiftManagement.Api.Modules.Claims;
 

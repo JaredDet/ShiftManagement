@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ShiftManagement.Api.Modules.Staff.Domain;
 
-[Table("employee")]
-public class Employee
+[Table("collaborators")]
+public class Collaborator
 {
     [Key]
     public Guid Id { get; private set; }
@@ -13,7 +13,7 @@ public class Employee
 
     public Guid CompanyId { get; private set; }
 
-    public EmployeeStatus Status { get; private set; }
+    public CollaboratorStatus Status { get; private set; }
 
     public DateTime CreatedAt { get; private set; }
 
@@ -22,9 +22,9 @@ public class Employee
     public IReadOnlyCollection<EmploymentAssignment>
         Assignments => _assignments;
 
-    private Employee() { }
+    private Collaborator() { }
 
-    private Employee(
+    private Collaborator(
         Guid id,
         Guid userId,
         Guid companyId,
@@ -35,15 +35,15 @@ public class Employee
         UserId = userId;
         CompanyId = companyId;
         CreatedAt = createdAt;
-        Status = EmployeeStatus.Active;
+        Status = CollaboratorStatus.Active;
     }
 
-    public static Employee Create(
+    public static Collaborator Create(
         Guid userId,
         Guid companyId
     )
     {
-        return new Employee(
+        return new Collaborator(
             Guid.NewGuid(),
             userId,
             companyId,
@@ -53,12 +53,12 @@ public class Employee
 
     public void Activate()
     {
-        Status = EmployeeStatus.Active;
+        Status = CollaboratorStatus.Active;
     }
 
     public void Deactivate()
     {
-        Status = EmployeeStatus.Inactive;
+        Status = CollaboratorStatus.Inactive;
     }
 
     public void AddAssignment(

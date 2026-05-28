@@ -3,17 +3,17 @@ using ShiftManagement.Api.Modules.Staff.Domain;
 
 namespace ShiftManagement.Api.Modules.Staff.Application.Mappers;
 
-public static class EmployeeMapper
+public static class CollaboratorMapper
 {
-    public static CollaboratorResponse ToResponse(Employee employee)
+    public static CollaboratorResponse ToResponse(Collaborator collaborator)
     {
         return new CollaboratorResponse
         {
-            Id = employee.Id,
-            UserId = employee.UserId,
-            CompanyId = employee.CompanyId,
-            Status = employee.Status.ToString(),
-            CreatedAt = employee.CreatedAt,
+            Id = collaborator.Id,
+            UserId = collaborator.UserId,
+            CompanyId = collaborator.CompanyId,
+            Status = collaborator.Status.ToString(),
+            CreatedAt = collaborator.CreatedAt,
 
             Name = "",
             Email = "",

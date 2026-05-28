@@ -11,7 +11,7 @@ namespace ShiftManagement.Api.Modules.Scheduling.Application.Calendar;
 
 public sealed class GetMyCalendarUseCase(
     CalendarReadRepository repository,
-    EmployeeRepository employeeRepository,
+    CollaboratorRepository CollaboratorRepository,
     IExecutionContext context
 )
 {
@@ -19,21 +19,21 @@ public sealed class GetMyCalendarUseCase(
         CalendarRequest request
     )
     {
-        var employee = await employeeRepository
+        var collaborator = await CollaboratorRepository
             .GetByUserAndCompanyAsync(
                 context.UserId,
                 context.CompanyId
             );
 
-        if (employee is null)
+        if (collaborator is null)
         {
             return Result<List<CalendarResponse>>.Failure(
-                StaffErrors.EmployeeNotFound
+                StaffErrors.CollaboratorNotFound
             );
         }
 
         var calendar = await repository.GetByCollaboratorAsync(
-            employee.Id,
+            collaborator.Id,
             request.StartsAt,
             request.EndsAt
         );

@@ -13,7 +13,7 @@ using ShiftManagement.Api.BuildingBlocks.Results;
 namespace ShiftManagement.Api.Modules.Staff.Application.Collaborators;
 
 public sealed class CreateCollaboratorUseCase(
-    EmployeeRepository employeeRepository,
+    CollaboratorRepository CollaboratorRepository,
     CompanyRepository companyRepository,
     UserRepository userRepository,
     StaffAccessPolicy staffAccessPolicy,
@@ -32,29 +32,29 @@ public sealed class CreateCollaboratorUseCase(
                 .Failure(validation.Error!);
         }
 
-        var employee = Employee.Create(
+        var collaborator = Collaborator.Create(
             request.UserId,
             request.CompanyId
         );
 
-        employee.AddAssignment(
+        collaborator.AddAssignment(
             request.MainBranchId,
             AssignmentType.Branch,
             isPrimary: true
         );
 
-        employee.AddAssignment(
+        collaborator.AddAssignment(
             request.MainPositionId,
             AssignmentType.Position,
             isPrimary: true
         );
 
-        await employeeRepository.AddAsync(employee);
+        await CollaboratorRepository.AddAsync(collaborator);
 
         await context.SaveChangesAsync();
 
         return Result<CollaboratorResponse>.Success(
-            EmployeeMapper.ToResponse(employee)
+            CollaboratorMapper.ToResponse(collaborator)
         );
     }
 
@@ -66,18 +66,18 @@ public sealed class CreateCollaboratorUseCase(
         if (!await companyRepository.ExistsAsync(request.CompanyId))
             return Result.Failure(OrganizationErrors.CompanyNotFound);
 
-        var existing = await employeeRepository.GetByUserAndCompanyAsync(
+        var existing = await CollaboratorRepository.GetByUserAndCompanyAsync(
             request.UserId,
             request.CompanyId
         );
 
         if (existing is not null)
-            return Result.Failure(StaffErrors.EmployeeAlreadyExists);
+            return Result.Failure(StaffErrors.CollaboratorAlreadyExists);
 
         var hasAccess = await staffAccessPolicy.CanAccess(request.UserId);
 
         if (!hasAccess)
-            return Result.Failure(StaffErrors.UserNotEligibleForEmployee);
+            return Result.Failure(StaffErrors.UserNotEligibleForCollaborator);
 
         return Result.Success();
     }

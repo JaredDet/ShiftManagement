@@ -6,18 +6,18 @@ using ShiftManagement.Api.BuildingBlocks.Results;
 namespace ShiftManagement.Api.Modules.Staff.Application.Collaborators;
 
 public sealed class DeactivateCollaboratorUseCase(
-    EmployeeRepository repository,
+    CollaboratorRepository repository,
     ShiftManagementDbContext context
 )
 {
     public async Task<Result> Execute(Guid id)
     {
-        var employee = await repository.GetByIdAsync(id);
+        var collaborator = await repository.GetByIdAsync(id);
 
-        if (employee is null)
-            return Result.Failure(StaffErrors.EmployeeNotFound);
+        if (collaborator is null)
+            return Result.Failure(StaffErrors.CollaboratorNotFound);
 
-        employee.Deactivate();
+        collaborator.Deactivate();
 
         await context.SaveChangesAsync();
 
