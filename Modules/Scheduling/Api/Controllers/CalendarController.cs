@@ -10,13 +10,25 @@ namespace ShiftManagement.Api.Modules.Scheduling.Api.Controllers;
 [ApiController]
 [Route("api/calendar")]
 public class CalendarController(
-    GetCalendarUseCase get
+    GetCalendarUseCase get,
+    GetMyCalendarUseCase getMyCalendar
 ) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> Get([FromQuery] CalendarRequest request)
+    public async Task<IActionResult> Get(
+        [FromQuery] CalendarRequest request
+    )
     {
         return (await get.ExecuteAsync(request))
+            .Match(Ok);
+    }
+
+    [HttpGet("me")]
+    public async Task<IActionResult> GetMyCalendar(
+        [FromQuery] CalendarRequest request
+    )
+    {
+        return (await getMyCalendar.ExecuteAsync(request))
             .Match(Ok);
     }
 }

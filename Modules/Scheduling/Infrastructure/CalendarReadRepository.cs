@@ -14,4 +14,19 @@ public class CalendarReadRepository(ShiftManagementDbContext context)
             .Where(x => x.StartsAt >= start && x.EndsAt <= end)
             .ToListAsync();
     }
+
+    public Task<List<CalendarResponse>> GetByCollaboratorAsync(
+    Guid collaboratorId,
+    DateTime start,
+    DateTime end
+)
+    {
+        return context
+            .ToCollaboratorCalendarResponse(collaboratorId)
+            .Where(x =>
+                x.StartsAt >= start &&
+                x.EndsAt <= end
+            )
+            .ToListAsync();
+    }
 }
