@@ -3,7 +3,7 @@ using ShiftManagement.Api.BuildingBlocks.Results;
 using ShiftManagement.Api.Modules.Claims.Api.Contracts.Queries;
 using ShiftManagement.Api.Modules.Claims.Api.Contracts.Reviews;
 using ShiftManagement.Api.Modules.Claims.Api.Contracts.Submissions;
-using ShiftManagement.Api.Modules.Claims.Application.Retrievalss;
+using ShiftManagement.Api.Modules.Claims.Application.Retrievals;
 using ShiftManagement.Api.Modules.Claims.Application.Reviews;
 using ShiftManagement.Api.Modules.Claims.Application.Submissions;
 
@@ -23,7 +23,8 @@ public class ClaimController(
     ReopenClaimUseCase reopen,
 
     GetClaimUseCase get,
-    ListClaimsUseCase list
+    ListClaimsUseCase list,
+    ListMyClaimsUseCase listMyClaims
 ) : ControllerBase
 {
 
@@ -108,6 +109,13 @@ public class ClaimController(
         [FromQuery] ListClaimsRequest request)
     {
         return (await list.ExecuteAsync(request))
+            .Match(Ok);
+    }
+
+    [HttpGet("me")]
+    public async Task<IActionResult> GetMyClaims()
+    {
+        return (await listMyClaims.ExecuteAsync())
             .Match(Ok);
     }
 }
