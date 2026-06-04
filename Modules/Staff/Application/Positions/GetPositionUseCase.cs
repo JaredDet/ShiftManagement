@@ -6,7 +6,7 @@ using ShiftManagement.Api.BuildingBlocks.Results;
 namespace ShiftManagement.Api.Modules.Staff.Application.Positions;
 
 public sealed class GetPositionUseCase(
-    PositionRepository repository
+    PositionReadRepository repository
 )
 {
     public async Task<Result<PositionResponse>> Execute(Guid id)

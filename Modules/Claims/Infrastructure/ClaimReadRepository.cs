@@ -3,11 +3,9 @@ using ShiftManagement.Api.Infrastructure.Persistence;
 using ShiftManagement.Api.Modules.Claims.Api.Contracts.Queries;
 using ShiftManagement.Api.Modules.Claims.Api.Contracts.Responses;
 
-using ShiftManagement.Api.Modules.Claims.Application;
-
 namespace ShiftManagement.Api.Modules.Claims.Infrastructure;
 
-public sealed class ClaimReadRepositoryPostgres(
+public sealed class ClaimReadRepository(
     ShiftManagementDbContext context
 )
 {

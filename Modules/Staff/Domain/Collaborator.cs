@@ -17,7 +17,7 @@ public class Collaborator
 
     public DateTime CreatedAt { get; private set; }
 
-    private readonly List<EmploymentAssignment> _assignments = new();
+    private readonly List<EmploymentAssignment> _assignments = [];
 
     public IReadOnlyCollection<EmploymentAssignment>
         Assignments => _assignments;

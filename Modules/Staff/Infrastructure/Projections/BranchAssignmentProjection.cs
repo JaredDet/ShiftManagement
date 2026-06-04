@@ -1,7 +1,7 @@
 using ShiftManagement.Api.Modules.Staff.Api.Contracts.BranchAssignments;
 using ShiftManagement.Api.Modules.Staff.Domain;
 
-namespace ShiftManagement.Api.Modules.Staff.Application.Projections;
+namespace ShiftManagement.Api.Modules.Staff.Infrastructure.Projections;
 
 public static class BranchAssignmentProjection
 {

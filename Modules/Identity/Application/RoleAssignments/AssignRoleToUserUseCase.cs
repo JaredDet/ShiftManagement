@@ -7,8 +7,8 @@ using ShiftManagement.Api.BuildingBlocks.Results;
 namespace ShiftManagement.Api.Modules.Identity.Application.RoleAssignments;
 
 public sealed class AssignRoleToUserUseCase(
+    RoleAssigner roleAssigner,
     UserRepository userRepository,
-    UserRoleRepository userRoleRepository,
     ShiftManagementDbContext context
 )
 {
@@ -20,34 +20,25 @@ public sealed class AssignRoleToUserUseCase(
         var user = await userRepository.GetByIdAsync(userId);
 
         if (user is null)
-            return Result<UserRoleResponse>.Failure(IdentityErrors.UserNotFound);
+            return Result<UserRoleResponse>.Failure(
+                IdentityErrors.UserNotFound
+            );
 
-        if (RoleRules.RequiresBranch(request.Role) && request.BranchId is null)
-            return Result<UserRoleResponse>.Failure(IdentityErrors.BranchRequiredForRole);
-
-        if (RoleRules.DisallowsBranch(request.Role) && request.BranchId is not null)
-            return Result<UserRoleResponse>.Failure(IdentityErrors.BranchNotAllowedForRole);
-
-        var alreadyExists = await userRoleRepository.ExistsAsync(
+        var result = await roleAssigner.AssignAsync(
             userId,
             request.Role,
             request.BranchId
         );
 
-        if (alreadyExists)
-            return Result<UserRoleResponse>.Failure(IdentityErrors.RoleAlreadyAssigned);
+        if (!result.IsSuccess)
+            return Result<UserRoleResponse>.Failure(
+                result.Error!
+            );
 
-        var userRole = UserRole.Create(
-            userId,
-            request.Role,
-            request.BranchId
-        );
-
-        await userRoleRepository.AddAsync(userRole);
         await context.SaveChangesAsync();
 
         return Result<UserRoleResponse>.Success(
-            UserRoleMapper.ToResponse(userRole)
+            UserRoleMapper.ToResponse(result.Value!)
         );
     }
 }

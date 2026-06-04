@@ -5,7 +5,7 @@ using ShiftManagement.Api.BuildingBlocks.Results;
 namespace ShiftManagement.Api.Modules.Staff.Application.Positions;
 
 public sealed class ListPositionsUseCase(
-    PositionRepository repository
+    PositionReadRepository repository
 )
 {
     public async Task<Result<List<PositionResponse>>> Execute()

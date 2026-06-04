@@ -21,13 +21,6 @@ public sealed class BranchRepository(ShiftManagementDbContext context)
             .ToListAsync();
     }
 
-    public Task<List<Branch>> ListAsync()
-    {
-        return context.Branches
-            .AsNoTracking()
-            .ToListAsync();
-    }
-
     public Task AddAsync(Branch branch)
     {
         return context.Branches.AddAsync(branch).AsTask();

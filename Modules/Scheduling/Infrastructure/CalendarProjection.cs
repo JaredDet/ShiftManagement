@@ -5,7 +5,7 @@ using ShiftManagement.Api.Modules.Scheduling.Api.Contracts;
 using ShiftManagement.Api.Modules.Scheduling.Domain;
 using ShiftManagement.Api.Modules.Staff.Domain;
 
-namespace ShiftManagement.Api.Modules.Scheduling.Application.Calendar;
+namespace ShiftManagement.Api.Modules.Scheduling.Infrastructure;
 
 public static class CalendarProjection
 {

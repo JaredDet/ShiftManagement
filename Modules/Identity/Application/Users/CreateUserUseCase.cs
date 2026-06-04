@@ -2,55 +2,42 @@ using ShiftManagement.Api.BuildingBlocks.Results;
 using ShiftManagement.Api.Infrastructure.Persistence;
 using ShiftManagement.Api.Modules.Identity.Api.Contracts.Users;
 using ShiftManagement.Api.Modules.Identity.Domain;
-using ShiftManagement.Api.Modules.Identity.Infrastructure;
 using ShiftManagement.Api.Modules.Organization.Application.Errors;
 using ShiftManagement.Api.Modules.Organization.Infrastructure.Persistence.Repositories;
 
 namespace ShiftManagement.Api.Modules.Identity.Application.Users;
 
 public sealed class CreateUserUseCase(
-    UserRepository userRepository,
-    UserCredentialRepository userCredentialRepository,
-    CompanyRepository companyRepository,
-    Argon2PasswordHasher argon2PasswordHasher,
-    ShiftManagementDbContext context
+    UserCreator userCreator,
+    ShiftManagementDbContext context,
+    CompanyRepository companyRepository
 )
 {
-    public async Task<Result<UserResponse>> ExecuteAsync(CreateUserRequest request)
+    public async Task<Result<UserResponse>> ExecuteAsync(
+        CreateUserRequest request
+    )
     {
         var companyExists = await companyRepository.ExistsAsync(request.CompanyId);
 
         if (!companyExists)
-            return Result<UserResponse>.Failure(OrganizationErrors.CompanyNotFound);
+            return Result<UserResponse>.Failure(
+                OrganizationErrors.CompanyNotFound
+            );
 
-        var emailNormalized = request.Email.Trim().ToLowerInvariant();
-
-        var existingUser = await userRepository.GetByEmailAsync(emailNormalized);
-
-        if (existingUser is not null)
-            return Result<UserResponse>.Failure(IdentityErrors.EmailAlreadyInUse);
-
-        var user = User.Create(
+        var result = await userCreator.CreateAsync(
             request.CompanyId,
             request.Name,
-            emailNormalized
+            request.Email,
+            request.Password
         );
 
-        var passwordHash = argon2PasswordHasher
-            .Hash(request.Password);
-
-        var credential = UserCredential.Create(
-            user.Id,
-            passwordHash
-        );
-
-        await userRepository.AddAsync(user);
-        await userCredentialRepository.AddAsync(credential);
+        if (!result.IsSuccess)
+            return Result<UserResponse>.Failure(result.Error!);
 
         await context.SaveChangesAsync();
 
         return Result<UserResponse>.Success(
-            UserMapper.ToResponse(user)
+            UserMapper.ToResponse(result.Value!)
         );
     }
 }

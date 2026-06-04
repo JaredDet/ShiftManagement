@@ -8,7 +8,7 @@ using ShiftManagement.Api.Modules.Staff.Infrastructure.Persistence.Repositories;
 namespace ShiftManagement.Api.Modules.Claims.Application.Retrievals;
 
 public sealed class ListMyClaimsUseCase(
-    ClaimReadRepositoryPostgres repository,
+    ClaimReadRepository repository,
     CollaboratorRepository collaboratorRepository,
     IExecutionContext context
 )

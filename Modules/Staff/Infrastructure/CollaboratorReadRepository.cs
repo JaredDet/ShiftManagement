@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using ShiftManagement.Api.Infrastructure.Persistence;
 using ShiftManagement.Api.Modules.Staff.Api.Contracts.Collaborators;
-using ShiftManagement.Api.Modules.Staff.Application.Projections;
+using ShiftManagement.Api.Modules.Staff.Infrastructure.Projections;
 
-namespace ShiftManagement.Api.Modules.Staff.Infrastructure.Persistence.Repositories;
+namespace ShiftManagement.Api.Modules.Staff.Infrastructure;
 
 public class CollaboratorReadRepository(ShiftManagementDbContext context)
 {

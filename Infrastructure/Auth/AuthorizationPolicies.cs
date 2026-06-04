@@ -16,6 +16,15 @@ public static class AuthorizationPolicies
     public const string SwapParticipantAccess = "SwapParticipantAccess";
     public const string SwapRejectAccess = "SwapRejectAccess";
 
+    public const string CalendarReadAccess = "CalendarReadAccess";
+    public const string CalendarSelfAccess = "CalendarSelfAccess";
+
+    public const string ClaimsReadAccess = "ClaimsReadAccess";
+    public const string ClaimsSelfAccess = "ClaimsSelfAccess";
+    public const string ClaimsWriteAccess = "ClaimsWriteAccess";
+    public const string ClaimsModerationAccess = "ClaimsModerationAccess";
+    public const string ClaimsEvidenceUploadAccess = "ClaimsEvidenceUploadAccess";
+
     public static void AddPolicies(AuthorizationOptions options)
     {
         options.AddPolicy(CompanyAdminOnly,
@@ -50,6 +59,18 @@ public static class AuthorizationPolicies
                 Role.Supervisor.ToString()
             ));
 
+        options.AddPolicy(CalendarReadAccess,
+            p => p.RequireRole(
+                Role.CompanyAdmin.ToString(),
+                Role.BranchManager.ToString(),
+                Role.Supervisor.ToString()
+            ));
+
+        options.AddPolicy(CalendarSelfAccess,
+            p => p.RequireRole(
+                Role.Staff.ToString()
+            ));
+
         options.AddPolicy(SwapParticipantAccess,
             p => p.RequireRole(Role.Staff.ToString()));
 
@@ -59,6 +80,39 @@ public static class AuthorizationPolicies
                 Role.Supervisor.ToString(),
                 Role.BranchManager.ToString(),
                 Role.CompanyAdmin.ToString()
+            ));
+
+        options.AddPolicy(ClaimsReadAccess,
+            p => p.RequireRole(
+                Role.Staff.ToString(),
+                Role.Supervisor.ToString(),
+                Role.BranchManager.ToString(),
+                Role.CompanyAdmin.ToString()
+            ));
+
+        options.AddPolicy(ClaimsSelfAccess,
+            p => p.RequireRole(
+                Role.Staff.ToString()
+            ));
+
+        options.AddPolicy(ClaimsWriteAccess,
+            p => p.RequireRole(
+                Role.Staff.ToString(),
+                Role.Supervisor.ToString()
+            ));
+
+        options.AddPolicy(ClaimsModerationAccess,
+            p => p.RequireRole(
+                Role.Supervisor.ToString(),
+                Role.BranchManager.ToString(),
+                Role.CompanyAdmin.ToString()
+            ));
+
+        options.AddPolicy(ClaimsEvidenceUploadAccess,
+            p => p.RequireRole(
+                Role.Staff.ToString(),
+                Role.Supervisor.ToString(),
+                Role.BranchManager.ToString()
             ));
     }
 }

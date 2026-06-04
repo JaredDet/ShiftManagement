@@ -21,18 +21,8 @@ public sealed class AssignClaimUseCase(
         AssignClaimRequest request
     )
     {
-        var claimTask =
-            claimRepository.GetByIdAsync(claimId);
-
-        var userExistsTask =
-            userRepository.ExistsAsync(request.AssignedToUserId);
-
-        await Task.WhenAll(
-            claimTask,
-            userExistsTask
-        );
-
-        var claim = claimTask.Result;
+        var claim =
+            await claimRepository.GetByIdAsync(claimId);
 
         if (claim is null)
         {
@@ -41,7 +31,12 @@ public sealed class AssignClaimUseCase(
             );
         }
 
-        if (!userExistsTask.Result)
+        var userExists =
+            await userRepository.ExistsAsync(
+                request.AssignedToUserId
+            );
+
+        if (!userExists)
         {
             return Result<ClaimResponse>.Failure(
                 IdentityErrors.UserNotFound

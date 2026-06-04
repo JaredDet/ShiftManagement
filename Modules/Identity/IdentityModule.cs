@@ -27,6 +27,9 @@ public static class IdentityModule
         services.AddScoped<RemoveRoleFromUserUseCase>();
         services.AddScoped<ListUserRolesUseCase>();
 
+        services.AddScoped<RoleAssigner>();
+        services.AddScoped<UserCreator>();
+
         services.Configure<JwtOptions>(
             configuration.GetSection("Jwt")
         );

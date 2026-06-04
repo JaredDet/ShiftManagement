@@ -8,7 +8,7 @@ namespace ShiftManagement.Api.Modules.Staff.Api.Controllers;
 
 [Authorize]
 [ApiController]
-[Route("api/collaborator")]
+[Route("api/collaborators")]
 public class CollaboratorController(
     CreateCollaboratorUseCase create,
     GetCollaboratorUseCase get,

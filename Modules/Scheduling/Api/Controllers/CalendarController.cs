@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShiftManagement.Api.BuildingBlocks.Results;
+using ShiftManagement.Api.Infrastructure.Auth;
 using ShiftManagement.Api.Modules.Scheduling.Api.Contracts;
 using ShiftManagement.Api.Modules.Scheduling.Application.Calendar;
 
@@ -15,6 +16,7 @@ public class CalendarController(
 ) : ControllerBase
 {
     [HttpGet]
+    [Authorize(Policy = AuthorizationPolicies.CalendarReadAccess)]
     public async Task<IActionResult> Get(
         [FromQuery] CalendarRequest request
     )
@@ -24,6 +26,7 @@ public class CalendarController(
     }
 
     [HttpGet("me")]
+    [Authorize(Policy = AuthorizationPolicies.CalendarSelfAccess)]
     public async Task<IActionResult> GetMyCalendar(
         [FromQuery] CalendarRequest request
     )

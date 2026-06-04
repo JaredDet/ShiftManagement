@@ -20,20 +20,9 @@ public sealed class CompanyRepository(ShiftManagementDbContext context)
             .ToListAsync();
     }
 
-    public Task AddAsync(Company company)
-    {
-        return context.Companies.AddAsync(company).AsTask();
-    }
-
     public Task<bool> ExistsAsync(Guid id)
     {
         return context.Companies
             .AnyAsync(c => c.Id == id);
-    }
-
-    public Task<bool> ExistsByNameAsync(string name)
-    {
-        return context.Companies
-            .AnyAsync(c => c.Name.ToLower() == name.ToLower());
     }
 }

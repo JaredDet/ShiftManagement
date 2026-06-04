@@ -1,8 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-using ShiftManagement.Api.Modules.Claims.Application;
-
 namespace ShiftManagement.Api.Modules.Claims.Domain;
 
 [Table("claims")]

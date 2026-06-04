@@ -25,9 +25,6 @@ public sealed class JwtTokenService(IOptions<JwtOptions> options)
             foreach (var role in roles)
             {
                 claims.Add(new Claim(ClaimTypes.Role, role.Role.ToString()));
-
-                if (role.BranchId.HasValue)
-                    claims.Add(new Claim("branchId", role.BranchId.Value.ToString()));
             }
         }
 

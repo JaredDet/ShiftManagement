@@ -12,17 +12,18 @@ public static class ClaimsModule
     )
     {
         services.AddScoped<ClaimRepository>();
-        services.AddScoped<ClaimReadRepositoryPostgres>();
+        services.AddScoped<ClaimReadRepository>();
 
         services.AddScoped<GetClaimUseCase>();
         services.AddScoped<ListClaimsUseCase>();
+        services.AddScoped<ListMyClaimsUseCase>();
 
         services.AddScoped<AssignClaimUseCase>();
         services.AddScoped<CancelClaimUseCase>();
+        services.AddScoped<StartClaimReviewUseCase>();
+        services.AddScoped<ResolveClaimUseCase>();
         services.AddScoped<RejectClaimUseCase>();
         services.AddScoped<ReopenClaimUseCase>();
-        services.AddScoped<ResolveClaimUseCase>();
-        services.AddScoped<StartClaimReviewUseCase>();
 
         services.AddScoped<AttachEvidenceToClaimUseCase>();
         services.AddScoped<CreateClaimUseCase>();

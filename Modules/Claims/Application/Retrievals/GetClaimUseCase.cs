@@ -6,7 +6,7 @@ using ShiftManagement.Api.Modules.Claims.Infrastructure;
 namespace ShiftManagement.Api.Modules.Claims.Application.Retrievals;
 
 public sealed class GetClaimUseCase(
-    ClaimReadRepositoryPostgres claimReadRepository
+    ClaimReadRepository claimReadRepository
 )
 {
     public async Task<Result<ClaimResponse>> ExecuteAsync(

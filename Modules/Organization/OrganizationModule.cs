@@ -11,11 +11,8 @@ public static class OrganizationModule
         services.AddScoped<CompanyRepository>();
         services.AddScoped<BranchRepository>();
 
-        services.AddScoped<CreateCompanyUseCase>();
         services.AddScoped<ListCompaniesUseCase>();
         services.AddScoped<GetCompanyUseCase>();
-        services.AddScoped<UpdateCompanyUseCase>();
-        services.AddScoped<DeactivateCompanyUseCase>();
 
         services.AddScoped<CreateBranchUseCase>();
         services.AddScoped<GetBranchUseCase>();

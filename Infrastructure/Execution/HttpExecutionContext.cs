@@ -18,4 +18,6 @@ public sealed class HttpExecutionContext(IHttpContextAccessor accessor)
     public Guid CompanyId =>
         Guid.Parse(User.FindFirstValue("companyId")
                    ?? throw new InvalidOperationException("Missing company id"));
+
+    public string? Email => User.FindFirstValue(ClaimTypes.Email);
 }

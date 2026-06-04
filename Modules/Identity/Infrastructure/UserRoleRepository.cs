@@ -12,12 +12,6 @@ public class UserRoleRepository(ShiftManagementDbContext context)
         await context.Set<UserRole>().AddAsync(userRole);
     }
 
-    public Task<UserRole?> GetByIdAsync(Guid id)
-    {
-        return context.Set<UserRole>()
-            .FirstOrDefaultAsync(x => x.Id == id);
-    }
-
     public Task<List<UserRole>> GetByUserIdAsync(Guid userId)
     {
         return context.Set<UserRole>()

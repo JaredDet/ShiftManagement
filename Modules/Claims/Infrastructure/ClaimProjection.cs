@@ -4,7 +4,7 @@ using ShiftManagement.Api.Modules.Claims.Api.Contracts.Queries;
 using ShiftManagement.Api.Modules.Claims.Api.Contracts.Responses;
 using ShiftManagement.Api.Modules.Claims.Domain;
 
-namespace ShiftManagement.Api.Modules.Claims.Application;
+namespace ShiftManagement.Api.Modules.Claims.Infrastructure;
 
 public static class ClaimProjection
 {

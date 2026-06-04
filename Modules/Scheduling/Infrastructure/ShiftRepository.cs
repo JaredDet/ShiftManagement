@@ -16,11 +16,4 @@ public sealed class ShiftRepository(ShiftManagementDbContext context)
         return await context.Shifts
             .FirstOrDefaultAsync(x => x.Id == id);
     }
-
-    public async Task<List<Shift>> GetByBranchIdAsync(Guid branchId)
-    {
-        return await context.Shifts
-            .Where(x => x.BranchId == branchId)
-            .ToListAsync();
-    }
 }
