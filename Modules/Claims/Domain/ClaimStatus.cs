@@ -6,5 +6,5 @@ public enum ClaimStatus
     InReview,
     Resolved,
     Rejected,
-    Canceled
+    Cancelled
 }

@@ -27,7 +27,7 @@ public sealed class ResolveClaimUseCase(
         }
 
         claim.Resolve();
-        claim.AddComment(request.ReviewerId, request.Reason, ClaimCommentType.Resolution);
+        claim.AddComment(request.ReviewerId, request.ResolutionComment, ClaimCommentType.Resolution);
 
         await context.SaveChangesAsync();
 

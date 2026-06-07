@@ -3,7 +3,7 @@ using ShiftManagement.Api.BuildingBlocks.Results;
 using ShiftManagement.Api.Modules.Claims.Api.Contracts.Responses;
 using ShiftManagement.Api.Modules.Claims.Infrastructure;
 using ShiftManagement.Api.Modules.Staff.Application.Errors;
-using ShiftManagement.Api.Modules.Staff.Infrastructure.Persistence.Repositories;
+using ShiftManagement.Api.Modules.Staff.Infrastructure;
 
 namespace ShiftManagement.Api.Modules.Claims.Application.Retrievals;
 

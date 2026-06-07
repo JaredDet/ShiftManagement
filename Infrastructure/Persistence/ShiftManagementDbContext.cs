@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShiftManagement.Api.Modules.Claims.Domain;
+using ShiftManagement.Api.Modules.Contracts.Domain;
 using ShiftManagement.Api.Modules.Identity.Domain;
 using ShiftManagement.Api.Modules.Organization.Domain;
 using ShiftManagement.Api.Modules.Scheduling.Domain;
@@ -13,6 +14,9 @@ public sealed class ShiftManagementDbContext(
 ) : DbContext(options)
 {
     public DbSet<Company> Companies => Set<Company>();
+
+    public DbSet<EmploymentContract> EmploymentContracts => Set<EmploymentContract>();
+    public DbSet<ContractTermination> ContractTerminations => Set<ContractTermination>();
 
     public DbSet<Branch> Branches => Set<Branch>();
 

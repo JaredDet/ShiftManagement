@@ -1,5 +1,3 @@
-using ShiftManagement.Api.Modules.Claims.Application;
-
 namespace ShiftManagement.Api.Modules.Claims.Domain;
 
 public static class ClaimStateMachine
@@ -10,7 +8,7 @@ public static class ClaimStateMachine
     > Transitions = new()
     {
         [(ClaimStatus.Pending, ClaimAction.StartReview)] = ClaimStatus.InReview,
-        [(ClaimStatus.Pending, ClaimAction.Cancel)] = ClaimStatus.Canceled,
+        [(ClaimStatus.Pending, ClaimAction.Cancel)] = ClaimStatus.Cancelled,
 
         [(ClaimStatus.InReview, ClaimAction.Resolve)] = ClaimStatus.Resolved,
         [(ClaimStatus.InReview, ClaimAction.Reject)] = ClaimStatus.Rejected,
@@ -33,6 +31,6 @@ public static class ClaimStateMachine
         return status is
             ClaimStatus.Resolved or
             ClaimStatus.Rejected or
-            ClaimStatus.Canceled;
+            ClaimStatus.Cancelled;
     }
 }

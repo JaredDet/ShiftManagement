@@ -10,5 +10,5 @@ public sealed record ResolveClaimRequest
 
     [Required]
     [MaxLength(500)]
-    public string Reason { get; init; } = string.Empty;
+    public string ResolutionComment { get; init; } = string.Empty;
 }

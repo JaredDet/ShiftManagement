@@ -1,7 +1,10 @@
 using ShiftManagement.Api.Modules.Staff.Application.Collaborators;
 using ShiftManagement.Api.Modules.Staff.Application.EmploymentAssignments;
 using ShiftManagement.Api.Modules.Staff.Application.Positions;
-using ShiftManagement.Api.Modules.Staff.Infrastructure.Persistence.Repositories;
+using ShiftManagement.Api.Modules.Staff.Infrastructure;
+
+
+
 
 namespace ShiftManagement.Api.Modules.Staff;
 

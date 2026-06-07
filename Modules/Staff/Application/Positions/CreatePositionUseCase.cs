@@ -1,10 +1,10 @@
 using ShiftManagement.Api.Modules.Staff.Api.Contracts.Positions;
-using ShiftManagement.Api.Modules.Staff.Infrastructure.Persistence.Repositories;
 using ShiftManagement.Api.Modules.Staff.Domain;
 using ShiftManagement.Api.Modules.Staff.Application.Mappers;
 using ShiftManagement.Api.Modules.Staff.Application.Errors;
 using ShiftManagement.Api.Infrastructure.Persistence;
 using ShiftManagement.Api.BuildingBlocks.Results;
+using ShiftManagement.Api.Modules.Staff.Infrastructure;
 
 namespace ShiftManagement.Api.Modules.Staff.Application.Positions;
 

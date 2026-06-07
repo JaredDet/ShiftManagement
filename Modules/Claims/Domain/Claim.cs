@@ -31,7 +31,7 @@ public sealed class Claim
 
     public DateTime? ResolvedAt { get; private set; }
 
-    public DateTime? CanceledAt { get; private set; }
+    public DateTime? CancelledAt { get; private set; }
 
     private readonly List<ClaimComment> _comments;
 
@@ -169,7 +169,7 @@ public sealed class Claim
             ClaimAction.Cancel
         );
 
-        CanceledAt = DateTime.UtcNow;
+        CancelledAt = DateTime.UtcNow;
         UpdatedAt = DateTime.UtcNow;
     }
 
@@ -178,7 +178,7 @@ public sealed class Claim
         Status = ClaimStateMachine.Transition(Status, ClaimAction.Reopen);
 
         ResolvedAt = null;
-        CanceledAt = null;
+        CancelledAt = null;
 
         UpdatedAt = DateTime.UtcNow;
     }

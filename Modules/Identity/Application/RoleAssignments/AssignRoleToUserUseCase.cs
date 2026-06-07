@@ -1,4 +1,3 @@
-using ShiftManagement.Api.Modules.Identity.Domain;
 using ShiftManagement.Api.Modules.Identity.Infrastructure;
 using ShiftManagement.Api.Modules.Identity.Api.Contracts.RoleAssignments;
 using ShiftManagement.Api.Infrastructure.Persistence;

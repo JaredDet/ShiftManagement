@@ -49,7 +49,7 @@ public static class ClaimProjection
 
                 ResolvedAt = c.ResolvedAt,
 
-                CanceledAt = c.CanceledAt,
+                CancelledAt = c.CancelledAt,
 
                 CommentsCount =
                     comments.Count(x => x.ClaimId == c.Id)

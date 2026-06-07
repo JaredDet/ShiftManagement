@@ -3,7 +3,10 @@ using ShiftManagement.Api.Modules.Claims.Api.Contracts.Responses;
 using ShiftManagement.Api.Modules.Claims.Domain;
 using ShiftManagement.Api.Modules.Claims.Infrastructure;
 using ShiftManagement.Api.Modules.Organization.Infrastructure.Persistence.Repositories;
-using ShiftManagement.Api.Modules.Staff.Infrastructure.Persistence.Repositories;
+using ShiftManagement.Api.Modules.Staff.Infrastructure;
+
+
+
 using ShiftManagement.Api.Modules.Organization.Application.Errors;
 using ShiftManagement.Api.Modules.Staff.Application.Errors;
 using ShiftManagement.Api.Infrastructure.Persistence;

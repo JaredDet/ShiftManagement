@@ -1,5 +1,5 @@
 using ShiftManagement.Api.Modules.Staff.Api.Contracts.PositionAssignments;
-using ShiftManagement.Api.Modules.Staff.Infrastructure.Persistence.Repositories;
+using ShiftManagement.Api.Modules.Staff.Infrastructure;
 using ShiftManagement.Api.Modules.Staff.Application.Errors;
 using ShiftManagement.Api.Modules.Staff.Domain;
 using ShiftManagement.Api.Infrastructure.Persistence;

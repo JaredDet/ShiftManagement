@@ -25,7 +25,7 @@ public static class ClaimMapper
             CreatedAt = claim.CreatedAt,
             UpdatedAt = claim.UpdatedAt,
             ResolvedAt = claim.ResolvedAt,
-            CanceledAt = claim.CanceledAt,
+            CancelledAt = claim.CancelledAt,
 
             CommentsCount = claim.Comments.Count,
             EvidencesCount = claim.Evidences.Count,

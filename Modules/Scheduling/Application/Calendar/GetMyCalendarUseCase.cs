@@ -5,7 +5,10 @@ using ShiftManagement.Api.Modules.Scheduling.Api.Contracts;
 using ShiftManagement.Api.Modules.Scheduling.Infrastructure;
 
 using ShiftManagement.Api.Modules.Staff.Application.Errors;
-using ShiftManagement.Api.Modules.Staff.Infrastructure.Persistence.Repositories;
+using ShiftManagement.Api.Modules.Staff.Infrastructure;
+
+
+
 
 namespace ShiftManagement.Api.Modules.Scheduling.Application.Calendar;
 

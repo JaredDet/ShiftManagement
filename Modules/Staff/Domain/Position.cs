@@ -18,8 +18,6 @@ public class Position
 
     public DateTime CreatedAt { get; private set; }
 
-    public List<EmploymentAssignment> Assignments { get; private set; } = new();
-
     private Position() { }
 
     private Position(
@@ -69,15 +67,5 @@ public class Position
     public void Deactivate()
     {
         Status = PositionStatus.Inactive;
-    }
-
-    public void AddAssignment(EmploymentAssignment assignment)
-    {
-        Assignments.Add(assignment);
-    }
-
-    public void RemoveAssignment(EmploymentAssignment assignment)
-    {
-        Assignments.Remove(assignment);
     }
 }

@@ -36,5 +36,5 @@ public sealed record ClaimResponse
 
     public DateTime? ResolvedAt { get; init; }
 
-    public DateTime? CanceledAt { get; init; }
+    public DateTime? CancelledAt { get; init; }
 }
