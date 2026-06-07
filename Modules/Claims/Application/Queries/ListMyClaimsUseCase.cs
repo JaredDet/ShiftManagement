@@ -5,7 +5,7 @@ using ShiftManagement.Api.Modules.Claims.Infrastructure;
 using ShiftManagement.Api.Modules.Staff.Application.Errors;
 using ShiftManagement.Api.Modules.Staff.Infrastructure;
 
-namespace ShiftManagement.Api.Modules.Claims.Application.Retrievals;
+namespace ShiftManagement.Api.Modules.Claims.Application.Queries;
 
 public sealed class ListMyClaimsUseCase(
     ClaimReadRepository repository,

@@ -5,7 +5,7 @@ using ShiftManagement.Api.Infrastructure.Persistence;
 using ShiftManagement.Api.BuildingBlocks.Results;
 using ShiftManagement.Api.BuildingBlocks.Storage;
 
-namespace ShiftManagement.Api.Modules.Claims.Application.Submissions;
+namespace ShiftManagement.Api.Modules.Claims.Application.Commands.Submissions;
 
 public sealed class AttachEvidenceToClaimUseCase(
     ClaimRepository claimRepository,

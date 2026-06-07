@@ -1,20 +1,18 @@
 using ShiftManagement.Api.BuildingBlocks.Results;
 using ShiftManagement.Api.Infrastructure.Persistence;
 using ShiftManagement.Api.Modules.Claims.Api.Contracts.Responses;
-using ShiftManagement.Api.Modules.Claims.Api.Contracts.Submissions;
 
 using ShiftManagement.Api.Modules.Claims.Infrastructure;
 
-namespace ShiftManagement.Api.Modules.Claims.Application.Submissions;
+namespace ShiftManagement.Api.Modules.Claims.Application.Commands;
 
-public sealed class UpdateClaimUseCase(
+public sealed class StartClaimReviewUseCase(
     ClaimRepository claimRepository,
     ShiftManagementDbContext context
 )
 {
     public async Task<Result<ClaimResponse>> ExecuteAsync(
-        Guid claimId,
-        UpdateClaimRequest request
+        Guid claimId
     )
     {
         var claim = await claimRepository.GetByIdAsync(claimId);
@@ -26,11 +24,7 @@ public sealed class UpdateClaimUseCase(
             );
         }
 
-        claim.Update(
-            request.Title,
-            request.Description,
-            request.Priority
-        );
+        claim.StartReview();
 
         await context.SaveChangesAsync();
 

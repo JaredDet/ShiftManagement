@@ -12,6 +12,7 @@ using ShiftManagement.Api.Infrastructure.Middleware;
 using ShiftManagement.Api.Infrastructure.Persistence;
 using ShiftManagement.Api.Infrastructure.Storage;
 using ShiftManagement.Api.Modules.Claims;
+using ShiftManagement.Api.Modules.Contracts;
 using ShiftManagement.Api.Modules.Dev;
 using ShiftManagement.Api.Modules.Identity;
 using ShiftManagement.Api.Modules.Organization;
@@ -107,10 +108,11 @@ builder.Services.AddScoped<IFileStorage, LocalFileStorage>();
 
 builder.Services.AddOrganization();
 builder.Services.AddStaff();
-builder.Services.AddIdentityModule(builder.Configuration);
+builder.Services.AddIdentity(builder.Configuration);
 builder.Services.AddScheduling();
 builder.Services.AddClaims();
 builder.Services.AddODev();
+builder.Services.AddContracts();
 
 var app = builder.Build();
 

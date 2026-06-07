@@ -1,20 +1,20 @@
 using ShiftManagement.Api.BuildingBlocks.Results;
 using ShiftManagement.Api.Infrastructure.Persistence;
 using ShiftManagement.Api.Modules.Claims.Api.Contracts.Responses;
-using ShiftManagement.Api.Modules.Claims.Api.Contracts.Reviews;
-using ShiftManagement.Api.Modules.Claims.Domain;
+using ShiftManagement.Api.Modules.Claims.Api.Contracts.Submissions;
+
 using ShiftManagement.Api.Modules.Claims.Infrastructure;
 
-namespace ShiftManagement.Api.Modules.Claims.Application.Reviews;
+namespace ShiftManagement.Api.Modules.Claims.Application.Commands.Submissions;
 
-public sealed class CancelClaimUseCase(
+public sealed class UpdateClaimUseCase(
     ClaimRepository claimRepository,
     ShiftManagementDbContext context
 )
 {
     public async Task<Result<ClaimResponse>> ExecuteAsync(
         Guid claimId,
-        CancelClaimRequest request
+        UpdateClaimRequest request
     )
     {
         var claim = await claimRepository.GetByIdAsync(claimId);
@@ -26,14 +26,11 @@ public sealed class CancelClaimUseCase(
             );
         }
 
-        claim.Cancel();
-
-        var reason = request.Reason;
-
-        if (!string.IsNullOrWhiteSpace(reason))
-        {
-            claim.AddComment(request.ActorId, reason, ClaimCommentType.Internal);
-        }
+        claim.Update(
+            request.Title,
+            request.Description,
+            request.Priority
+        );
 
         await context.SaveChangesAsync();
 

@@ -9,7 +9,7 @@ using ShiftManagement.Api.Modules.Identity.Application;
 using ShiftManagement.Api.Modules.Contracts.Api.Contracts.Managements;
 using ShiftManagement.Api.BuildingBlocks.Execution;
 
-namespace ShiftManagement.Api.Modules.Contracts.Application.Command;
+namespace ShiftManagement.Api.Modules.Contracts.Application.Commands;
 
 public sealed class CreateContractUseCase(
     ContractRepository contractRepository,

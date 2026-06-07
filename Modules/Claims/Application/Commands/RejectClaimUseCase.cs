@@ -2,27 +2,22 @@ using ShiftManagement.Api.BuildingBlocks.Results;
 using ShiftManagement.Api.Infrastructure.Persistence;
 using ShiftManagement.Api.Modules.Claims.Api.Contracts.Responses;
 using ShiftManagement.Api.Modules.Claims.Api.Contracts.Reviews;
-
+using ShiftManagement.Api.Modules.Claims.Domain;
 using ShiftManagement.Api.Modules.Claims.Infrastructure;
 
-using ShiftManagement.Api.Modules.Identity.Application;
-using ShiftManagement.Api.Modules.Identity.Infrastructure;
+namespace ShiftManagement.Api.Modules.Claims.Application.Commands;
 
-namespace ShiftManagement.Api.Modules.Claims.Application.Reviews;
-
-public sealed class AssignClaimUseCase(
+public sealed class RejectClaimUseCase(
     ClaimRepository claimRepository,
-    UserRepository userRepository,
     ShiftManagementDbContext context
 )
 {
     public async Task<Result<ClaimResponse>> ExecuteAsync(
         Guid claimId,
-        AssignClaimRequest request
+        RejectClaimRequest request
     )
     {
-        var claim =
-            await claimRepository.GetByIdAsync(claimId);
+        var claim = await claimRepository.GetByIdAsync(claimId);
 
         if (claim is null)
         {
@@ -31,19 +26,8 @@ public sealed class AssignClaimUseCase(
             );
         }
 
-        var userExists =
-            await userRepository.ExistsAsync(
-                request.AssignedToUserId
-            );
-
-        if (!userExists)
-        {
-            return Result<ClaimResponse>.Failure(
-                IdentityErrors.UserNotFound
-            );
-        }
-
-        claim.Assign(request.AssignedToUserId);
+        claim.Reject();
+        claim.AddComment(request.ReviewerId, request.Reason, ClaimCommentType.Rejection);
 
         await context.SaveChangesAsync();
 

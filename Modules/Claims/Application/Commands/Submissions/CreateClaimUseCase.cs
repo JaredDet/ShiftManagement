@@ -12,7 +12,7 @@ using ShiftManagement.Api.Modules.Staff.Application.Errors;
 using ShiftManagement.Api.Infrastructure.Persistence;
 using ShiftManagement.Api.BuildingBlocks.Results;
 
-namespace ShiftManagement.Api.Modules.Claims.Application.Submissions;
+namespace ShiftManagement.Api.Modules.Claims.Application.Commands.Submissions;
 
 public sealed class CreateClaimUseCase(
     ClaimRepository claimRepository,

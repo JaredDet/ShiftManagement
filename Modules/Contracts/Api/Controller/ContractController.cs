@@ -2,8 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShiftManagement.Api.BuildingBlocks.Results;
 using ShiftManagement.Api.Modules.Contracts.Api.Contracts.Managements;
-using ShiftManagement.Api.Modules.Contracts.Application;
-using ShiftManagement.Api.Modules.Contracts.Application.Command;
+using ShiftManagement.Api.Modules.Contracts.Application.Commands;
 using ShiftManagement.Api.Modules.Contracts.Application.Queries;
 
 namespace ShiftManagement.Api.Modules.Contracts.Api.Controllers;
@@ -52,17 +51,15 @@ public sealed class ContractController(
 
     [HttpGet("{contractId:guid}/pdf")]
     public async Task<IActionResult> DownloadContractPdf(
-    Guid contractId,
-    CancellationToken cancellationToken)
+    Guid contractId)
     {
         return (await downloadPdf.ExecuteAsync(
-                contractId,
-                cancellationToken))
+                contractId))
             .Match(file =>
                 File(
-                    file.Content,
-                    "application/pdf",
-                    file.FileName));
+                    file.Document,
+                        file.ContentType,
+                        file.FileName));
     }
 
     [HttpGet("me")]

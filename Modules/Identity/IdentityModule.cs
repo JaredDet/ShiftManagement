@@ -7,7 +7,7 @@ namespace ShiftManagement.Api.Modules.Identity;
 
 public static class IdentityModule
 {
-    public static IServiceCollection AddIdentityModule(
+    public static IServiceCollection AddIdentity(
         this IServiceCollection services,
         IConfiguration configuration
     )

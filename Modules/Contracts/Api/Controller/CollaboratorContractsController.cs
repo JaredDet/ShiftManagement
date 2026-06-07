@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShiftManagement.Api.BuildingBlocks.Results;
-using ShiftManagement.Api.Modules.Contracts.Application;
 using ShiftManagement.Api.Modules.Contracts.Application.Queries;
 
 namespace ShiftManagement.Api.Modules.Contracts.Api.Controllers;

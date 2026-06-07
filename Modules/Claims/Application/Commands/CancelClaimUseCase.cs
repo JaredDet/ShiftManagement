@@ -5,16 +5,16 @@ using ShiftManagement.Api.Modules.Claims.Api.Contracts.Reviews;
 using ShiftManagement.Api.Modules.Claims.Domain;
 using ShiftManagement.Api.Modules.Claims.Infrastructure;
 
-namespace ShiftManagement.Api.Modules.Claims.Application.Reviews;
+namespace ShiftManagement.Api.Modules.Claims.Application.Commands;
 
-public sealed class RejectClaimUseCase(
+public sealed class CancelClaimUseCase(
     ClaimRepository claimRepository,
     ShiftManagementDbContext context
 )
 {
     public async Task<Result<ClaimResponse>> ExecuteAsync(
         Guid claimId,
-        RejectClaimRequest request
+        CancelClaimRequest request
     )
     {
         var claim = await claimRepository.GetByIdAsync(claimId);
@@ -26,8 +26,14 @@ public sealed class RejectClaimUseCase(
             );
         }
 
-        claim.Reject();
-        claim.AddComment(request.ReviewerId, request.Reason, ClaimCommentType.Rejection);
+        claim.Cancel();
+
+        var reason = request.Reason;
+
+        if (!string.IsNullOrWhiteSpace(reason))
+        {
+            claim.AddComment(request.ActorId, reason, ClaimCommentType.Internal);
+        }
 
         await context.SaveChangesAsync();
 

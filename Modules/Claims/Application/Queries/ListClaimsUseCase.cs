@@ -4,7 +4,7 @@ using ShiftManagement.Api.Modules.Claims.Api.Contracts.Responses;
 
 using ShiftManagement.Api.Modules.Claims.Infrastructure;
 
-namespace ShiftManagement.Api.Modules.Claims.Application.Retrievals;
+namespace ShiftManagement.Api.Modules.Claims.Application.Queries;
 
 public sealed class ListClaimsUseCase(
     ClaimReadRepository claimReadRepository
