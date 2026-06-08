@@ -1,19 +1,17 @@
 using ShiftManagement.Api.Modules.Staff.Api.Contracts.MainChanges;
 using ShiftManagement.Api.Modules.Staff.Infrastructure;
 
-
-
 using ShiftManagement.Api.Modules.Staff.Application.Errors;
-using ShiftManagement.Api.Modules.Staff.Application.Mappers;
 using ShiftManagement.Api.Modules.Staff.Domain;
-using ShiftManagement.Api.Modules.Staff.Api.Contracts.Collaborators;
 using ShiftManagement.Api.Infrastructure.Persistence;
 using ShiftManagement.Api.BuildingBlocks.Results;
+using ShiftManagement.Api.Modules.Staff.Api.Contracts.Collaborators;
 
 namespace ShiftManagement.Api.Modules.Staff.Application.EmploymentAssignments;
 
 public sealed class ChangeMainPositionUseCase(
     CollaboratorRepository CollaboratorRepository,
+    CollaboratorReadRepository collaboratorReadRepository,
     ShiftManagementDbContext context
 )
 {
@@ -34,8 +32,11 @@ public sealed class ChangeMainPositionUseCase(
 
         await context.SaveChangesAsync();
 
-        return Result<CollaboratorResponse>.Success(
-            CollaboratorMapper.ToResponse(collaborator)
-        );
+        var result = await collaboratorReadRepository.GetByIdAsync(collaborator.Id, collaborator.CompanyId);
+
+        if (result is null)
+            return Result<CollaboratorResponse>.Failure(StaffErrors.CollaboratorNotFound);
+
+        return Result<CollaboratorResponse>.Success(result);
     }
 }

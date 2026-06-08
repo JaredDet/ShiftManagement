@@ -11,7 +11,7 @@ public static class SchedulingModule
     {
         services.AddScoped<ShiftRepository>();
         services.AddScoped<ShiftAssignmentRepository>();
-        services.AddScoped<ShiftSwapRequestRepository>();
+        services.AddScoped<ShiftSwapRepository>();
         services.AddScoped<CalendarReadRepository>();
 
         services.AddScoped<CreateShiftUseCase>();

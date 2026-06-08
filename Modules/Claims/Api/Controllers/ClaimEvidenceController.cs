@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using ShiftManagement.Api.BuildingBlocks.Results;
 using ShiftManagement.Api.Infrastructure.Auth;
 using ShiftManagement.Api.Modules.Claims.Api.Contracts.Submissions;
-using ShiftManagement.Api.Modules.Claims.Application.Submissions;
+using ShiftManagement.Api.Modules.Claims.Application.Commands.Submissions;
 
 namespace ShiftManagement.Api.Modules.Claims.Api.Controllers;
 

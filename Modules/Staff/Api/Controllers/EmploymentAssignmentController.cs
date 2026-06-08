@@ -27,7 +27,7 @@ public class EmploymentAssignmentController(
         [FromBody] AssignBranchToCollaboratorRequest request)
     {
         return (await assignBranch.Execute(collaboratorId, request))
-            .Match(Ok);
+            .Match(NoContent);
     }
 
     [HttpPost("{collaboratorId:guid}/remove-branch")]
@@ -37,7 +37,7 @@ public class EmploymentAssignmentController(
         [FromBody] RemoveBranchFromCollaboratorRequest request)
     {
         return (await removeBranch.Execute(collaboratorId, request))
-            .Match(Ok);
+            .Match(NoContent);
     }
 
     [HttpPost("{collaboratorId:guid}/assign-position")]
@@ -47,7 +47,7 @@ public class EmploymentAssignmentController(
         [FromBody] AssignPositionToCollaboratorRequest request)
     {
         return (await assignPosition.Execute(collaboratorId, request))
-            .Match(Ok);
+            .Match(NoContent);
     }
 
     [HttpPost("{collaboratorId:guid}/remove-position")]
@@ -57,7 +57,7 @@ public class EmploymentAssignmentController(
         [FromBody] RemovePositionFromCollaboratorRequest request)
     {
         return (await removePosition.Execute(collaboratorId, request))
-            .Match(Ok);
+            .Match(NoContent);
     }
 
     [HttpPost("{collaboratorId:guid}/change-primary-branch")]

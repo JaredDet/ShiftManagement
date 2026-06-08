@@ -28,6 +28,15 @@ public class CollaboratorRepository(ShiftManagementDbContext context)
             .FirstOrDefaultAsync(x => x.Id == id);
     }
 
+    public Task<Collaborator?> GetByIdAsync(Guid companyId, Guid id)
+    {
+        return context.Set<Collaborator>()
+            .FirstOrDefaultAsync(x =>
+                x.Id == id &&
+                x.CompanyId == companyId
+            );
+    }
+
     public Task<bool> HasBranchAccessAsync(
     Guid userId,
     Guid companyId,

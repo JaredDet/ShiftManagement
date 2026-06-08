@@ -4,7 +4,7 @@ using ShiftManagement.Api.Modules.Scheduling.Domain;
 
 namespace ShiftManagement.Api.Modules.Scheduling.Infrastructure;
 
-public sealed class ShiftSwapRequestRepository(ShiftManagementDbContext context)
+public sealed class ShiftSwapRepository(ShiftManagementDbContext context)
 {
 
     public async Task AddAsync(ShiftSwapRequest swapRequest)

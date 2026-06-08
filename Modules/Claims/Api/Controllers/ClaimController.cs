@@ -5,9 +5,9 @@ using ShiftManagement.Api.Infrastructure.Auth;
 using ShiftManagement.Api.Modules.Claims.Api.Contracts.Queries;
 using ShiftManagement.Api.Modules.Claims.Api.Contracts.Reviews;
 using ShiftManagement.Api.Modules.Claims.Api.Contracts.Submissions;
-using ShiftManagement.Api.Modules.Claims.Application.Retrievals;
-using ShiftManagement.Api.Modules.Claims.Application.Reviews;
-using ShiftManagement.Api.Modules.Claims.Application.Submissions;
+using ShiftManagement.Api.Modules.Claims.Application.Commands;
+using ShiftManagement.Api.Modules.Claims.Application.Commands.Submissions;
+using ShiftManagement.Api.Modules.Claims.Application.Queries;
 
 namespace ShiftManagement.Api.Modules.Claims.Api.Controllers;
 

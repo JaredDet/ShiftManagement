@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShiftManagement.Api.BuildingBlocks.Results;
+using ShiftManagement.Api.Infrastructure.Auth;
 using ShiftManagement.Api.Modules.Contracts.Api.Contracts.Managements;
 using ShiftManagement.Api.Modules.Contracts.Application.Commands;
 using ShiftManagement.Api.Modules.Contracts.Application.Queries;
@@ -19,6 +20,7 @@ public sealed class ContractController(
     : ControllerBase
 {
     [HttpPost]
+    [Authorize(Policy = AuthorizationPolicies.ContractsWriteAccess)]
     public async Task<IActionResult> CreateContract(
     [FromBody] CreateEmploymentContractRequest request)
     {
@@ -33,6 +35,7 @@ public sealed class ContractController(
     }
 
     [HttpPost("{contractId:guid}/terminate")]
+    [Authorize(Policy = AuthorizationPolicies.ContractsWriteAccess)]
     public async Task<IActionResult> TerminateContract(
     Guid contractId,
     [FromBody] TerminateEmploymentContractRequest request)
@@ -42,6 +45,7 @@ public sealed class ContractController(
     }
 
     [HttpGet("{contractId:guid}")]
+    [Authorize(Policy = AuthorizationPolicies.ContractsReadAccess)]
     public async Task<IActionResult> GetContract(
         Guid contractId)
     {
@@ -50,6 +54,7 @@ public sealed class ContractController(
     }
 
     [HttpGet("{contractId:guid}/pdf")]
+    [Authorize(Policy = AuthorizationPolicies.ContractsExportAccess)]
     public async Task<IActionResult> DownloadContractPdf(
     Guid contractId)
     {
@@ -63,6 +68,7 @@ public sealed class ContractController(
     }
 
     [HttpGet("me")]
+    [Authorize(Policy = AuthorizationPolicies.ContractsSelfAccess)]
     public async Task<IActionResult> GetMyContract()
     {
         return (await getMyContract.ExecuteAsync())

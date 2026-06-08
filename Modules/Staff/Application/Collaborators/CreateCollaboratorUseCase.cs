@@ -5,7 +5,6 @@ using ShiftManagement.Api.Modules.Staff.Infrastructure;
 
 
 using ShiftManagement.Api.Modules.Staff.Application.Errors;
-using ShiftManagement.Api.Modules.Staff.Application.Mappers;
 using ShiftManagement.Api.Modules.Organization.Infrastructure.Persistence.Repositories;
 using ShiftManagement.Api.Modules.Organization.Application.Errors;
 using ShiftManagement.Api.Modules.Identity.Infrastructure;
@@ -17,6 +16,7 @@ namespace ShiftManagement.Api.Modules.Staff.Application.Collaborators;
 
 public sealed class CreateCollaboratorUseCase(
     CollaboratorRepository CollaboratorRepository,
+    CollaboratorReadRepository collaboratorReadRepository,
     CompanyRepository companyRepository,
     UserRepository userRepository,
     StaffAccessPolicy staffAccessPolicy,
@@ -56,9 +56,12 @@ public sealed class CreateCollaboratorUseCase(
 
         await context.SaveChangesAsync();
 
-        return Result<CollaboratorResponse>.Success(
-            CollaboratorMapper.ToResponse(collaborator)
-        );
+        var result = await collaboratorReadRepository.GetByIdAsync(collaborator.Id, request.CompanyId);
+
+        if (result is null)
+            return Result<CollaboratorResponse>.Failure(StaffErrors.CollaboratorNotFound);
+
+        return Result<CollaboratorResponse>.Success(result);
     }
 
     private async Task<Result> ValidateRequest(CreateCollaboratorRequest request)

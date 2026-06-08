@@ -1,9 +1,17 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 using ShiftManagement.Api.Modules.Contracts.Domain.Enums;
 
 namespace ShiftManagement.Api.Modules.Contracts.Domain;
 
+[Index(nameof(ContractId))]
+[Table("contract_terminations")]
 public class ContractTermination
 {
+    [Key]
+    public Guid Id { get; private set; }
+
     public Guid ContractId { get; private set; }
 
     public ContractTerminationReason Reason { get; private set; }
@@ -21,6 +29,7 @@ public class ContractTermination
     private ContractTermination() { }
 
     private ContractTermination(
+        Guid id,
         Guid contractId,
         ContractTerminationReason reason,
         string? comment,
@@ -29,6 +38,7 @@ public class ContractTermination
         DateOnly terminationDate,
         DateTime createdAt)
     {
+        Id = id;
         ContractId = contractId;
         Reason = reason;
         Comment = comment;
@@ -47,6 +57,7 @@ public class ContractTermination
         DateOnly terminationDate)
     {
         return new ContractTermination(
+            Guid.NewGuid(),
             contractId,
             reason,
             comment,

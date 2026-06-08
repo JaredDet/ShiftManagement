@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using ShiftManagement.Api.Modules.Contracts.Domain;
+using ShiftManagement.Api.Modules.Contracts.Domain.Enums;
 using ShiftManagement.Api.Validations;
 
 namespace ShiftManagement.Api.Modules.Contracts.Api.Contracts.Managements;

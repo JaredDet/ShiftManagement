@@ -9,7 +9,8 @@ namespace ShiftManagement.Api.Modules.Scheduling.Application.Swaps;
 public sealed class RequestShiftSwapUseCase(
     ShiftRepository shiftRepository,
     ShiftAssignmentRepository assignmentRepository,
-    ShiftSwapRequestRepository swapRepository,
+    ShiftSwapRepository swapRepository,
+    ShiftSwapReadRepository swapReadRepository,
     ShiftManagementDbContext context
 )
 {
@@ -47,8 +48,15 @@ public sealed class RequestShiftSwapUseCase(
         await swapRepository.AddAsync(swapRequest);
         await context.SaveChangesAsync();
 
+        var response = await swapReadRepository.GetByIdAsync(swapRequest.Id);
+
+        if (response == null)
+        {
+            return Result<ShiftSwapRequestResponse>.Failure(SchedulingErrors.SwapRequestNotFound);
+        }
+
         return Result<ShiftSwapRequestResponse>.Success(
-            ShiftSwapMapper.ToResponse(swapRequest)
+            response
         );
     }
 }

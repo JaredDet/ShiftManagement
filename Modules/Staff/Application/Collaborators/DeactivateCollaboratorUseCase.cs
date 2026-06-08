@@ -1,8 +1,5 @@
 using ShiftManagement.Api.Modules.Staff.Application.Errors;
 using ShiftManagement.Api.Modules.Staff.Infrastructure;
-
-
-
 using ShiftManagement.Api.Infrastructure.Persistence;
 using ShiftManagement.Api.BuildingBlocks.Results;
 
@@ -13,9 +10,9 @@ public sealed class DeactivateCollaboratorUseCase(
     ShiftManagementDbContext context
 )
 {
-    public async Task<Result> Execute(Guid id)
+    public async Task<Result> Execute(Guid companyId, Guid id)
     {
-        var collaborator = await repository.GetByIdAsync(id);
+        var collaborator = await repository.GetByIdAsync(companyId, id);
 
         if (collaborator is null)
             return Result.Failure(StaffErrors.CollaboratorNotFound);

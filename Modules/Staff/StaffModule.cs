@@ -33,6 +33,7 @@ public static class StaffModule
         services.AddScoped<CollaboratorRepository>();
         services.AddScoped<CollaboratorReadRepository>();
         services.AddScoped<PositionRepository>();
+        services.AddScoped<PositionReadRepository>();
 
         return services;
     }

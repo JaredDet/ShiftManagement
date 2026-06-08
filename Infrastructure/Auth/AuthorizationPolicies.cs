@@ -25,6 +25,11 @@ public static class AuthorizationPolicies
     public const string ClaimsModerationAccess = "ClaimsModerationAccess";
     public const string ClaimsEvidenceUploadAccess = "ClaimsEvidenceUploadAccess";
 
+    public const string ContractsReadAccess = "ContractsReadAccess";
+    public const string ContractsWriteAccess = "ContractsWriteAccess";
+    public const string ContractsSelfAccess = "ContractsSelfAccess";
+    public const string ContractsExportAccess = "ContractsExportAccess";
+
     public static void AddPolicies(AuthorizationOptions options)
     {
         options.AddPolicy(CompanyAdminOnly,
@@ -113,6 +118,32 @@ public static class AuthorizationPolicies
                 Role.Staff.ToString(),
                 Role.Supervisor.ToString(),
                 Role.BranchManager.ToString()
+            ));
+
+        options.AddPolicy(ContractsReadAccess,
+            p => p.RequireRole(
+                Role.CompanyAdmin.ToString(),
+                Role.BranchManager.ToString(),
+                Role.Supervisor.ToString()
+            ));
+
+        options.AddPolicy(ContractsWriteAccess,
+            p => p.RequireRole(
+                Role.CompanyAdmin.ToString(),
+                Role.BranchManager.ToString(),
+                Role.Supervisor.ToString()
+            ));
+
+        options.AddPolicy(ContractsSelfAccess,
+            p => p.RequireRole(
+                Role.Staff.ToString()
+            ));
+
+        options.AddPolicy(ContractsExportAccess,
+            p => p.RequireRole(
+                Role.CompanyAdmin.ToString(),
+                Role.BranchManager.ToString(),
+                Role.Supervisor.ToString()
             ));
     }
 }

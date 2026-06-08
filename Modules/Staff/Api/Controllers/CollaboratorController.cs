@@ -8,25 +8,29 @@ namespace ShiftManagement.Api.Modules.Staff.Api.Controllers;
 
 [Authorize]
 [ApiController]
-[Route("api/collaborators")]
+[Route("api/companies/{companyId:guid}/collaborators")]
 public class CollaboratorController(
     CreateCollaboratorUseCase create,
     GetCollaboratorUseCase get,
     ListCollaboratorsUseCase list,
-    DeactivateCollaboratorUseCase deactivate) : ControllerBase
+    DeactivateCollaboratorUseCase deactivate
+) : ControllerBase
 {
     [HttpPost]
     [Authorize(Policy = "CompanyAdminOnly")]
     public async Task<IActionResult> CreateCollaborator(
+        Guid companyId,
         [FromBody] CreateCollaboratorRequest request
     )
     {
+        request = request with { CompanyId = companyId };
+
         return (await create.Execute(request))
-            .Match(value =>
+            .Match(id =>
                 CreatedAtAction(
                     nameof(GetCollaborator),
-                    new { id = value.Id },
-                    value
+                    new { companyId, id },
+                    new { id }
                 )
             );
     }
@@ -34,7 +38,7 @@ public class CollaboratorController(
     [HttpGet("{id:guid}")]
     [Authorize(Policy = "StaffReadAccess")]
     public async Task<IActionResult> GetCollaborator(
-        [FromQuery] Guid companyId,
+        Guid companyId,
         Guid id
     )
     {
@@ -44,7 +48,9 @@ public class CollaboratorController(
 
     [HttpGet]
     [Authorize(Policy = "StaffReadAccess")]
-    public async Task<IActionResult> ListCollaborators([FromQuery] Guid companyId)
+    public async Task<IActionResult> ListCollaborators(
+        Guid companyId
+    )
     {
         return (await list.Execute(companyId))
             .Match(Ok);
@@ -52,9 +58,12 @@ public class CollaboratorController(
 
     [HttpDelete("{id:guid}")]
     [Authorize(Policy = "CompanyAdminOnly")]
-    public async Task<IActionResult> DeactivateCollaborator(Guid id)
+    public async Task<IActionResult> DeactivateCollaborator(
+        Guid companyId,
+        Guid id
+    )
     {
-        return (await deactivate.Execute(id))
+        return (await deactivate.Execute(companyId, id))
             .Match(NoContent);
     }
 }

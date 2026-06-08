@@ -6,9 +6,9 @@ public sealed record ShiftAssignmentResponse
     public Guid ShiftId { get; init; }
 
     public Guid CollaboratorId { get; init; }
-    public string CollaboratorName { get; init; }
+    public string CollaboratorName { get; init; } = string.Empty;
 
-    public string Status { get; init; }
+    public string Status { get; init; } = string.Empty;
 
     public DateTime CreatedAt { get; init; }
     public DateTime? CancelledAt { get; init; }
